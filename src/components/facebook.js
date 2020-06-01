@@ -3,16 +3,23 @@ import axios from "axios";
 
 export default class facebook extends Component {
   handlefacebook = (e) => {
+    // axios({
+    //   method: "get",
+    //   url: "http://localhost:5000/authenticate/facebook/",
+    //   header: {
+    //     "Access-Control-Allow-Origin": "*",
+    //   },
+    // });
     axios
-      .get("http://localhost:5000/authenticate/facebook/")
-      .then((res) => {
-        console.log(res.data);
+      .get("http://localhost:5000/authenticate/facebook/", {
+        crossdomain: true,
+      })
+      .then((req) => {
+        console.log(req.headers);
       })
       .catch((error) => {
         console.log(error);
       });
-
-    window.location = "/";
   };
   render() {
     return (
@@ -28,3 +35,8 @@ export default class facebook extends Component {
     );
   }
 }
+
+// function facebook() {
+//   return <a href={"http://localhost:5000/authenticate/facebook/"}>Login</a>;
+// }
+// export default facebook;

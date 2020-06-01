@@ -28,7 +28,11 @@ export default class Registration extends Component {
     };
 
     axios
-      .post("http://localhost:5000/signup", user)
+      .post(
+        "http://localhost:5000/signup",
+
+        user
+      )
       .then((res) => {
         console.log(res.data);
       })
