@@ -3,19 +3,19 @@ import axios from "axios";
 
 export default class facebook extends Component {
   handlefacebook = (e) => {
-    // axios({
-    //   method: "get",
-    //   url: "http://localhost:5000/authenticate/facebook/",
-    //   header: {
-    //     "Access-Control-Allow-Origin": "*",
-    //   },
-    // });
-    axios
-      .get("http://localhost:5000/authenticate/facebook/", {
-        crossdomain: true,
-      })
-      .then((req) => {
-        console.log(req.headers);
+    fetch("http://localhost:5000/authenticate/facebook", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) return response.json();
+        throw new Error("failed to authenticate user");
       })
       .catch((error) => {
         console.log(error);

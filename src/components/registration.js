@@ -28,13 +28,13 @@ export default class Registration extends Component {
     };
 
     axios
-      .post(
-        "http://localhost:5000/signup",
-
-        user
-      )
+      .post("http://localhost:5000/signup", user)
       .then((res) => {
-        console.log(res.data);
+        console.log(res.data.user);
+        const { token, user } = res.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        window.location.href = "/user";
       })
       .catch((error) => {
         console.log(error);
@@ -45,7 +45,7 @@ export default class Registration extends Component {
       email: "",
       password: "",
     });
-    window.location = "/";
+    // window.location = "/";
   };
 
   render() {

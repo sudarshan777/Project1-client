@@ -24,12 +24,15 @@ export default class Login extends Component {
       email: this.state.email,
       password: this.state.password,
     };
-    console.log(user);
+    //onsole.log(user);
     axios
       .post("http://localhost:5000/auth", user)
       .then((res) => {
-        console.log(res.data);
-        
+        console.log(res.data.user);
+        const { token, user } = res.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        window.location.href = "/user";
       })
       .catch((error) => {
         console.log(error);
@@ -39,7 +42,6 @@ export default class Login extends Component {
       email: "",
       password: "",
     });
-    //window.location = "/";
   };
 
   render() {
