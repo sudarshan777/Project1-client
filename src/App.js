@@ -8,7 +8,8 @@ import Login from "./components/login";
 import Logout from "./components/logout";
 import Facebook from "./components/facebook";
 import User from "./components/user";
-
+import ArticlesList from "./components/articles-list";
+import CreateArticle from "./components/create-article";
 
 const checkAuth = () => {
   const token = localStorage.getItem("token");
@@ -49,6 +50,8 @@ function App() {
         <Route exact path="/login" component={Login} />
         <Route exact path="/logout" component={Logout} />
         <Route exact path="/facebook" component={Facebook} />
+        <Route exact path="/article-list" component={ArticlesList} />
+        <PrivateRoute exact path="/create-article" component={CreateArticle} />
         <PrivateRoute exact path="/user" component={User} />
       </div>
     </Router>

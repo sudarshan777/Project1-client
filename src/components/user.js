@@ -6,7 +6,9 @@ export default class User extends Component {
     console.log(user);
     return (
       <div>
-        <h4>Welcome {user.name}</h4>
+        <h4>
+          Welcome {user.name} {user.id}
+        </h4>
       </div>
     );
   }
