@@ -4,8 +4,13 @@ import axios from "axios";
 
 const Article = (props) => (
   <div>
-    <h4>{props.article.title}</h4>
+    <h4>
+      <Link to={"/article/" + props.article._id}>{props.article.title}</Link>
+    </h4>
     <p>{props.article.body}</p>
+    <h6>
+      <b>Author - </b> {props.article.user.name}
+    </h6>
     <span>
       {"   "}
       {props.article.date.substring(0, 10)}

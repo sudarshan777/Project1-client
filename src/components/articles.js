@@ -1,14 +1,18 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-export default class EditExercise extends Component {
+export default class Articles extends Component {
   constructor(props) {
     super(props);
     this.state = {
       title: "",
       body: "",
       user: "",
-      comment: [],
+      comments: [],
+      newComment: {
+        body: "",
+        user: "",
+      },
     };
   }
 
@@ -20,45 +24,83 @@ export default class EditExercise extends Component {
           title: response.data.title,
           body: response.data.body,
           user: response.data.user,
-          comment: response.data.comment,
+          comments: response.data.comments,
         });
       })
       .catch((error) => console.log(error));
+
+    setTimeout(console.log(this.state), 5000);
   }
+  onChange = (e) => {
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  //   onSubmit = (e) => {
-  //     e.preventDefault();
+    this.setState({
+      newComment: { body: e.target.value, user: user.id },
+    });
+  };
 
-  //     const exercise = {
-  //       username: this.state.username,
-  //       description: this.state.description,
-  //       duration: this.state.duration,
-  //       date: this.state.date,
-  //     };
+  onSubmit = (e) => {
+    e.preventDefault();
 
-  //     axios
-  //       .post(
-  //         "https://quiet-brushlands-94117.herokuapp.com/exercises/update/" +
-  //           this.props.match.params.id,
-  //         exercise
-  //       )
-  //       .then((res) => console.log(res.data));
-  //     console.log(exercise);
+    const newComment = this.state.newComment;
 
-  //     window.location = "/";
-  //   };
+    axios
+      .post(
+        "http://localhost:5000/articles/comment/" + this.props.match.params.id,
+        newComment
+      )
+      .then((res) => console.log(res.data));
+    console.log(newComment);
+    // window.location = "/";
+  };
+
+  commentsList = () => {
+    if (this.state.comments.length > 0) {
+      return (
+        <div>
+          <h6>
+            {" "}
+            <b>Comments</b>
+          </h6>
+          <p>
+            {this.state.comments.map((comment, index) => {
+              return (
+                <li key={index}>
+                  {comment.body} by {comment.user.name}
+                </li>
+              );
+            })}
+          </p>
+        </div>
+      );
+    }
+  };
 
   render() {
     return (
       <div>
         <h3>{this.state.title}</h3>
+        <p>{this.state.body}</p>
+        <h6>
+          <b>Author - </b> {this.state.user.name}
+        </h6>
+        <hr />
+        {this.commentsList()}
+        <br />
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
-            <label>Comment: </label>
+            <label>Add Comments </label>
+            <input
+              type="text"
+              required
+              className="form-control"
+              value={this.state.newComment.body}
+              onChange={this.onChange}
+            />
 
             <input
               type="submit"
-              value="Edit Exercise Log"
+              value="Add comment"
               className="btn btn-primary"
             />
           </div>
