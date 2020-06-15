@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { getArticlesList } from "../redux/actions/get-list";
+import { connect } from "react-redux";
 import axios from "axios";
 
 const Article = (props) => (
@@ -36,7 +38,7 @@ const Article = (props) => (
   </div>
 );
 
-export default class ArticlesList extends Component {
+class ArticlesList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,28 +47,14 @@ export default class ArticlesList extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get("http://localhost:5000/articles/")
-      .then((response) => {
-        this.setState({
-          articles: response.data,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.props.dispatch(getArticlesList());
   }
 
   deleteArticle = (id) => {
-    axios
-      .delete("http://localhost:5000/articles/" + id)
-      .then((res) => console.log(res.data));
-    this.setState({
-      articles: this.state.articles.filter((el) => el._id !== id),
-    });
+    // this.props.dispatch(deleteArticle(emp._id));
   };
   articleList = () => {
-    return this.state.articles.map((currentArticle) => {
+    return this.props.articles.map((currentArticle) => {
       return (
         <Article
           article={currentArticle}
@@ -86,3 +74,12 @@ export default class ArticlesList extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  console.log("STATE" + JSON.stringify(state.articleListReducer.articles));
+  return {
+    articles: state.articleListReducer.articles,
+  };
+}
+
+export default connect(mapStateToProps)(ArticlesList);

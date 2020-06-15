@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch,
+} from "react-router-dom";
 import decode from "jwt-decode";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -11,33 +16,35 @@ import User from "./components/user";
 import ArticlesList from "./components/articles-list";
 import CreateArticle from "./components/create-article";
 import Article from "./components/articles";
-const checkAuth = () => {
-  const token = localStorage.getItem("token");
-  if (!token) return false;
+import PrivateRoute from "./components/privateRoutes";
 
-  try {
-    const { exp } = decode(token);
-    if (exp < new Date().getTime() / 1000) {
-      return false;
-    }
-  } catch (e) {
-    return false;
-  }
+// const checkAuth = () => {
+//   const token = localStorage.getItem("token");
+//   if (!token) return false;
 
-  return true;
-};
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      checkAuth() ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to={{ pathname: "/login" }} />
-      )
-    }
-  />
-);
+//   try {
+//     const { exp } = decode(token);
+//     if (exp < new Date().getTime() / 1000) {
+//       return false;
+//     }
+//   } catch (e) {
+//     return false;
+//   }
+
+//   return true;
+// };
+// const PrivateRoute = ({ component: Component, ...rest }) => (
+//   <Route
+//     {...rest}
+//     render={(props) =>
+//       checkAuth() ? (
+//         <Component {...props} />
+//       ) : (
+//         <Redirect to={{ pathname: "/login" }} />
+//       )
+//     }
+//   />
+// );
 
 function App() {
   // this.state = {
@@ -45,16 +52,29 @@ function App() {
   // };
   return (
     <Router>
-      <div>
-        <Route exact path="/register" component={Registration} />
-        <Route exact path="/login" component={Login} />
+      <Switch>
+        <Route
+          exact
+          path="/register"
+          render={(props) => <Registration {...props} />}
+        />
+        <Route exact path="/login" render={(props) => <Login {...props} />} />
         <Route exact path="/logout" component={Logout} />
         <Route exact path="/facebook" component={Facebook} />
         <Route exact path="/article-list" component={ArticlesList} />
         <Route exact path="/article/:id" component={Article} />
-        <PrivateRoute exact path="/create-article" component={CreateArticle} />
-        <PrivateRoute exact path="/user" component={User} />
-      </div>
+        <PrivateRoute
+          exact
+          path="/create-article"
+          component={(props) => <CreateArticle {...props} />}
+        />
+
+        <PrivateRoute
+          exact
+          path="/user"
+          component={(props) => <User {...props} />}
+        />
+      </Switch>
     </Router>
   );
 }

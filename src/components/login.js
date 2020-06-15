@@ -1,14 +1,21 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { loginUser } from "../redux/actions/authActions";
+import { connect } from "react-redux";
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
       password: "",
-      registrationErrors: "",
     };
+  }
+  static getDerivedStateFromProps(props, state) {
+    if (props.isLoggedIn) {
+      console.log(props);
+      props.history.push("/article-list");
+    }
+    return null;
   }
 
   handleChange = (e) => {
@@ -24,19 +31,7 @@ export default class Login extends Component {
       email: this.state.email,
       password: this.state.password,
     };
-    //onsole.log(user);
-    axios
-      .post("http://localhost:5000/auth", user)
-      .then((res) => {
-        console.log(res.data.user);
-        const { token, user } = res.data;
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
-        window.location.href = "/user";
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.props.dispatch(loginUser(user.email, user.password));
 
     this.setState({
       email: "",
@@ -80,3 +75,15 @@ export default class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {};
+const mapStateToProps = (state) => {
+  return {
+    isLoggedIn: state.authReducer.loggedIn,
+    user: state.authReducer.user,
+  };
+};
+
+export default connect(mapStateToProps)(Login);
+
+//export default WrappedNormalLoginForm;
