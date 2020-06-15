@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { getArticlesList } from "../redux/actions/get-list";
+import { deleteArticle } from "../redux/actions/articlesActions";
 import { connect } from "react-redux";
 import axios from "axios";
 
@@ -50,8 +51,15 @@ class ArticlesList extends Component {
     this.props.dispatch(getArticlesList());
   }
 
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.articles !== prevProps.articles) {
+        //  this.props.dispatch(getArticlesList())
+    }
+}
+
   deleteArticle = (id) => {
-    // this.props.dispatch(deleteArticle(emp._id));
+    this.props.dispatch(deleteArticle(id));
   };
   articleList = () => {
     return this.props.articles.map((currentArticle) => {
@@ -76,7 +84,9 @@ class ArticlesList extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log("STATE" + JSON.stringify(state.articleListReducer.articles));
+  console.log(
+    "ARTICLE-LIST STATE" + JSON.stringify(state.articleListReducer.articles)
+  );
   return {
     articles: state.articleListReducer.articles,
   };

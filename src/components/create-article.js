@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { connect } from "react-redux";
+import { createArticleDetailsSubmit } from "../redux/actions/articlesActions";
 
-export default class CreateArticle extends Component {
+class CreateArticle extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,16 +12,9 @@ export default class CreateArticle extends Component {
     };
   }
 
-  //   componentDidMount() {
-  //     axios.get("http://localhost:5000/users/").then((response) => {
-  //       if (response.data.length > 0) {
-  //         this.setState({
-  //           users: response.data.map((user) => user.username),
-  //           username: response.data[0].username,
-  //         });
-  //       }
-  //     });
-  //   }
+  componentDidMount() {
+    console.log("we re here");
+  }
   onChangeTitle = (e) => {
     this.setState({
       title: e.target.value,
@@ -35,20 +29,22 @@ export default class CreateArticle extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    const user = JSON.parse(localStorage.getItem("user"));
+    // const user = JSON.parse(localStorage.getItem("user"));
 
     const article = {
       title: this.state.title,
       body: this.state.body,
-      user: user.id,
+      user: this.props.user.id,
     };
 
-    axios
-      .post("http://localhost:5000/articles/add", article)
-      .then((res) => console.log(res.data));
+    // axios
+    //   .post("http://localhost:5000/articles/add", article)
+    //   .then((res) => console.log(res.data));
     console.log(article);
 
-    window.location = "/article-list";
+    this.props.dispatch(createArticleDetailsSubmit(article));
+
+    // window.location = "/article-list";
   };
 
   render() {
@@ -88,3 +84,11 @@ export default class CreateArticle extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  // console.log("Article" + JSON.stringify(state.articleDetails));
+  return {
+    user: state.authReducer.user,
+  };
+}
+
+export default connect(mapStateToProps)(CreateArticle);

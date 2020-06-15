@@ -17,9 +17,6 @@ export function GetDataFromServer(apiPath, reqMethod, formBody) {
   }
 }
 
-// below service call is used only for posting a new item,
-// for posting a new item we're using formData for whihc we should not send the headers
-// and the request body shoudl be form data.
 export function GetDataFromServerToPost(apiPath, reqMethod, formBody) {
   let myHeaders = new Headers();
   // if(window.localStorage.userLoginToken !== undefined){

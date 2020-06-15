@@ -10,10 +10,10 @@ const initialUserObj = {
 const handleLoginServerResponseSuccess = (state, action) => {
   console.log("REdux" + JSON.stringify(state));
   let newState = { ...state };
-  if (action.result !== undefined ) {
+  if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       loggedIn: true,
-      pending:false,
+      pending: false,
       token: action.result.token,
       user: Object.assign({}, action.result.user),
     });
@@ -37,6 +37,12 @@ export default (state = initialUserObj, action) => {
       return handleLoginServerResponseError(state);
     case Types.LOGIN_USER_SERVER_RESPONSE_SUCCESS:
       return handleLoginServerResponseSuccess(state, action);
+
+    case Types.SIGNUP_USER_SERVER_RESPONSE_SUCCESS:
+      return handleLoginServerResponseSuccess(state, action);
+      
+    case Types.SIGNUP_USER_SERVER_RESPONSE_ERROR:
+      return handleLoginServerResponseError(state);
 
     default:
       return state;

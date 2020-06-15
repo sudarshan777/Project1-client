@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-
-export default class User extends Component {
+import { connect } from "react-redux";
+class User extends Component {
   render() {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = this.props.user;
     console.log(user);
     return (
       <div>
@@ -13,3 +13,11 @@ export default class User extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  console.log("User" + JSON.stringify(state.authReducer.user));
+  return {
+    user: state.authReducer.user,
+  };
+}
+
+export default connect(mapStateToProps)(User);

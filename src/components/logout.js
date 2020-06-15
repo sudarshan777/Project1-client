@@ -1,24 +1,35 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { logoutUser } from "../redux/actions/authActions";
 
-export default class Logout extends Component {
-  componentDidMount() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+class Logout extends Component {
+  constructor(props) {
+    super(props);
+    // defining the state to the component
+    this.state = {};
   }
+  componentDidMount() {
+    this.props.dispatch(logoutUser());
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (!props.isLoggedIn) {
+      props.history.push("/login");
+    }
+    return null;
+  }
+
   render() {
-    return (
-      <div>
-        <div className="form-group">
-          <h3>Logged Out</h3>
-          <p> To Continue</p>
-          <Link to="/login" className="nav-link">
-            <button className="btn btn-primary" type="button">
-              Log In
-            </button>
-          </Link>
-        </div>
-      </div>
-    );
+    return <div></div>;
   }
 }
+
+Logout.propTypes = {};
+
+const mapStateToProps = (state) => {
+  return {
+    isLoggedIn: state.authReducer.loggedIn,
+  };
+};
+
+export default connect(mapStateToProps)(Logout);

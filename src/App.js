@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -46,37 +46,52 @@ import PrivateRoute from "./components/privateRoutes";
 //   />
 // );
 
-function App() {
+export default class App extends Component {
   // this.state = {
   //   isLoggedIn: false,
   // };
-  return (
-    <Router>
-      <Switch>
-        <Route
-          exact
-          path="/register"
-          render={(props) => <Registration {...props} />}
-        />
-        <Route exact path="/login" render={(props) => <Login {...props} />} />
-        <Route exact path="/logout" component={Logout} />
-        <Route exact path="/facebook" component={Facebook} />
-        <Route exact path="/article-list" component={ArticlesList} />
-        <Route exact path="/article/:id" component={Article} />
-        <PrivateRoute
-          exact
-          path="/create-article"
-          component={(props) => <CreateArticle {...props} />}
-        />
+  render() {
+    return (
+      <div>
+        <Router>
+          <Switch>
+            <Route
+              exact
+              path="/register"
+              render={(props) => <Registration {...props} />}
+            />
+            <Route
+              exact
+              path="/login"
+              render={(props) => <Login {...props} />}
+            />
+            <Route
+              exact
+              path="/logout"
+              render={(props) => <Logout {...props} />}
+            />
+            <Route exact path="/facebook" component={Facebook} />
 
-        <PrivateRoute
-          exact
-          path="/user"
-          component={(props) => <User {...props} />}
-        />
-      </Switch>
-    </Router>
-  );
+            <PrivateRoute
+              exact
+              path="/article-list"
+              component={(props) => <ArticlesList {...props} />}
+            />
+            <Route exact path="/article/:id" component={Article} />
+            <Route
+              exact
+              path="/create-article"
+              component={(props) => <CreateArticle {...props} />}
+            />
+
+            <PrivateRoute
+              exact
+              path="/user"
+              component={(props) => <User {...props} />}
+            />
+          </Switch>
+        </Router>
+      </div>
+    );
+  }
 }
-
-export default App;

@@ -13,3 +13,8 @@ export const logoutUser = () => {
     type: Types.LOGOUT
   }
 }
+
+export const signupUser = user => ({
+  type: Types.SIGNUP_USER,
+  user
+});

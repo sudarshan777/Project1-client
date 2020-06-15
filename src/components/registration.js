@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { signupUser } from "../redux/actions/authActions";
+import { connect } from "react-redux";
 
-export default class Registration extends Component {
+class Registration extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,6 +20,14 @@ export default class Registration extends Component {
     });
   };
 
+  static getDerivedStateFromProps(props, state) {
+    if (props.isLoggedIn) {
+      console.log(props);
+      props.history.push("/article-list");
+    }
+    return null;
+  }
+
   onSubmit = (e) => {
     e.preventDefault();
 
@@ -27,18 +37,7 @@ export default class Registration extends Component {
       password: this.state.password,
     };
 
-    axios
-      .post("http://localhost:5000/signup", user)
-      .then((res) => {
-        console.log(res.data.user);
-        const { token, user } = res.data;
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
-        window.location.href = "/user";
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.props.dispatch(signupUser(user));
 
     this.setState({
       name: "",
@@ -105,3 +104,15 @@ export default class Registration extends Component {
     );
   }
 }
+
+Registration.propTypes = {};
+
+const mapStateToProps = (state) => {
+  console.log("Signup" + JSON.stringify(state));
+  return {
+    userObject: state.authReducer.user,
+    isLoggedIn: state.authReducer.loggedIn,
+  };
+};
+
+export default connect(mapStateToProps)(Registration);

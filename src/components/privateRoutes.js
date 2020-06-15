@@ -10,7 +10,7 @@ class PrivateRoute extends Component {
       <Route
         {...props}
         render={(props) =>
-          loggedIn ? <Component {...props} /> : <Redirect to="/" />
+          loggedIn ? <Component {...props} /> : <Redirect to="/login" />
         }
       />
     );
@@ -18,9 +18,9 @@ class PrivateRoute extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
+  console.log("Through Private Route" + JSON.stringify(state));
   return {
-    loggedIn: state.auth.loggedIn,
+    loggedIn: state.authReducer.loggedIn,
   };
 };
 

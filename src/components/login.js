@@ -13,7 +13,7 @@ class Login extends Component {
   static getDerivedStateFromProps(props, state) {
     if (props.isLoggedIn) {
       console.log(props);
-      props.history.push("/article-list");
+      props.history.push("/create-article");
     }
     return null;
   }
@@ -80,7 +80,6 @@ Login.propTypes = {};
 const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.authReducer.loggedIn,
-    user: state.authReducer.user,
   };
 };
 

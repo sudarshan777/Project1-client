@@ -8,9 +8,9 @@ const sagaMiddleware = createSagaMiddleware();
 
 let middleware = [sagaMiddleware];
 
-if (process.env.NODE_ENV === "development") {
-    middleware.push(logger);
-}
+// if (process.env.NODE_ENV === "development") {
+middleware.push(logger);
+// }
 
 const store = createStore(reducers, applyMiddleware(...middleware));
 
