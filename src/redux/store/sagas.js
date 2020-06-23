@@ -58,6 +58,23 @@ function* listArticles(action) {
     yield put({ type: Types.ARTICLE_LIST_SUCCESS_RESPONSE, result });
   }
 }
+function* getUser(action) {
+  console.log("Get Action->" + JSON.stringify(action));
+
+  const reqMethod = "GET";
+  const loginUrl = baseUrl + "/user/" + action._id;
+
+  const response = yield call(GetDataFromServer, loginUrl, "", "");
+
+  const result = yield response.json();
+
+  console.log("Result->" + JSON.stringify(result));
+  if (result.error) {
+    yield put({ type: Types.GET_USER_ERROR_RESPONSE, result });
+  } else {
+    yield put({ type: Types.GET_USER_SUCCESS_RESPONSE, result });
+  }
+}
 
 function* saveArticleDetails(action) {
   try {
@@ -143,5 +160,6 @@ export default function* rootSaga(params) {
   yield takeEvery(Types.CREATE_ARTICLE, saveArticleDetails);
   yield takeEvery(Types.DELETE_ARTICLE, deleteArticleDetails);
   yield takeEvery(Types.SIGNUP_USER, signUpUser);
+  yield takeEvery(Types.GET_USER, getUser);
   console.log("ROOT SAGA");
 }

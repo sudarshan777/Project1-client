@@ -1,11 +1,6 @@
 import React, { Component } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect,
-  Switch,
-} from "react-router-dom";
-import decode from "jwt-decode";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Registration from "./components/registration";
@@ -15,45 +10,16 @@ import Facebook from "./components/facebook";
 import User from "./components/user";
 import ArticlesList from "./components/articles-list";
 import CreateArticle from "./components/create-article";
-import Article from "./components/articles";
+import Article from "./components/article";
 import PrivateRoute from "./components/privateRoutes";
+import Home from "./components/Home";
 
-// const checkAuth = () => {
-//   const token = localStorage.getItem("token");
-//   if (!token) return false;
-
-//   try {
-//     const { exp } = decode(token);
-//     if (exp < new Date().getTime() / 1000) {
-//       return false;
-//     }
-//   } catch (e) {
-//     return false;
-//   }
-
-//   return true;
-// };
-// const PrivateRoute = ({ component: Component, ...rest }) => (
-//   <Route
-//     {...rest}
-//     render={(props) =>
-//       checkAuth() ? (
-//         <Component {...props} />
-//       ) : (
-//         <Redirect to={{ pathname: "/login" }} />
-//       )
-//     }
-//   />
-// );
-
-export default class App extends Component {
-  // this.state = {
-  //   isLoggedIn: false,
-  // };
+class App extends Component {
   render() {
     return (
-      <div>
-        <Router>
+      <Router>
+        <div className="container">
+          <Home />
           <Switch>
             <Route
               exact
@@ -65,33 +31,34 @@ export default class App extends Component {
               path="/login"
               render={(props) => <Login {...props} />}
             />
-            <Route
+            <PrivateRoute
               exact
               path="/logout"
               render={(props) => <Logout {...props} />}
             />
             <Route exact path="/facebook" component={Facebook} />
 
-            <PrivateRoute
+            <Route
               exact
-              path="/article-list"
-              component={(props) => <ArticlesList {...props} />}
+              path="/"
+              component={(props) => <ArticlesList show={false} {...props} />}
             />
             <Route exact path="/article/:id" component={Article} />
-            <Route
+            <PrivateRoute
               exact
               path="/create-article"
               component={(props) => <CreateArticle {...props} />}
             />
 
-            <PrivateRoute
+            <Route
               exact
-              path="/user"
+              path="/user/:id"
               component={(props) => <User {...props} />}
             />
           </Switch>
-        </Router>
-      </div>
+        </div>
+      </Router>
     );
   }
 }
+export default App;

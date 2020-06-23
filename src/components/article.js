@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
 
-export default class Articles extends Component {
+class Article extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,25 +33,34 @@ export default class Articles extends Component {
     setTimeout(console.log(this.state), 5000);
   }
   onChange = (e) => {
-    const user = JSON.parse(localStorage.getItem("user"));
-
     this.setState({
-      newComment: { body: e.target.value, user: user.id },
+      newComment: { body: e.target.value },
     });
   };
 
   onSubmit = (e) => {
     e.preventDefault();
-
+    this.setState({
+      newComment: {
+        body: this.state.newComment.body,
+        user: this.props.user.id,
+      },
+    });
     const newComment = this.state.newComment;
+    if (this.props.loggedIn) {
+      axios
+        .post(
+          "http://localhost:5000/articles/comment/" +
+            this.props.match.params.id,
+          newComment
+        )
+        .then((res) => console.log(res.data));
+      console.log(newComment);
+      this.setState({
+        newComment: { body: "" },
+      });
+    }
 
-    axios
-      .post(
-        "http://localhost:5000/articles/comment/" + this.props.match.params.id,
-        newComment
-      )
-      .then((res) => console.log(res.data));
-    console.log(newComment);
     // window.location = "/";
   };
 
@@ -62,15 +72,16 @@ export default class Articles extends Component {
             {" "}
             <b>Comments</b>
           </h6>
-          <p>
+
+          <ul className="list-group">
             {this.state.comments.map((comment, index) => {
               return (
-                <li key={index}>
-                  {comment.body} by {comment.user.name}
+                <li className="list-group-item" key={index}>
+                  {comment.body} {/*by {comment.user.name} */}
                 </li>
               );
             })}
-          </p>
+          </ul>
         </div>
       );
     }
@@ -78,15 +89,19 @@ export default class Articles extends Component {
 
   render() {
     return (
-      <div>
+      <div className="container-fluid">
         <h3>{this.state.title}</h3>
         <p>{this.state.body}</p>
         <h6>
           <b>Author - </b> {this.state.user.name}
         </h6>
+
         <hr />
+
         {this.commentsList()}
+
         <br />
+
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
             <label>Add Comments </label>
@@ -97,15 +112,21 @@ export default class Articles extends Component {
               value={this.state.newComment.body}
               onChange={this.onChange}
             />
-
-            <input
-              type="submit"
-              value="Add comment"
-              className="btn btn-primary"
-            />
           </div>
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
         </form>
       </div>
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    loggedIn: state.authReducer.loggedIn,
+    user: state.authReducer.user,
+  };
+}
+
+export default connect(mapStateToProps)(Article);

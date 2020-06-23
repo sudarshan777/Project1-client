@@ -49,8 +49,8 @@ class Registration extends Component {
 
   render() {
     return (
-      <div>
-        <h3>Create New User</h3>
+      <div className="container">
+        <h3>Register</h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
             <label>Name: </label>
@@ -95,11 +95,13 @@ class Registration extends Component {
           </div>
         </form>
 
-        <Link to="/facebook" className="nav-link">
-          <button className="btn btn-primary" type="button">
-            Facebook
-          </button>
-        </Link>
+        <div className="form-group">
+          <Link to="/facebook" className="nav-link">
+            <button className="btn btn-primary" type="button">
+              Facebook
+            </button>
+          </Link>
+        </div>
       </div>
     );
   }

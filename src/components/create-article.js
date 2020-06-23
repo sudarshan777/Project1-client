@@ -13,7 +13,7 @@ class CreateArticle extends Component {
   }
 
   componentDidMount() {
-    console.log("we re here");
+    console.log(this.props.user);
   }
   onChangeTitle = (e) => {
     this.setState({
@@ -44,7 +44,7 @@ class CreateArticle extends Component {
 
     this.props.dispatch(createArticleDetailsSubmit(article));
 
-    // window.location = "/article-list";
+    this.props.history.push("/");
   };
 
   render() {
