@@ -44,13 +44,13 @@ export default (state = initialUserObj, action) => {
     case Types.SIGNUP_USER_SERVER_RESPONSE_ERROR:
       return handleLoginServerResponseError(state);
 
-    case Types.LOGOUT:
-      return Object.assign({}, state, {
-        loggedIn: false,
-        pending: false,
-        token: "",
-        user: {},
-      });
+    // case Types.LOGOUT:
+    //   return Object.assign({}, state, {
+    //     loggedIn: false,
+    //     pending: false,
+    //     token: "",
+    //     user: {},
+    //   });
 
     default:
       return state;

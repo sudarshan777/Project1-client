@@ -10,7 +10,7 @@ export const loginUser = (email, password) => {
 
 export const logoutUser = () => {
   return {
-    type: Types.LOGOUT
+    type: Types.USER_LOGOUT
   }
 }
 

@@ -5,7 +5,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import Registration from "./components/registration";
 import Login from "./components/login";
-import Logout from "./components/logout";
 import Facebook from "./components/facebook";
 import User from "./components/user";
 import ArticlesList from "./components/articles-list";
@@ -31,11 +30,7 @@ class App extends Component {
               path="/login"
               render={(props) => <Login {...props} />}
             />
-            <PrivateRoute
-              exact
-              path="/logout"
-              render={(props) => <Logout {...props} />}
-            />
+
             <Route exact path="/facebook" component={Facebook} />
 
             <Route

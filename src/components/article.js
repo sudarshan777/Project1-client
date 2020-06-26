@@ -1,71 +1,95 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import {
+  postNewComment,
+  listArticleDetails,
+  bookmarkArticle,
+  removeBookmarkArticle,
+} from "../redux/actions/articlesActions";
 
 class Article extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "",
-      body: "",
-      user: "",
-      comments: [],
-      newComment: {
+      articleDetails: {
+        title: "",
         body: "",
-        user: "",
+        user_id: "",
+        user_name: "",
+        comments: [],
       },
+      newComment: "",
     };
   }
-
-  componentDidMount() {
-    axios
-      .get("http://localhost:5000/articles/" + this.props.match.params.id)
-      .then((response) => {
-        this.setState({
-          title: response.data.title,
-          body: response.data.body,
-          user: response.data.user,
-          comments: response.data.comments,
-        });
-      })
-      .catch((error) => console.log(error));
-
-    setTimeout(console.log(this.state), 5000);
+  UNSAFE_componentWillMount() {
+    this.props.dispatch(listArticleDetails(this.props.match.params.id));
   }
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.setState({
+      articleDetails: {
+        title: nextProps.article.title,
+        body: nextProps.article.body,
+        user_id: nextProps.article.user._id,
+        user_name: nextProps.article.user.name,
+        comments: nextProps.article.comments,
+      },
+      isBookmarked: false,
+    });
+    console.log(this.state.articleDetails);
+  }
+
   onChange = (e) => {
     this.setState({
-      newComment: { body: e.target.value },
+      newComment: e.target.value,
     });
   };
 
   onSubmit = (e) => {
     e.preventDefault();
-    this.setState({
-      newComment: {
-        body: this.state.newComment.body,
-        user: this.props.user.id,
-      },
-    });
-    const newComment = this.state.newComment;
+
+    const newComment = {
+      body: this.state.newComment,
+      user: this.props.user.id,
+    };
+
+    console.log(this.props.user.id);
+    const _id = this.props.match.params.id;
     if (this.props.loggedIn) {
-      axios
-        .post(
-          "http://localhost:5000/articles/comment/" +
-            this.props.match.params.id,
-          newComment
-        )
-        .then((res) => console.log(res.data));
-      console.log(newComment);
+      this.props.dispatch(postNewComment(_id, newComment));
+
       this.setState({
-        newComment: { body: "" },
+        newComment: "",
       });
+    } else {
+      alert("Log In or Register to comment.");
     }
 
     // window.location = "/";
   };
+  handlebookmark = (e) => {
+    if (this.props.loggedIn) {
+      this.props.dispatch(
+        bookmarkArticle(this.props.match.params.id, this.props.user.id)
+      );
+    } else {
+      e.preventDefault();
+      alert("Log In or Register to bookmark.");
+    }
+  };
+  handleRemovebookmark = (e) => {
+    if (this.props.loggedIn) {
+      this.props.dispatch(
+        removeBookmarkArticle(this.props.match.params.id, this.props.user.id)
+      );
+    } else {
+      e.preventDefault();
+      alert("Log In or Register to remove bookmark.");
+    }
+  };
 
   commentsList = () => {
-    if (this.state.comments.length > 0) {
+    if (this.state.articleDetails.comments.length > 0) {
       return (
         <div>
           <h6>
@@ -74,10 +98,10 @@ class Article extends Component {
           </h6>
 
           <ul className="list-group">
-            {this.state.comments.map((comment, index) => {
+            {this.state.articleDetails.comments.map((comment, index) => {
               return (
                 <li className="list-group-item" key={index}>
-                  {comment.body} {/*by {comment.user.name} */}
+                  {comment.body} by {/*comment.user.name*/}
                 </li>
               );
             })}
@@ -85,16 +109,28 @@ class Article extends Component {
         </div>
       );
     }
+    return null;
   };
 
   render() {
     return (
       <div className="container-fluid">
-        <h3>{this.state.title}</h3>
-        <p>{this.state.body}</p>
+        <h3>{this.state.articleDetails.title}</h3>
+        <p>{this.state.articleDetails.body}</p>
         <h6>
-          <b>Author - </b> {this.state.user.name}
+          {" "}
+          <b> Author - </b>
+          <Link to={"/user/" + this.state.articleDetails.user_id}>
+            {this.state.articleDetails.user_name}
+          </Link>
         </h6>
+
+        <button className="btn btn-primary" onClick={this.handlebookmark}>
+          Bookmark
+        </button>
+        <button className="btn btn-primary" onClick={this.handleRemovebookmark}>
+          Remove Bookmark
+        </button>
 
         <hr />
 
@@ -109,7 +145,7 @@ class Article extends Component {
               type="text"
               required
               className="form-control"
-              value={this.state.newComment.body}
+              value={this.state.newComment}
               onChange={this.onChange}
             />
           </div>
@@ -126,6 +162,7 @@ function mapStateToProps(state) {
   return {
     loggedIn: state.authReducer.loggedIn,
     user: state.authReducer.user,
+    article: state.articlesReducer.article,
   };
 }
 

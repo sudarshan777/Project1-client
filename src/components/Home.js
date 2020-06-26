@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { logoutUser } from "../redux/actions/authActions";
 
 class Home extends Component {
   constructor(props) {
@@ -18,6 +19,11 @@ class Home extends Component {
     }
     return null;
   }
+  handleLogout = (e) => {
+    e.preventDefault();
+    this.props.dispatch(logoutUser());
+    window.location = "/";
+  };
   render() {
     let createArticle;
     let register;
@@ -56,14 +62,14 @@ class Home extends Component {
     if (this.state.isLoggedIn) {
       logout = (
         <li className="navbar-item">
-          <Link to="/logout" className="nav-link">
+          <a className="nav-link" href="#" onClick={this.handleLogout}>
             Logout
-          </Link>
+          </a>
         </li>
       );
     }
     if (this.state.isLoggedIn) {
-      logout = (
+      user = (
         <li className="navbar-item">
           <Link to={"/user/" + this.props.user.id} className="nav-link">
             {this.props.user.name}
@@ -83,8 +89,8 @@ class Home extends Component {
             {createArticle}
             {register}
             {login}
-            {logout}
             {user}
+            {logout}
           </ul>
         </div>
       </nav>

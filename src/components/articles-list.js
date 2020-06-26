@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { getArticlesList } from "../redux/actions/get-list";
 import { deleteArticle } from "../redux/actions/articlesActions";
 import { connect } from "react-redux";
-import axios from "axios";
 
 const Article = (props) => {
   return (
@@ -17,14 +16,18 @@ const Article = (props) => {
         <p className="card-text">{props.article.body}</p>
         <b>Likes -{props.article.likes} </b>
         <br />
-        <b>Author - </b> {props.article.user.name}
+        <b>Author - </b>{" "}
+        <Link to={"/user/" + props.article.user._id}>
+          {props.article.user.name}
+        </Link>
         <br />
         <b>Created at - </b> {props.article.date.substring(0, 10)}
         <br />
-        <Link to={"/edit/" + props.article._id} className="btn btn-primary">
-          Edit
-        </Link>
-        {/* <a
+        {props.article.user._id }
+        <br/>
+        {props.userId}
+        {/* {props.article.user._id === props.userId ? (
+          <a
             href="#"
             onClick={() => {
               props.deleteArticle(props.article._id);
@@ -32,7 +35,9 @@ const Article = (props) => {
             className="btn btn-primary"
           >
             Delete
-          </a> */}
+          </a>
+        ) : null} */}
+        
       </div>
     </div>
   );
@@ -64,7 +69,7 @@ class ArticlesList extends Component {
   };
   articleList = () => {
     // console.log(this.props.articles.articles);
-    // if (this.props.articles.length > 0) {
+
     if (this.props.show && this.props.userArticles !== undefined) {
       console.log(this.props.userArticles);
       return this.props.userArticles.map((currentArticle) => {
@@ -73,6 +78,7 @@ class ArticlesList extends Component {
             <Article
               article={currentArticle}
               deleteArticle={this.deleteArticle}
+              userId={this.props.user.id}
             />
             <br />
           </div>
@@ -86,6 +92,7 @@ class ArticlesList extends Component {
           <Article
             article={currentArticle}
             deleteArticle={this.deleteArticle}
+            userId={this.props.user.id}
           />
           <br />
         </div>
@@ -115,6 +122,7 @@ function mapStateToProps(state) {
   return {
     articles: state.articleListReducer.articles,
     userArticles: state.userReducer.user.articlesWritten,
+    user: state.authReducer.user,
   };
 }
 

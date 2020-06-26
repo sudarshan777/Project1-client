@@ -27,52 +27,60 @@ class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false,
-      isAdmin: false,
+      user: {
+        role: [],
+        articlesWritten: [],
+        bookmarks: [],
+        articleLiked: [],
+        following: [],
+        followers: [],
+        _id: "",
+        name: "",
+        email: "",
+        commented: [],
+      },
     };
   }
-  static getDerivedStateFromProps(nextProps, state) {
-    // nextProps.dispatch(getUser(nextProps.match.params.id));
-    if (nextProps.loggedIn) {
-      state.isLoggedIn = nextProps.loggedIn;
-    }
-    if (nextProps.match.params.id === nextProps.user.id) {
-      state.isAdmin = true;
-    }
-    return null;
-  }
-  componentDidMount() {
-    console.log("IS ADMIN " + this.state.isAdmin);
-    // console.log(this.props.userDetails.articlesWritten.length());
-    // this.props.dispatch(getUser(this.props.match.params.id));
-  }
-  render() {
-    const user = this.props.userDetails;
-    // console.log(user.articlesWritten.length);
-    let bookmarks = 0;
-    let followers = 0;
-    let following = 0;
-    let articles = 0;
-    if (this.state.isAdmin && user.bookmarks.length > 0) {
-      bookmarks = user.bookmarks.length;
-    }
-    if (this.state.isAdmin && user.followers.length > 0) {
-      followers = user.followers.length;
-    }
-    if (this.state.loggedIn && user.following.length > 0) {
-      following = user.following.length;
-    }
-    if (this.state.loggedIn && user.articlesWritten.length > 0) {
-      articles = user.articlesWritten.length;
-    }
 
+  UNSAFE_componentWillMount() {
+    this.props.dispatch(getUser(this.props.match.params.id));
+  }
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.setState({
+      user: {
+        role: nextProps.userDetails.role,
+        bookmarks: nextProps.userDetails.bookmarks,
+        articleLiked: nextProps.userDetails.articleLiked,
+        following: nextProps.userDetails.following,
+        followers: nextProps.userDetails.followers,
+        _id: nextProps.userDetails._id,
+        name: nextProps.userDetails.name,
+        commented: nextProps.userDetails.commented,
+      },
+    });
+    console.log(this.state.user);
+  }
+
+  handleSubscribe = (e) => {
+    e.preventDefault();
+  };
+  handleUnsubscribe = (e) => {
+    e.preventDefault();
+  };
+  render() {
     return (
       <div>
-        <h4>Welcome {user.name}</h4>
-        <h6> Bookmarks - {bookmarks}</h6>
-        <h6> Followers - {followers}</h6>
-        <h6> Following - {following}</h6>
-        <h6> Articles - {articles}</h6>
+        <h4>{this.state.user.name}</h4>
+        <h6> Bookmarks - {this.state.user.bookmarks.length}</h6>
+        <h6> Followers - {this.state.user.followers.length}</h6>
+        <h6> Following - {this.state.user.following.length}</h6>
+
+        <button className="btn btn-primary" onClick={this.handleSubscribe}>
+          Subscribe
+        </button>
+        <button className="btn btn-primary" onClick={this.handleUnsubscribe}>
+          Unsubscribe
+        </button>
         <ErrorBoundary>
           <ArticlesList show={true} />
         </ErrorBoundary>

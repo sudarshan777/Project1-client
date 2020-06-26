@@ -15,15 +15,9 @@ class CreateArticle extends Component {
   componentDidMount() {
     console.log(this.props.user);
   }
-  onChangeTitle = (e) => {
+  handleChange = (e) => {
     this.setState({
-      title: e.target.value,
-    });
-  };
-
-  onChangeBody = (e) => {
-    this.setState({
-      body: e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -37,19 +31,13 @@ class CreateArticle extends Component {
       user: this.props.user.id,
     };
 
-    // axios
-    //   .post("http://localhost:5000/articles/add", article)
-    //   .then((res) => console.log(res.data));
-    console.log(article);
-
     this.props.dispatch(createArticleDetailsSubmit(article));
-
     this.props.history.push("/");
   };
 
   render() {
     return (
-      <div>
+      <div className="container">
         <h3>Create New Article</h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
@@ -57,9 +45,10 @@ class CreateArticle extends Component {
             <input
               type="text"
               required
+              name='title'
               className="form-control"
               value={this.state.title}
-              onChange={this.onChangeTitle}
+              onChange={this.handleChange}
             />
           </div>
           <div className="form-group">
@@ -67,9 +56,10 @@ class CreateArticle extends Component {
             <input
               type="text"
               required
+              name='body'
               className="form-control"
               value={this.state.body}
-              onChange={this.onChangeBody}
+              onChange={this.handleChange}
             />
           </div>
           <div className="form-group">
