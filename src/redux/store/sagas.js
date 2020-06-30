@@ -236,6 +236,64 @@ function* deleteBookmark(action) {
     console.log(error);
   }
 }
+function* followUser(action) {
+  try {
+    console.log("Follow User Action->" + JSON.stringify(action.comment));
+
+    let formBody = {};
+    formBody.user = action.follow_id;
+    console.log("FormBody" + JSON.stringify(formBody));
+
+    const postUrl = baseUrl + "/user/follow/" + action.user_id;
+    const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
+    const result = yield response.json();
+    console.log("Result Json" + JSON.stringify(result));
+    if (result.error) {
+      yield put({
+        type: Types.FOLLOW_USER_ERROR_RESPONSE,
+        error: result.error,
+      });
+    } else {
+      yield put({
+        type: Types.FOLLOW_USER_ERROR_RESPONSE,
+        result,
+      });
+      console.log("Follow details" + JSON.stringify(result));
+    }
+  } catch (error) {
+    // yield put({ type: Types.SERVER_CALL_FAILED, error: error.message });
+    console.log(error);
+  }
+}
+function* unFollowUser(action) {
+  try {
+    console.log("Un Follow Use Action->" + JSON.stringify(action.comment));
+
+    let formBody = {};
+    formBody.user = action.unfollow_id;
+    console.log("FormBody" + JSON.stringify(formBody));
+
+    const postUrl = baseUrl + "/user/unfollow/" + action.user_id;
+    const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
+    const result = yield response.json();
+    console.log("Result Json" + JSON.stringify(result));
+    if (result.error) {
+      yield put({
+        type: Types.UN_FOLLOW_USER_ERROR_RESPONSE,
+        error: result.error,
+      });
+    } else {
+      yield put({
+        type: Types.UN_FOLLOW_USER_ERROR_RESPONSE,
+        result,
+      });
+      console.log("Un Follow details " + JSON.stringify(result));
+    }
+  } catch (error) {
+    // yield put({ type: Types.SERVER_CALL_FAILED, error: error.message });
+    console.log(error);
+  }
+}
 
 function* signUpUser(action) {
   try {
@@ -275,6 +333,8 @@ export default function* rootSaga(params) {
   yield takeEvery(Types.GET_ARTICLE, getArticle);
   yield takeEvery(Types.POST_COMMENT_ARTICLE, postComment);
   yield takeEvery(Types.BOOKMARK_ARTICLE, postBookmark);
-  yield takeEvery(Types.UN_BOOKMARK_ARTICLE, deleteBookmark)
+  yield takeEvery(Types.UN_BOOKMARK_ARTICLE, deleteBookmark);
+  yield takeEvery(Types.FOLLOW_USER, followUser);
+  yield takeEvery(Types.UN_FOLLOW_USER, unFollowUser);
   console.log("ROOT SAGA");
 }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getUser } from "../redux/actions/get-user";
+import { getUser, followUser, unFollowUser } from "../redux/actions/get-user";
 import ArticlesList from "./articles-list";
 
 class ErrorBoundary extends Component {
@@ -61,26 +61,53 @@ class User extends Component {
     console.log(this.state.user);
   }
 
-  handleSubscribe = (e) => {
-    e.preventDefault();
+  handleFollow = (e) => {
+    if (this.props.loggedIn && this.props.user.id !== this.state.user._id) {
+      this.props.dispatch(followUser(this.props.user.id, this.state.user._id));
+    } else if (
+      this.props.loggedIn &&
+      this.props.user.id === this.state.user._id
+    ) {
+      alert("You cannot follow yourself.");
+    } else {
+      e.preventDefault();
+      alert("Log In or Register to follow.");
+    }
   };
-  handleUnsubscribe = (e) => {
-    e.preventDefault();
+  handleUnfollow = (e) => {
+    if (this.props.loggedIn && this.props.user.id !== this.state.user._id) {
+      this.props.dispatch(
+        unFollowUser(this.props.user.id, this.state.user._id)
+      );
+    } else if (
+      this.props.loggedIn &&
+      this.props.user.id === this.state.user._id
+    ) {
+      alert("You cannot un follow yourself.");
+    } else {
+      e.preventDefault();
+      alert("Log In or Register to Unfollow.");
+    }
   };
   render() {
+    let followButton = (
+      <div>
+        <button className="btn btn-primary" onClick={this.handleFollow}>
+          Follow
+        </button>
+        <button className="btn btn-primary" onClick={this.handleUnfollow}>
+          Un Follow
+        </button>
+      </div>
+    );
     return (
       <div>
         <h4>{this.state.user.name}</h4>
         <h6> Bookmarks - {this.state.user.bookmarks.length}</h6>
         <h6> Followers - {this.state.user.followers.length}</h6>
         <h6> Following - {this.state.user.following.length}</h6>
+        {this.props.loggedIn ? followButton : null}
 
-        <button className="btn btn-primary" onClick={this.handleSubscribe}>
-          Subscribe
-        </button>
-        <button className="btn btn-primary" onClick={this.handleUnsubscribe}>
-          Unsubscribe
-        </button>
         <ErrorBoundary>
           <ArticlesList show={true} />
         </ErrorBoundary>

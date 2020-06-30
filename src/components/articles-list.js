@@ -23,9 +23,8 @@ const Article = (props) => {
         <br />
         <b>Created at - </b> {props.article.date.substring(0, 10)}
         <br />
-        {props.article.user._id }
         <br/>
-        {props.userId}
+        
         {/* {props.article.user._id === props.userId ? (
           <a
             href="#"
