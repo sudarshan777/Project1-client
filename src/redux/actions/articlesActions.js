@@ -43,15 +43,14 @@ export const deleteArticleSuccess = (_id) => {
   };
 };
 
-
-export const bookmarkArticle = (article_id,user_id) => {
+export const bookmarkArticle = (article_id, user_id) => {
   return {
     type: Types.BOOKMARK_ARTICLE,
     article_id,
     user_id,
   };
 };
-export const removeBookmarkArticle = (article_id,user_id) => {
+export const removeBookmarkArticle = (article_id, user_id) => {
   return {
     type: Types.UN_BOOKMARK_ARTICLE,
     article_id,

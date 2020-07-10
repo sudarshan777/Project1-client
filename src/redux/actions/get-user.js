@@ -5,6 +5,11 @@ export const getUser = (_id) => ({
   _id,
 
 });
+export const getBookmarks = (_id) => ({
+  type: Types.GET_BOOKMARKS,
+  _id,
+
+});
 
 export const followUser = (user_id,follow_id) => ({
   type: Types.FOLLOW_USER,

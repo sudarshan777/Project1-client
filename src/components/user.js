@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getUser, followUser, unFollowUser } from "../redux/actions/get-user";
+import {
+  getUser,
+  followUser,
+  unFollowUser,
+  getBookmarks,
+} from "../redux/actions/get-user";
 import ArticlesList from "./articles-list";
 
 class ErrorBoundary extends Component {
@@ -44,6 +49,7 @@ class User extends Component {
 
   UNSAFE_componentWillMount() {
     this.props.dispatch(getUser(this.props.match.params.id));
+    this.props.dispatch(getBookmarks(this.props.match.params.id));
   }
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
@@ -89,6 +95,7 @@ class User extends Component {
       alert("Log In or Register to Unfollow.");
     }
   };
+
   render() {
     let followButton = (
       <div>
@@ -109,7 +116,7 @@ class User extends Component {
         {this.props.loggedIn ? followButton : null}
 
         <ErrorBoundary>
-          <ArticlesList show={true} />
+          <ArticlesList />
         </ErrorBoundary>
       </div>
     );

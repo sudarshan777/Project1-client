@@ -9,7 +9,7 @@ import Facebook from "./components/facebook";
 import User from "./components/user";
 import ArticlesList from "./components/articles-list";
 import CreateArticle from "./components/create-article";
-import Article from "./components/article";
+import ArticleView from "./components/article-view";
 import PrivateRoute from "./components/privateRoutes";
 import Home from "./components/Home";
 
@@ -36,9 +36,9 @@ class App extends Component {
             <Route
               exact
               path="/"
-              component={(props) => <ArticlesList show={false} {...props} />}
+              component={(props) => <ArticlesList  {...props} />}
             />
-            <Route exact path="/article/:id" component={Article} />
+            <Route exact path="/article/:id" component={ArticleView} />
             <PrivateRoute
               exact
               path="/create-article"

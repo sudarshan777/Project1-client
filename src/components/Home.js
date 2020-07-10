@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logoutUser } from "../redux/actions/authActions";
+import { getArticlesList } from "../redux/actions/get-list";
+import ArticlesList from "./articles-list";
 
 class Home extends Component {
   constructor(props) {
@@ -10,6 +12,10 @@ class Home extends Component {
       isLoggedIn: false,
       userName: "",
     };
+  }
+
+  componentDidMount() {
+    this.props.dispatch(getArticlesList());
   }
 
   static getDerivedStateFromProps(nextProps, state) {
@@ -79,21 +85,24 @@ class Home extends Component {
     }
 
     return (
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <Link to="/" className="navbar-brand">
-          Articles
-        </Link>
+      <div>
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <Link to="/" className="navbar-brand">
+            Articles
+          </Link>
 
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
-            {createArticle}
-            {register}
-            {login}
-            {user}
-            {logout}
-          </ul>
-        </div>
-      </nav>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav mr-auto">
+              {createArticle}
+              {register}
+              {login}
+              {user}
+              {logout}
+            </ul>
+          </div>
+        </nav>
+        {/* <div><ArticlesList articles={this.props.articles} /></div> */}
+      </div>
     );
   }
 }
@@ -101,6 +110,7 @@ function mapStateToProps(state) {
   return {
     loggedIn: state.authReducer.loggedIn,
     user: state.authReducer.user,
+    articles: state.articleListReducer.articles,
   };
 }
 

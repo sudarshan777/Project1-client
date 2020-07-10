@@ -2,6 +2,7 @@ import * as Types from "../actions/types";
 
 const initialUserObj = {
   user: {},
+  bookmarks: [],
   message: "",
 };
 
@@ -18,6 +19,17 @@ const getUserSuccessResponse = (state, action) => {
       user: JSON.parse(JSON.stringify(action.result)),
     });
     console.log("New" + JSON.stringify(newState));
+  }
+  return { ...newState };
+};
+const getBookmarksSuccessResponse = (state, action) => {
+  console.log("REdux" + JSON.stringify(action));
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      bookmarks: JSON.parse(JSON.stringify(action.result)),
+    });
+    console.log("New Bookmarks" + JSON.stringify(newState));
   }
   return { ...newState };
 };
@@ -62,7 +74,7 @@ export default (state = initialUserObj, action = {}) => {
       return followUserSuccessResponse(state, action);
     case Types.FOLLOW_USER_ERROR_RESPONSE:
       return { ...state };
-
+    //un follow user
     case Types.UN_FOLLOW_USER:
       return { ...state };
     case Types.UN_FOLLOW_USER_SUCCESS_RESPONSE:
@@ -70,7 +82,14 @@ export default (state = initialUserObj, action = {}) => {
     case Types.UN_FOLLOW_USER_ERROR_RESPONSE:
       return { ...state };
 
-    // un follow user
+    // get bookmarks
+
+    case Types.GET_BOOKMARKS:
+      return { ...state };
+    case Types.GET_BOOKMARKS_SUCCESS_RESPONSE:
+      return getBookmarksSuccessResponse(state, action);
+    case Types.GET_BOOKMARKS_ERROR_RESPONSE:
+      return { ...state };
 
     default:
       return state;

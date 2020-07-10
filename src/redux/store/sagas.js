@@ -11,7 +11,7 @@ import {
 import * as Types from "../actions/types";
 import { GetDataFromServer, deleteService } from "../service";
 
-const baseUrl = "https://mern-article.herokuapp.com";
+const baseUrl = "http://localhost:5000"; //"https://mern-article.herokuapp.com"
 
 function* fetchLoginUser(action) {
   try {
@@ -73,6 +73,24 @@ function* getUser(action) {
     yield put({ type: Types.GET_USER_ERROR_RESPONSE, result });
   } else {
     yield put({ type: Types.GET_USER_SUCCESS_RESPONSE, result });
+  }
+}
+
+function* getBookmarks(action) {
+  console.log("Get Action->" + JSON.stringify(action));
+
+  const reqMethod = "GET";
+  const loginUrl = baseUrl + "/user/bookmarks/" + action._id;
+
+  const response = yield call(GetDataFromServer, loginUrl, "", "");
+
+  const result = yield response.json();
+
+  console.log("Result->" + JSON.stringify(result));
+  if (result.error) {
+    yield put({ type: Types.GET_BOOKMARKS_ERROR_RESPONSE, result });
+  } else {
+    yield put({ type: Types.GET_BOOKMARKS_SUCCESS_RESPONSE, result });
   }
 }
 
@@ -244,7 +262,7 @@ function* followUser(action) {
     formBody.user = action.follow_id;
     console.log("FormBody" + JSON.stringify(formBody));
 
-    const postUrl = baseUrl + "/user/follow/" + action.user_id;
+    const postUrl = baseUrl + "/user/" + action.user_id + "/follow";
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     console.log("Result Json" + JSON.stringify(result));
@@ -273,7 +291,7 @@ function* unFollowUser(action) {
     formBody.user = action.unfollow_id;
     console.log("FormBody" + JSON.stringify(formBody));
 
-    const postUrl = baseUrl + "/user/unfollow/" + action.user_id;
+    const postUrl = baseUrl + +"/user/" + action.user_id + "/unfollow";
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     console.log("Result Json" + JSON.stringify(result));
@@ -336,5 +354,6 @@ export default function* rootSaga(params) {
   yield takeEvery(Types.UN_BOOKMARK_ARTICLE, deleteBookmark);
   yield takeEvery(Types.FOLLOW_USER, followUser);
   yield takeEvery(Types.UN_FOLLOW_USER, unFollowUser);
+  yield takeEvery(Types.GET_BOOKMARKS, getBookmarks);
   console.log("ROOT SAGA");
 }
