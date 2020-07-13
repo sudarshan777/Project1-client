@@ -101,7 +101,7 @@ class Home extends Component {
             </ul>
           </div>
         </nav>
-        {/* <div><ArticlesList articles={this.props.articles} /></div> */}
+        { <div><ArticlesList articles={this.props.articles} /></div> }
       </div>
     );
   }
