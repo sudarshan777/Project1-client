@@ -1,8 +1,4 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { getArticlesList } from "../redux/actions/get-list";
-import { deleteArticle } from "../redux/actions/articlesActions";
-import { connect } from "react-redux";
+import React from "react";
 import Article from "./article";
 
 const ArticlesList = (props) => {

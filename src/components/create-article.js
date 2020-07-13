@@ -45,7 +45,7 @@ class CreateArticle extends Component {
             <input
               type="text"
               required
-              name='title'
+              name="title"
               className="form-control"
               value={this.state.title}
               onChange={this.handleChange}
@@ -56,7 +56,7 @@ class CreateArticle extends Component {
             <input
               type="text"
               required
-              name='body'
+              name="body"
               className="form-control"
               value={this.state.body}
               onChange={this.handleChange}
