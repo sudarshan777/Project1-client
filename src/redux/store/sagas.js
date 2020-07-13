@@ -11,7 +11,7 @@ import {
 import * as Types from "../actions/types";
 import { GetDataFromServer, deleteService } from "../service";
 
-const baseUrl = "http://localhost:5000"; //"https://mern-article.herokuapp.com"
+const baseUrl = "https://mern-article.herokuapp.com";//"http://localhost:5000"; 
 
 function* fetchLoginUser(action) {
   try {

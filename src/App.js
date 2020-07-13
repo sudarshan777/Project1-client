@@ -7,18 +7,18 @@ import Registration from "./components/registration";
 import Login from "./components/login";
 import Facebook from "./components/facebook";
 import User from "./components/user";
-import ArticlesList from "./components/articles-list";
 import CreateArticle from "./components/create-article";
 import ArticleView from "./components/article-view";
 import PrivateRoute from "./components/privateRoutes";
 import Home from "./components/Home";
+import Navbar from "./components/Navbar";
 
 class App extends Component {
   render() {
     return (
       <Router>
         <div className="container">
-          <Home />
+          <Navbar />
           <Switch>
             <Route
               exact
@@ -33,11 +33,7 @@ class App extends Component {
 
             <Route exact path="/facebook" component={Facebook} />
 
-            <Route
-              exact
-              path="/"
-              component={(props) => <ArticlesList  {...props} />}
-            />
+            <Route exact path="/" component={(props) => <Home {...props} />} />
             <Route exact path="/article/:id" component={ArticleView} />
             <PrivateRoute
               exact
