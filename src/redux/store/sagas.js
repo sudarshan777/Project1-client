@@ -11,7 +11,8 @@ import {
 import * as Types from "../actions/types";
 import { GetDataFromServer, deleteService } from "../service";
 
-const baseUrl = "https://mern-article.herokuapp.com"; //"http://localhost:5000";
+const baseUrl = "https://mern-article.herokuapp.com";
+// const baseUrl = "http://localhost:5000";
 
 function* fetchLoginUser(action) {
   try {
@@ -289,6 +290,30 @@ function* getFollowing(action) {
     yield put({ type: Types.GET_FOLLOWING_SUCCESS_RESPONSE, result });
   }
 }
+
+function* getUserArticles(action) {
+  console.log("Get Action->" + JSON.stringify(action));
+
+  const reqMethod = "GET";
+  const loginUrl = baseUrl + "/user/articlesWritten/" + action._id;
+
+  const response = yield call(GetDataFromServer, loginUrl, "", "");
+
+  const result = yield response.json();
+
+  console.log("Result->" + JSON.stringify(result));
+  if (result.error) {
+    yield put({
+      type: Types.GET_USER_WRITTEN_ARTICLES_SERVER_RESPONSE_ERROR,
+      result,
+    });
+  } else {
+    yield put({
+      type: Types.GET_USER_WRITTEN_ARTICLES_SERVER_RESPONSE_SUCCESS,
+      result,
+    });
+  }
+}
 function* followUser(action) {
   try {
     console.log("Follow User Action->" + JSON.stringify(action.comment));
@@ -326,7 +351,7 @@ function* unFollowUser(action) {
     formBody.user = action.unfollow_id;
     console.log("FormBody" + JSON.stringify(formBody));
 
-    const postUrl = baseUrl + +"/user/" + action.user_id + "/unfollow";
+    const postUrl = baseUrl + +"/user/" + action.user_id + "/follow";
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     console.log("Result Json" + JSON.stringify(result));
@@ -393,6 +418,6 @@ export default function* rootSaga(params) {
   yield takeEvery(Types.GET_FOLLOWERS, getFollowers);
   yield takeEvery(Types.GET_FOLLOWERS, getFollowers);
   yield takeEvery(Types.GET_FOLLOWING, getFollowing);
-
+  yield takeEvery(Types.GET_USER_WRITTEN_ARTICLES, getUserArticles);
   console.log("ROOT SAGA");
 }

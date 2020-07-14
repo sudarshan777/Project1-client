@@ -5,6 +5,7 @@ const initialUserObj = {
   bookmarks: [],
   followers: [],
   following: [],
+  articles: [],
   message: "",
 };
 
@@ -83,6 +84,18 @@ const getFollowingSuccessResponse = (state, action) => {
   return { ...newState };
 };
 
+const getArticlesSuccessResponse = (state, action) => {
+  console.log("REdux" + JSON.stringify(action));
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      articles: JSON.parse(JSON.stringify(action.result)),
+    });
+    console.log("New" + JSON.stringify(newState));
+  }
+  return { ...newState };
+};
+
 export default (state = initialUserObj, action = {}) => {
   switch (action.type) {
     case Types.GET_USER:
@@ -132,6 +145,15 @@ export default (state = initialUserObj, action = {}) => {
     case Types.GET_FOLLOWING_SUCCESS_RESPONSE:
       return getFollowingSuccessResponse(state, action);
     case Types.GET_FOLLOWING_ERROR_RESPONSE:
+      return { ...state };
+
+    // get user written articles
+
+    case Types.GET_USER_WRITTEN_ARTICLES:
+      return { ...state };
+    case Types.GET_USER_WRITTEN_ARTICLES_SERVER_RESPONSE_SUCCESS:
+      return getArticlesSuccessResponse(state, action);
+    case Types.GET_USER_WRITTEN_ARTICLES_SERVER_RESPONSE_ERROR:
       return { ...state };
     default:
       return state;
