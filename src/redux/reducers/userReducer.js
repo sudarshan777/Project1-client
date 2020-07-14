@@ -76,7 +76,7 @@ const getFollowingSuccessResponse = (state, action) => {
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
-      following: JSON.parse(JSON.stringify(action.result)),
+      following: JSON.parse(JSON.stringify(action.result.following)),
     });
     console.log("New" + JSON.stringify(newState));
   }
