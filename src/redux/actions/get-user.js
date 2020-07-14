@@ -18,6 +18,10 @@ export const getFollowing = (_id) => ({
   type: Types.GET_FOLLOWING,
   _id,
 });
+export const getUserWrittenArticles = (_id) => ({
+  type: Types.GET_USER_WRITTEN_ARTICLES,
+  _id,
+});
 
 export const followUser = (user_id, follow_id) => ({
   type: Types.FOLLOW_USER,

@@ -9,6 +9,7 @@ import {
   getBookmarks,
   getFollowers,
   getFollowing,
+  getUserWrittenArticles,
 } from "../redux/actions/get-user";
 import ArticlesList from "./articles-list";
 
@@ -50,6 +51,7 @@ class User extends Component {
       },
       showFollowers: false,
       showFollowing: false,
+      showArticles: false,
     };
   }
 
@@ -108,20 +110,42 @@ class User extends Component {
   };
   handleClickFollowers = (e) => {
     e.preventDefault();
+    if (this.state.user.followers.length === 0) {
+      return false;
+    }
     this.props.dispatch(getFollowers(this.props.match.params.id));
-    this.setState({ showFollowers: true });
-    this.setState({ showFollowing: false });
+    this.setState({
+      showFollowers: true,
+      showFollowing: false,
+      showArticles: false,
+    });
   };
 
   handleClickFollowing = (e) => {
     e.preventDefault();
+    if (this.state.user.following.length === 0) {
+      return false;
+    }
     this.props.dispatch(getFollowing(this.props.match.params.id));
-    this.setState({ showFollowing: true });
-    this.setState({ showFollowers: false });
+    this.setState({
+      showFollowing: true,
+      showFollowers: false,
+      showArticles: false,
+    });
   };
 
-  render() {
-    let followButton = (
+  handleClickArticlesWritten = (e) => {
+    e.preventDefault();
+    this.props.dispatch(getUserWrittenArticles(this.props.match.params.id));
+    this.setState({
+      showArticles: true,
+      showFollowing: false,
+      showFollowers: false,
+    });
+  };
+
+  followButton = () => {
+    return (
       <div>
         <button className="btn btn-primary" onClick={this.handleFollow}>
           Follow
@@ -131,10 +155,17 @@ class User extends Component {
         </button>
       </div>
     );
+  };
 
+  render() {
     return (
       <div>
         <h4>{this.state.user.name}</h4>
+        <h6>
+          <a href="#" onClick={this.handleClickArticlesWritten}>
+            Articles Written
+          </a>
+        </h6>
         <h6> Bookmarks - {this.state.user.bookmarks.length}</h6>
         <h6>
           <a href="#" onClick={this.handleClickFollowers}>
@@ -148,6 +179,7 @@ class User extends Component {
           </a>
           - {this.state.user.following.length}
         </h6>
+
         {this.props.loggedIn ? followButton : null}
 
         <ErrorBoundary>
@@ -160,7 +192,7 @@ class User extends Component {
               <ul>
                 {this.props.followers.map((user) => {
                   return (
-                    <li>
+                    <li key={user._id}>
                       <Link to={"/user/" + user._id}>{user.name}</Link>
                     </li>
                   );
@@ -177,12 +209,21 @@ class User extends Component {
               <ul>
                 {this.props.following.map((user) => {
                   return (
-                    <li>
+                    <li key={user._id}>
                       <Link to={"/user/" + user._id}>{user.name}</Link>
                     </li>
                   );
                 })}
               </ul>
+            </div>
+          ) : null}
+        </div>
+
+        <div>
+          {this.state.showArticles && this.props.articles.length !== 0 ? (
+            <div>
+              <h5>Articles Written</h5>
+              <ArticlesList articles={this.props.articles} />
             </div>
           ) : null}
         </div>
@@ -195,12 +236,15 @@ function mapStateToProps(state) {
   console.log("User" + JSON.stringify(state.userReducer.user));
   console.log("Followers" + JSON.stringify(state.userReducer.followers));
   console.log("Following" + JSON.stringify(state.userReducer.following));
+  console.log("Articles" + JSON.stringify(state.userReducer.articles));
+
   return {
     loggedIn: state.authReducer.loggedIn,
     user: state.authReducer.user,
     userDetails: state.userReducer.user,
     followers: state.userReducer.followers,
     following: state.userReducer.following,
+    articles: state.userReducer.articles,
   };
 }
 
