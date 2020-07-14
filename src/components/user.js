@@ -1,10 +1,14 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
 import { connect } from "react-redux";
 import {
   getUser,
   followUser,
   unFollowUser,
   getBookmarks,
+  getFollowers,
+  getFollowing,
 } from "../redux/actions/get-user";
 import ArticlesList from "./articles-list";
 
@@ -44,10 +48,17 @@ class User extends Component {
         email: "",
         commented: [],
       },
+      showFollowers: false,
+      showFollowing: false,
     };
   }
 
-  UNSAFE_componentWillMount() {
+  // UNSAFE_componentWillMount() {
+  //   this.props.dispatch(getUser(this.props.match.params.id));
+  //   this.props.dispatch(getBookmarks(this.props.match.params.id));
+  // }
+
+  componentDidMount() {
     this.props.dispatch(getUser(this.props.match.params.id));
     this.props.dispatch(getBookmarks(this.props.match.params.id));
   }
@@ -64,7 +75,6 @@ class User extends Component {
         commented: nextProps.userDetails.commented,
       },
     });
-    console.log(this.state.user);
   }
 
   handleFollow = (e) => {
@@ -80,6 +90,7 @@ class User extends Component {
       alert("Log In or Register to follow.");
     }
   };
+
   handleUnfollow = (e) => {
     if (this.props.loggedIn && this.props.user.id !== this.state.user._id) {
       this.props.dispatch(
@@ -94,6 +105,19 @@ class User extends Component {
       e.preventDefault();
       alert("Log In or Register to Unfollow.");
     }
+  };
+  handleClickFollowers = (e) => {
+    e.preventDefault();
+    this.props.dispatch(getFollowers(this.props.match.params.id));
+    this.setState({ showFollowers: true });
+    this.setState({ showFollowing: false });
+  };
+
+  handleClickFollowing = (e) => {
+    e.preventDefault();
+    this.props.dispatch(getFollowing(this.props.match.params.id));
+    this.setState({ showFollowing: true });
+    this.setState({ showFollowers: false });
   };
 
   render() {
@@ -111,13 +135,56 @@ class User extends Component {
       <div>
         <h4>{this.state.user.name}</h4>
         <h6> Bookmarks - {this.state.user.bookmarks.length}</h6>
-        <h6> Followers - {this.state.user.followers.length}</h6>
-        <h6> Following - {this.state.user.following.length}</h6>
+        <h6>
+          <a href="#" onClick={this.handleClickFollowers}>
+            Followers
+          </a>
+          - {this.state.user.followers.length}
+        </h6>
+        <h6>
+          <a href="#" onClick={this.handleClickFollowing}>
+            Following
+          </a>
+          - {this.state.user.following.length}
+        </h6>
         {this.props.loggedIn ? followButton : null}
 
         <ErrorBoundary>
-          <ArticlesList />
+          <ArticlesList article={null} />
         </ErrorBoundary>
+        <div>
+          {this.state.showFollowers && this.props.followers ? (
+            <div>
+              <h5>Followers</h5>
+              <ul>
+                {this.props.followers.map((user) => {
+                  return (
+                    <li>
+                      <Link to={"/user/" + user._id}>{user.name}</Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
+        </div>
+
+        <div>
+          {this.state.showFollowing && this.props.following ? (
+            <div>
+              <h5>Following</h5>
+              <ul>
+                {this.props.following.map((user) => {
+                  return (
+                    <li>
+                      <Link to={"/user/" + user._id}>{user.name}</Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
+        </div>
       </div>
     );
   }
@@ -125,10 +192,14 @@ class User extends Component {
 
 function mapStateToProps(state) {
   console.log("User" + JSON.stringify(state.userReducer.user));
+  console.log("Followers" + JSON.stringify(state.userReducer.followers));
+  console.log("Following" + JSON.stringify(state.userReducer.following));
   return {
     loggedIn: state.authReducer.loggedIn,
     user: state.authReducer.user,
     userDetails: state.userReducer.user,
+    followers: state.userReducer.followers,
+    following: state.userReducer.following,
   };
 }
 
