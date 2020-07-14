@@ -9,10 +9,14 @@ import {
 import ArticlesList from "./articles-list";
 
 class ErrorBoundary extends Component {
-  state = { errorMessage: null };
+  state = {
+    errorMessage: null,
+  };
 
   static getDerivedStateFromError(error) {
-    return { errorMessage: error.message };
+    return {
+      errorMessage: error.message,
+    };
   }
 
   componentDidCatch(error, info) {
@@ -21,7 +25,7 @@ class ErrorBoundary extends Component {
 
   render() {
     if (this.state.errorMessage) {
-      return <h1>Oops! {this.state.errorMessage}</h1>;
+      return <h1> Oops!{this.state.errorMessage} </h1>;
     }
 
     return this.props.children;
@@ -100,24 +104,26 @@ class User extends Component {
     let followButton = (
       <div>
         <button className="btn btn-primary" onClick={this.handleFollow}>
-          Follow
-        </button>
+          Follow{" "}
+        </button>{" "}
         <button className="btn btn-primary" onClick={this.handleUnfollow}>
-          Un Follow
-        </button>
+          Un Follow{" "}
+        </button>{" "}
       </div>
     );
     return (
       <div>
-        <h4>{this.state.user.name}</h4>
-        <h6> Bookmarks - {this.state.user.bookmarks.length}</h6>
-        <h6> Followers - {this.state.user.followers.length}</h6>
-        <h6> Following - {this.state.user.following.length}</h6>
+        <center>
+          {" "}
+          <h1> {this.state.user.name} </h1>
+        </center>
+        <h6> Bookmarks - {this.state.user.bookmarks.length} </h6>{" "}
+        <h6> Followers - {this.state.user.followers.length} </h6>{" "}
+        <h6> Following - {this.state.user.following.length} </h6>{" "}
         {this.props.loggedIn ? followButton : null}
-
         <ErrorBoundary>
           <ArticlesList />
-        </ErrorBoundary>
+        </ErrorBoundary>{" "}
       </div>
     );
   }

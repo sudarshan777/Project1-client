@@ -38,31 +38,32 @@ class Navbar extends Component {
 
     createArticle = (
       <Link to="/create-article" className="nav-link">
-        Create Article
+        Create Article{" "}
       </Link>
     );
 
     register = (
       <Link to="/register" className="nav-link">
-        Register
+        Register{" "}
       </Link>
     );
 
     login = (
       <Link to="/login" className="nav-link">
-        Login
+        Login{" "}
       </Link>
     );
 
     logout = (
       <a className="nav-link" href="#" onClick={this.handleLogout}>
-        Logout
+        Logout{" "}
       </a>
     );
 
     user = (
       <Link to={"/user/" + this.props.user.id} className="nav-link">
-        {this.props.user.name}
+        {" "}
+        {this.props.user.name}{" "}
       </Link>
     );
 
@@ -70,44 +71,44 @@ class Navbar extends Component {
       <div>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <Link to="/" className="navbar-brand">
-            Home
+            Home{" "}
           </Link>
-
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto">
+              {" "}
               {this.state.isLoggedIn ? (
-                <li className="navbar-item">{createArticle}</li>
-              ) : (
-                ""
-              )}
-
-              {!this.state.isLoggedIn ? (
-                <li className="navbar-item">{register}</li>
+                <li className="navbar-item"> {createArticle} </li>
               ) : (
                 ""
               )}
               {!this.state.isLoggedIn ? (
-                <li className="navbar-item">{login}</li>
+                <li className="navbar-item"> {register} </li>
               ) : (
                 ""
-              )}
+              )}{" "}
+              {!this.state.isLoggedIn ? (
+                <li className="navbar-item"> {login} </li>
+              ) : (
+                ""
+              )}{" "}
               {this.state.isLoggedIn ? (
-                <li className="navbar-item">{user}</li>
+                <li className="navbar-item"> {user} </li>
               ) : (
                 ""
-              )}
+              )}{" "}
               {this.state.isLoggedIn ? (
-                <li className="navbar-item">{logout}</li>
+                <li className="navbar-item"> {logout} </li>
               ) : (
                 ""
-              )}
-            </ul>
-          </div>
-        </nav>
+              )}{" "}
+            </ul>{" "}
+          </div>{" "}
+        </nav>{" "}
       </div>
     );
   }
 }
+
 function mapStateToProps(state) {
   return {
     loggedIn: state.authReducer.loggedIn,
