@@ -131,6 +131,7 @@ class User extends Component {
         </button>
       </div>
     );
+
     return (
       <div>
         <h4>{this.state.user.name}</h4>
@@ -153,7 +154,7 @@ class User extends Component {
           <ArticlesList article={null} />
         </ErrorBoundary>
         <div>
-          {this.state.showFollowers && this.props.followers ? (
+          {this.state.showFollowers && this.props.followers.length !== 0 ? (
             <div>
               <h5>Followers</h5>
               <ul>
@@ -170,7 +171,7 @@ class User extends Component {
         </div>
 
         <div>
-          {this.state.showFollowing && this.props.following ? (
+          {this.state.showFollowing && this.props.following.length !== 0 ? (
             <div>
               <h5>Following</h5>
               <ul>
