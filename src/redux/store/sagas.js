@@ -11,7 +11,7 @@ import {
 import * as Types from "../actions/types";
 import { GetDataFromServer, deleteService } from "../service";
 
-const baseUrl = "http://localhost:5000"; //"https://mern-article.herokuapp.com"
+const baseUrl = "https://mern-article.herokuapp.com"; //"http://localhost:5000";
 
 function* fetchLoginUser(action) {
   try {
@@ -254,6 +254,41 @@ function* deleteBookmark(action) {
     console.log(error);
   }
 }
+
+function* getFollowers(action) {
+  console.log("Get Action->" + JSON.stringify(action));
+
+  const reqMethod = "GET";
+  const loginUrl = baseUrl + "/user/followers/" + action._id;
+
+  const response = yield call(GetDataFromServer, loginUrl, "", "");
+
+  const result = yield response.json();
+
+  console.log("Result->" + JSON.stringify(result));
+  if (result.error) {
+    yield put({ type: Types.GET_FOLLOWERS_ERROR_RESPONSE, result });
+  } else {
+    yield put({ type: Types.GET_FOLLOWERS_SUCCESS_RESPONSE, result });
+  }
+}
+function* getFollowing(action) {
+  console.log("Get Action->" + JSON.stringify(action));
+
+  const reqMethod = "GET";
+  const loginUrl = baseUrl + "/user/following/" + action._id;
+
+  const response = yield call(GetDataFromServer, loginUrl, "", "");
+
+  const result = yield response.json();
+
+  console.log("Result->" + JSON.stringify(result));
+  if (result.error) {
+    yield put({ type: Types.GET_FOLLOWING_ERROR_RESPONSE, result });
+  } else {
+    yield put({ type: Types.GET_FOLLOWING_SUCCESS_RESPONSE, result });
+  }
+}
 function* followUser(action) {
   try {
     console.log("Follow User Action->" + JSON.stringify(action.comment));
@@ -355,5 +390,9 @@ export default function* rootSaga(params) {
   yield takeEvery(Types.FOLLOW_USER, followUser);
   yield takeEvery(Types.UN_FOLLOW_USER, unFollowUser);
   yield takeEvery(Types.GET_BOOKMARKS, getBookmarks);
+  yield takeEvery(Types.GET_FOLLOWERS, getFollowers);
+  yield takeEvery(Types.GET_FOLLOWERS, getFollowers);
+  yield takeEvery(Types.GET_FOLLOWING, getFollowing);
+
   console.log("ROOT SAGA");
 }
