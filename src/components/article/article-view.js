@@ -4,10 +4,41 @@ import { connect } from "react-redux";
 import {
   postNewComment,
   listArticleDetails,
+  listArticleComments,
   bookmarkArticle,
   removeBookmarkArticle,
   deleteArticle,
+  listArticleLikes,
+  postLikeArticle,
+  deleteLikeArticle,
 } from "../../redux/actions/articlesActions";
+
+const Comments = (props) => {
+  if (props.comments.length > 0 && props !== undefined) {
+    return (
+      <div>
+        <h6>
+          {" "}
+          <b>Comments</b>
+        </h6>
+        <ul className="list-group">
+          {props.comments.map((comment, index) => {
+            return (
+              <li className="list-group-item" key={index}>
+                <p>{comment.body}</p>-
+                <Link to={"/user/" + comment.user._id}>
+                  {comment.user.name}
+                </Link>
+                <br />
+                <b>Date - </b> {comment.createdAt.substring(0, 10)}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  } else return null;
+};
 
 class ArticleView extends Component {
   constructor(props) {
@@ -20,10 +51,15 @@ class ArticleView extends Component {
         user_name: "",
       },
       newComment: "",
+      showComments: false,
+      isBookmarked: false,
+      isLiked: false,
+      likeId: "",
     };
   }
   componentDidMount() {
     this.props.dispatch(listArticleDetails(this.props.match.params.id));
+    this.props.dispatch(listArticleLikes(this.props.match.params.id));
   }
   componentDidUpdate(prevProps) {
     if (this.props.article !== prevProps.article) {
@@ -34,8 +70,15 @@ class ArticleView extends Component {
           user_id: this.props.article.user._id,
           user_name: this.props.article.user.name,
         },
-        isBookmarked: false,
       });
+    }
+    if (this.props.likes !== prevProps.likes) {
+      const result = this.props.likes.find(
+        ({ user }) => user._id === this.props.user.id
+      );
+      if (result) {
+        this.setState({ isLiked: true, likeId: result._id });
+      }
     }
   }
 
@@ -88,28 +131,27 @@ class ArticleView extends Component {
     }
   };
 
-  commentsList = () => {
-    // if (this.state.articleDetails.comments.length > 0) {
-    //   return (
-    //     <div>
-    //       <h6>
-    //         {" "}
-    //         <b>Comments</b>
-    //       </h6>
+  handleFetchComments = (e) => {
+    e.preventDefault();
+    if (this.state.showComments === false) {
+      this.props.dispatch(listArticleComments(this.props.match.params.id));
 
-    //       <ul className="list-group">
-    //         {this.state.articleDetails.comments.map((comment, index) => {
-    //           return (
-    //             <li className="list-group-item" key={index}>
-    //               {comment.body} by {/*comment.user.name*/}
-    //             </li>
-    //           );
-    //         })}
-    //       </ul>
-    //     </div>
-    //   );
-    // }
-    return null;
+      this.setState({ showComments: true });
+    } else {
+      this.setState({ showComments: false });
+    }
+  };
+  handleLike = (e) => {
+    if (this.props.loggedIn && !this.state.isLiked) {
+      this.props.dispatch(
+        postLikeArticle(this.props.match.params.id, this.props.user.id)
+      );
+    } else if (this.props.loggedIn && this.state.isLiked) {
+      this.props.dispatch(deleteLikeArticle(this.state.likeId));
+    } else {
+      e.preventDefault();
+      alert("Log In or Register to Like .");
+    }
   };
   deleteArticle = () => {
     if (this.props.user.id === this.state.articleDetails.user_id) {
@@ -127,6 +169,7 @@ class ArticleView extends Component {
     window.location = "/";
   };
   render() {
+    console.log("like id", this.state.likeId);
     return (
       <div className="container-fluid">
         <h3>{this.state.articleDetails.title}</h3>
@@ -139,17 +182,41 @@ class ArticleView extends Component {
           </Link>
         </h6>
 
-        <button className="btn btn-primary" onClick={this.handlebookmark}>
+        <button
+          className="btn btn-primary"
+          onClick={this.handleLike}
+          disabled={!this.props.loggedIn}
+        >
+          {this.state.isLiked ? "Liked" : "Likes"} -{" "}
+          {this.props.likes.length ? this.props.likes.length : 0}
+        </button>
+        <button
+          className="btn btn-primary"
+          onClick={this.handlebookmark}
+          disabled={!this.props.loggedIn}
+        >
           Bookmark
         </button>
-        <button className="btn btn-primary" onClick={this.handleRemovebookmark}>
+        <button
+          className="btn btn-primary"
+          onClick={this.handleRemovebookmark}
+          disabled={!this.props.loggedIn}
+        >
           Remove Bookmark
         </button>
 
         {this.deleteArticle()}
         <hr />
-
-        {this.commentsList()}
+        <h6>
+          <a href="#" onClick={this.handleFetchComments}>
+            Show Comments
+          </a>
+        </h6>
+        {this.state.showComments ? (
+          <Comments comments={this.props.comments} />
+        ) : (
+          ""
+        )}
 
         <br />
 
@@ -178,6 +245,8 @@ function mapStateToProps(state) {
     loggedIn: state.authReducer.loggedIn,
     user: state.authReducer.user,
     article: state.articlesReducer.article,
+    comments: state.articlesReducer.comments,
+    likes: state.articlesReducer.likes,
   };
 }
 

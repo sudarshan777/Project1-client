@@ -95,7 +95,7 @@ function* getBookmarks(action) {
   }
 }
 
-function* getArticle(action) {
+function* getArticleDetails(action) {
   console.log("Get Action->" + JSON.stringify(action));
 
   const reqMethod = "GET";
@@ -114,6 +114,53 @@ function* getArticle(action) {
   } else {
     yield put({
       type: Types.GET_ARTICLE_DETAILS_SERVER_RESPONSE_SUCCESS,
+      result,
+    });
+  }
+}
+
+function* getArticleComments(action) {
+  console.log("Get Action->" + JSON.stringify(action));
+
+  const reqMethod = "GET";
+  const loginUrl = baseUrl + "/comments/get/article/" + action._id;
+
+  const response = yield call(GetDataFromServer, loginUrl, "", "");
+
+  const result = yield response.json();
+
+  console.log("Result->" + JSON.stringify(result));
+  if (result.error) {
+    yield put({
+      type: Types.GET_ARTICLE_COMMENTS_SERVER_RESPONSE_ERROR,
+      result,
+    });
+  } else {
+    yield put({
+      type: Types.GET_ARTICLE_COMMENTS_SERVER_RESPONSE_SUCCESS,
+      result,
+    });
+  }
+}
+function* getArticleLikes(action) {
+  console.log("Get Action->" + JSON.stringify(action));
+
+  const reqMethod = "GET";
+  const loginUrl = baseUrl + "/like/article/all_users/" + action._id;
+
+  const response = yield call(GetDataFromServer, loginUrl, "", "");
+
+  const result = yield response.json();
+
+  console.log("Result->" + JSON.stringify(result));
+  if (result.error) {
+    yield put({
+      type: Types.GET_ARTICLE_LIKES_SERVER_RESPONSE_ERROR,
+      result,
+    });
+  } else {
+    yield put({
+      type: Types.GET_ARTICLE_LIKES_SERVER_RESPONSE_SUCCESS,
       result,
     });
   }
@@ -176,7 +223,7 @@ function* postComment(action) {
     formBody = action.comment;
     console.log("FormBody" + JSON.stringify(formBody));
 
-    const postUrl = baseUrl + "/articles/comment/" + action._id;
+    const postUrl = baseUrl + "/comments/post/article/" + action._id;
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     console.log("Result Json" + JSON.stringify(result));
@@ -219,8 +266,8 @@ function* postBookmark(action) {
         type: Types.BOOKMARK_ARTICLE_ERROR_RESPONSE,
         result,
       });
-      console.log("BOOKMARK DETAILS" + JSON.stringify(result));
     }
+    console.log("BOOKMARK DETAILS" + JSON.stringify(result));
   } catch (error) {
     // yield put({ type: Types.SERVER_CALL_FAILED, error: error.message });
     console.log(error);
@@ -253,6 +300,57 @@ function* deleteBookmark(action) {
   } catch (error) {
     // yield put({ type: Types.SERVER_CALL_FAILED, error: error.message });
     console.log(error);
+  }
+}
+
+function* postLike(action) {
+  try {
+    console.log("Post New Like Action->" + JSON.stringify(action.comment));
+
+    let formBody = {};
+    formBody.user = action.user_id;
+    console.log("FormBody" + JSON.stringify(formBody));
+
+    const postUrl = baseUrl + "/like/post/article/" + action.article_id;
+    const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
+    const result = yield response.json();
+    console.log("Result Json" + JSON.stringify(result));
+    if (result.error) {
+      yield put({
+        type: Types.LIKE_ARTICLE_ERROR_RESPONSE,
+        error: result.error,
+      });
+    } else {
+      yield put({
+        type: Types.LIKE_ARTICLE_SUCCESS_RESPONSE,
+        result,
+      });
+      console.log("LIKE DETAILS" + JSON.stringify(result));
+    }
+  } catch (error) {
+    // yield put({ type: Types.SERVER_CALL_FAILED, error: error.message });
+    console.log(error);
+  }
+}
+
+function* deleteArticleLike(action) {
+  console.log("DELETE  ARTICLE LIKE ACTION" + JSON.stringify(action));
+  try {
+    // Ensure that your API returns the data of the updated todo
+    let formBody = {};
+    formBody._id = action._id;
+    const deleteApi = baseUrl + "/like/" + action.like_id;
+    const result = yield call(deleteService, formBody, deleteApi); // Refer sample to api calls in remote.js file
+    /// Other things can go here depending on what you want
+
+    if (result.error) {
+      yield put({ type: Types.DELETE_LIKE_ARTICLE_ERROR_RESPONSE, result }); // pass in the id you updated and the newData returned from the API
+    } else {
+      yield put({ type: Types.DELETE_LIKE_ARTICLE_SUCCESS_RESPONSE, result }); // pass in the id you updated and the newData returned from the API
+    }
+    console.log("LIKE DELETE DETAILS" + JSON.stringify(result));
+  } catch (e) {
+    console.log("SAGA ERROR");
   }
 }
 
@@ -408,10 +506,11 @@ export default function* rootSaga(params) {
   yield takeEvery(Types.DELETE_ARTICLE, deleteArticleDetails);
   yield takeEvery(Types.SIGNUP_USER, signUpUser);
   yield takeEvery(Types.GET_USER, getUser);
-  yield takeEvery(Types.GET_ARTICLE, getArticle);
+  yield takeEvery(Types.GET_ARTICLE_DETAILS, getArticleDetails);
   yield takeEvery(Types.POST_COMMENT_ARTICLE, postComment);
   yield takeEvery(Types.BOOKMARK_ARTICLE, postBookmark);
   yield takeEvery(Types.UN_BOOKMARK_ARTICLE, deleteBookmark);
+  yield takeEvery(Types.LIKE_ARTICLE, postLike);
   yield takeEvery(Types.FOLLOW_USER, followUser);
   yield takeEvery(Types.UN_FOLLOW_USER, unFollowUser);
   yield takeEvery(Types.GET_BOOKMARKS, getBookmarks);
@@ -419,5 +518,8 @@ export default function* rootSaga(params) {
   yield takeEvery(Types.GET_FOLLOWERS, getFollowers);
   yield takeEvery(Types.GET_FOLLOWING, getFollowing);
   yield takeEvery(Types.GET_USER_WRITTEN_ARTICLES, getUserArticles);
+  yield takeEvery(Types.GET_ARTICLE_COMMENTS, getArticleComments);
+  yield takeEvery(Types.GET_ARTICLE_LIKES, getArticleLikes);
+  yield takeEvery(Types.DELETE_LIKE_ARTICLE, deleteArticleLike);
   console.log("ROOT SAGA");
 }
