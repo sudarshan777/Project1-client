@@ -5,9 +5,6 @@ import ArticlesList from "./article/articles-list";
 import { getArticlesList } from "../redux/actions/get-list";
 
 class Home extends Component {
-  componentDidMount() {
-    this.props.dispatch(getArticlesList());
-  }
   render() {
     return (
       <div>
