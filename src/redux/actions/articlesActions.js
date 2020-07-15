@@ -23,7 +23,21 @@ export const postNewComment = (_id, comment) => {
 
 export const listArticleDetails = (_id) => {
   return {
-    type: Types.GET_ARTICLE,
+    type: Types.GET_ARTICLE_DETAILS,
+    _id,
+  };
+};
+
+export const listArticleComments = (_id) => {
+  return {
+    type: Types.GET_ARTICLE_COMMENTS,
+    _id,
+  };
+};
+
+export const listArticleLikes = (_id) => {
+  return {
+    type: Types.GET_ARTICLE_LIKES,
     _id,
   };
 };
@@ -50,6 +64,7 @@ export const bookmarkArticle = (article_id, user_id) => {
     user_id,
   };
 };
+
 export const removeBookmarkArticle = (article_id, user_id) => {
   return {
     type: Types.UN_BOOKMARK_ARTICLE,
@@ -58,6 +73,19 @@ export const removeBookmarkArticle = (article_id, user_id) => {
   };
 };
 
+export const postLikeArticle = (article_id, user_id) => {
+  return {
+    type: Types.LIKE_ARTICLE,
+    article_id,
+    user_id,
+  };
+};
+export const deleteLikeArticle = (like_id) => {
+  return {
+    type: Types.DELETE_LIKE_ARTICLE,
+    like_id,
+  };
+};
 // export const editArticle = (_id) => {
 //   return {
 //     type: Types.EDIT_ARTICLE_GET_DETAILS,

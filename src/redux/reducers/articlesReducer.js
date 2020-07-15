@@ -3,6 +3,8 @@ import * as Type from "../actions/types";
 const initialUserObj = {
   loading: false,
   article: {},
+  comments: [],
+  likes: [],
   message: "",
 };
 
@@ -17,12 +19,34 @@ const handleArticle = (state, action) => {
   }
   return { ...newState };
 };
-const handleComment = (state, action) => {
+const handleNewComment = (state, action) => {
   console.log("NEW Comment" + JSON.stringify(action));
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       message: JSON.parse(JSON.stringify(action.result)),
+    });
+  }
+  return { ...newState };
+};
+
+const handleArticleComments = (state, action) => {
+  console.log("Comments" + JSON.stringify(action));
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      comments: JSON.parse(JSON.stringify(action.result)),
+    });
+  }
+  return { ...newState };
+};
+
+const handleArticleLikes = (state, action) => {
+  console.log(" Likes" + JSON.stringify(action));
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      likes: JSON.parse(JSON.stringify(action.result)),
     });
   }
   return { ...newState };
@@ -60,9 +84,19 @@ const handleRemoveBookmark = (state, action) => {
   return { ...newState };
 };
 
+const handleLike = (state, action) => {
+  console.log("Bookmark an  Article" + JSON.stringify(action.result));
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      message: JSON.parse(JSON.stringify(action.result)),
+    });
+  }
+
+  return { ...newState };
+};
+
 const handleArticleDelete = (state, action) => {
-  console.log("DELETE" + JSON.stringify(state.result));
-  console.log("REducer DELETE" + JSON.stringify(action._id));
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
@@ -72,7 +106,19 @@ const handleArticleDelete = (state, action) => {
     });
   }
 
-  return { newState };
+  return { ...newState };
+};
+const handleLikeArticleDelete = (state, action) => {
+  console.log("DELETE" + JSON.stringify(state.result));
+  console.log("REducer DELETE" + JSON.stringify(action._id));
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      message: JSON.parse(JSON.stringify(action.result)),
+    });
+  }
+
+  return { ...newState };
 };
 export default (state = initialUserObj, action = {}) => {
   switch (action.type) {
@@ -87,7 +133,7 @@ export default (state = initialUserObj, action = {}) => {
       return { ...state };
 
     // fetch a particular article
-    case Type.GET_ARTICLE:
+    case Type.GET_ARTICLE_DETAILS:
       return { ...state, loading: true };
 
     case Type.GET_ARTICLE_DETAILS_SERVER_RESPONSE_SUCCESS:
@@ -96,12 +142,31 @@ export default (state = initialUserObj, action = {}) => {
     case Type.GET_ARTICLE_DETAILS_SERVER_RESPONSE_ERROR:
       return { ...state };
 
+    // get article comments
+    case Type.GET_ARTICLE_COMMENTS:
+      return { ...state, loading: true };
+
+    case Type.GET_ARTICLE_COMMENTS_SERVER_RESPONSE_SUCCESS:
+      return handleArticleComments(state, action);
+
+    case Type.GET_ARTICLE_COMMENTS_SERVER_RESPONSE_ERROR:
+      return { ...state };
+
+    // get article likes
+    case Type.GET_ARTICLE_LIKES:
+      return { ...state, loading: true };
+
+    case Type.GET_ARTICLE_LIKES_SERVER_RESPONSE_SUCCESS:
+      return handleArticleLikes(state, action);
+
+    case Type.GET_ARTICLE_LIKES_SERVER_RESPONSE_ERROR:
+      return { ...state };
     // Comment on an Article
     case Type.POST_COMMENT_ARTICLE:
       return { ...state, loading: true };
 
     case Type.POST_COMMENT_ARTICLE_DETAILS_SERVER_RESPONSE_SUCCESS:
-      return handleComment(state, action);
+      return handleNewComment(state, action);
 
     case Type.POST_COMMENT_ARTICLE_DETAILS_SERVER_RESPONSE_ERROR:
       return { ...state };
@@ -124,6 +189,23 @@ export default (state = initialUserObj, action = {}) => {
       return handleRemoveBookmark(state, action);
 
     case Type.UN_BOOKMARK_ARTICLE_ERROR_RESPONSE:
+      return { ...state };
+
+    //  like on an Article
+    case Type.LIKE_ARTICLE:
+      return { ...state, loading: true };
+
+    case Type.LIKE_ARTICLE_SUCCESS_RESPONSE:
+      return handleLike(state, action);
+
+    case Type.LIKE_ARTICLE_ERROR_RESPONSE:
+      return { ...state };
+    //  delete like on an Article
+
+    case Type.DELETE_LIKE_ARTICLE_SUCCESS_RESPONSE:
+      return handleLikeArticleDelete(state, action);
+
+    case Type.DELETE_LIKE_ARTICLE_ERROR_RESPONSE:
       return { ...state };
 
     // case Type.UPDATE_ARTICLE_SUCCESS:
