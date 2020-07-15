@@ -17,10 +17,10 @@ class Navbar extends Component {
     this.props.dispatch(getArticlesList());
   }
 
-  static getDerivedStateFromProps(nextProps, state) {
-    if (nextProps.loggedIn) {
+  componentDidUpdate(prevProps) {
+    if (this.props.loggedIn !== prevProps.loggedIn) {
       //   state.userName = nextProps.authReducer.user.name;
-      state.isLoggedIn = nextProps.loggedIn;
+      this.setState({ isLoggedIn: this.props.loggedIn });
     }
     return null;
   }

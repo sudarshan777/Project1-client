@@ -11,7 +11,7 @@ import {
   getFollowing,
   getUserWrittenArticles,
 } from "../redux/actions/get-user";
-import ArticlesList from "./articles-list";
+import ArticlesList from "./article/articles-list";
 
 class ErrorBoundary extends Component {
   state = { errorMessage: null };
@@ -55,28 +55,26 @@ class User extends Component {
     };
   }
 
-  // UNSAFE_componentWillMount() {
-  //   this.props.dispatch(getUser(this.props.match.params.id));
-  //   this.props.dispatch(getBookmarks(this.props.match.params.id));
-  // }
-
   componentDidMount() {
     this.props.dispatch(getUser(this.props.match.params.id));
     this.props.dispatch(getBookmarks(this.props.match.params.id));
   }
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({
-      user: {
-        role: nextProps.userDetails.role,
-        bookmarks: nextProps.userDetails.bookmarks,
-        articleLiked: nextProps.userDetails.articleLiked,
-        following: nextProps.userDetails.following,
-        followers: nextProps.userDetails.followers,
-        _id: nextProps.userDetails._id,
-        name: nextProps.userDetails.name,
-        commented: nextProps.userDetails.commented,
-      },
-    });
+  componentDidUpdate(prevProps) {
+    if (this.props.userDetails !== prevProps.userDetails) {
+      console.log(this.props.user);
+      this.setState({
+        user: {
+          role: this.props.userDetails.role,
+          bookmarks: this.props.userDetails.bookmarks,
+          articleLiked: this.props.userDetails.articleLiked,
+          following: this.props.userDetails.following,
+          followers: this.props.userDetails.followers,
+          _id: this.props.userDetails._id,
+          name: this.props.userDetails.name,
+          commented: this.props.userDetails.commented,
+        },
+      });
+    }
   }
 
   handleFollow = (e) => {
@@ -180,7 +178,7 @@ class User extends Component {
           - {this.state.user.following.length}
         </h6>
 
-        {this.props.loggedIn ? followButton : null}
+        {this.props.loggedIn ? this.followButton() : null}
 
         <ErrorBoundary>
           <ArticlesList article={null} />
