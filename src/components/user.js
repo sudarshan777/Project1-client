@@ -292,7 +292,11 @@ class User extends Component {
                     <strong> {this.state.user.followers.length}</strong>
                   </h2>
                   <p>
-                    <small>Followers</small>
+                    <small>
+                      <a href="#" onClick={this.handleClickFollowers}>
+                        Followers
+                      </a>
+                    </small>
                   </p>
                   <button class="btn btn-success btn-block">
                     <span class="fa fa-plus-circle"></span> Follow{" "}
@@ -303,10 +307,17 @@ class User extends Component {
                     <strong>{this.state.user.following.length}</strong>
                   </h2>
                   <p>
-                    <small>Following</small>
+                    <small>
+                      <a href="#" onClick={this.handleClickFollowing}>
+                        Following
+                      </a>
+                    </small>
                   </p>
-                  <button class="btn btn-info btn-block">
-                    <span class="fa fa-user"></span> View Profile{" "}
+                  <button
+                    class="btn btn-info btn-block"
+                    onClick={this.handleClickArticlesWritten}
+                  >
+                    <span class="fa fa-user"></span> View Articles{" "}
                   </button>
                 </div>
                 <div class="col-xs-12 col-sm-4 emphasis">
@@ -361,6 +372,46 @@ class User extends Component {
               </div>
             </div>
           </div>
+        </div>
+        <div>
+          {this.state.showArticles && this.props.articles.length !== 0 ? (
+            <div>
+              <h5>Articles Written</h5>
+              <ArticlesList articles={this.props.articles} />
+            </div>
+          ) : null}
+        </div>
+        <div>
+          {this.state.showFollowers && this.props.followers.length !== 0 ? (
+            <div>
+              <h5>Followers</h5>
+              <ul>
+                {this.props.followers.map((user) => {
+                  return (
+                    <li key={user._id}>
+                      <Link to={"/user/" + user._id}>{user.name}</Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          {this.state.showFollowing && this.props.following.length !== 0 ? (
+            <div>
+              <h5>Following</h5>
+              <ul>
+                {this.props.following.map((user) => {
+                  return (
+                    <li key={user._id}>
+                      <Link to={"/user/" + user._id}>{user.name}</Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
         </div>
       </div>
     );
