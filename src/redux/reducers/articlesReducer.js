@@ -59,6 +59,21 @@ const handleRemoveBookmark = (state, action) => {
 
   return { ...newState };
 };
+
+const handleArticleDelete = (state, action) => {
+  console.log("DELETE" + JSON.stringify(state.result));
+  console.log("REducer DELETE" + JSON.stringify(action._id));
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      loading: false,
+      article: {},
+      message: JSON.parse(JSON.stringify(action.result)),
+    });
+  }
+
+  return { newState };
+};
 export default (state = initialUserObj, action = {}) => {
   switch (action.type) {
     // create new articles
@@ -101,7 +116,7 @@ export default (state = initialUserObj, action = {}) => {
     case Type.BOOKMARK_ARTICLE_ERROR_RESPONSE:
       return { ...state };
 
-       // Remove bookmark on an Article
+    // Remove bookmark on an Article
     case Type.UN_BOOKMARK_ARTICLE:
       return { ...state, loading: true };
 
@@ -115,13 +130,7 @@ export default (state = initialUserObj, action = {}) => {
     //     return handleArticleList(state, action);
 
     case Type.DELETE_ARTICLE_SUCCESS:
-      const newState = state.result.filter(
-        (eachArticle) => eachArticle._id !== action._id
-      );
-      console.log("DELETE" + JSON.stringify(state.result));
-      console.log("REducer DELETE" + JSON.stringify(action._id));
-      console.log("sds" + newState);
-      return { newState };
+      return handleArticleDelete(state, action);
 
     default:
       return { ...state };

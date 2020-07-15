@@ -20,12 +20,11 @@ class Registration extends Component {
     });
   };
 
-  static getDerivedStateFromProps(props, state) {
+  componentDidUpdate(props) {
     if (props.isLoggedIn) {
       console.log(props);
-      props.history.push("/article-list");
+      props.history.push("/");
     }
-    return null;
   }
 
   onSubmit = (e) => {
