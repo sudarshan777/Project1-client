@@ -43,7 +43,7 @@ class Registration extends Component {
       email: "",
       password: "",
     });
-    // window.location = "/";
+    window.location = "/";
   };
 
   render() {

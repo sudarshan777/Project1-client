@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import ArticlesList from "./article/articles-list";
-import { getArticlesList } from "../redux/actions/get-list";
-
 class Home extends Component {
   render() {
     return (
