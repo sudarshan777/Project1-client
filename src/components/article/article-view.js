@@ -18,7 +18,6 @@ class ArticleView extends Component {
         body: "",
         user_id: "",
         user_name: "",
-        comments: [],
       },
       newComment: "",
     };
@@ -34,7 +33,6 @@ class ArticleView extends Component {
           body: this.props.article.body,
           user_id: this.props.article.user._id,
           user_name: this.props.article.user.name,
-          comments: [],
         },
         isBookmarked: false,
       });
@@ -91,26 +89,26 @@ class ArticleView extends Component {
   };
 
   commentsList = () => {
-    if (this.state.articleDetails.comments.length > 0) {
-      return (
-        <div>
-          <h6>
-            {" "}
-            <b>Comments</b>
-          </h6>
+    // if (this.state.articleDetails.comments.length > 0) {
+    //   return (
+    //     <div>
+    //       <h6>
+    //         {" "}
+    //         <b>Comments</b>
+    //       </h6>
 
-          <ul className="list-group">
-            {this.state.articleDetails.comments.map((comment, index) => {
-              return (
-                <li className="list-group-item" key={index}>
-                  {comment.body} by {/*comment.user.name*/}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      );
-    }
+    //       <ul className="list-group">
+    //         {this.state.articleDetails.comments.map((comment, index) => {
+    //           return (
+    //             <li className="list-group-item" key={index}>
+    //               {comment.body} by {/*comment.user.name*/}
+    //             </li>
+    //           );
+    //         })}
+    //       </ul>
+    //     </div>
+    //   );
+    // }
     return null;
   };
   deleteArticle = () => {
