@@ -3,6 +3,8 @@ import * as Types from "../actions/types";
 const initialUserObj = {
   user: {},
   bookmarks: [],
+  followers: [],
+  following: [],
   message: "",
 };
 
@@ -58,6 +60,29 @@ const unFollowUserSuccessResponse = (state, action) => {
   return { ...newState };
 };
 
+const getFollowersSuccessResponse = (state, action) => {
+  console.log("REdux" + JSON.stringify(action));
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      followers: JSON.parse(JSON.stringify(action.result.followers)),
+    });
+    console.log("New" + JSON.stringify(newState));
+  }
+  return { ...newState };
+};
+const getFollowingSuccessResponse = (state, action) => {
+  console.log("REdux" + JSON.stringify(action));
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      following: JSON.parse(JSON.stringify(action.result.following)),
+    });
+    console.log("New" + JSON.stringify(newState));
+  }
+  return { ...newState };
+};
+
 export default (state = initialUserObj, action = {}) => {
   switch (action.type) {
     case Types.GET_USER:
@@ -91,6 +116,23 @@ export default (state = initialUserObj, action = {}) => {
     case Types.GET_BOOKMARKS_ERROR_RESPONSE:
       return { ...state };
 
+    // get followers
+
+    case Types.GET_FOLLOWERS:
+      return { ...state };
+    case Types.GET_FOLLOWERS_SUCCESS_RESPONSE:
+      return getFollowersSuccessResponse(state, action);
+    case Types.GET_FOLLOWERS_ERROR_RESPONSE:
+      return { ...state };
+
+    // get following
+
+    case Types.GET_FOLLOWING:
+      return { ...state };
+    case Types.GET_FOLLOWING_SUCCESS_RESPONSE:
+      return getFollowingSuccessResponse(state, action);
+    case Types.GET_FOLLOWING_ERROR_RESPONSE:
+      return { ...state };
     default:
       return state;
   }
