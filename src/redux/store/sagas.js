@@ -234,7 +234,7 @@ function* deleteBookmark(action) {
     formBody.user = action.user_id;
     console.log("FormBody" + JSON.stringify(formBody));
 
-    const postUrl = baseUrl + "/articles/unbookmark/" + action.article_id;
+    const postUrl = baseUrl + "/articles/bookmark/" + action.article_id;
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     console.log("Result Json" + JSON.stringify(result));

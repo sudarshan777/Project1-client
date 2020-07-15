@@ -6,7 +6,8 @@ import {
   listArticleDetails,
   bookmarkArticle,
   removeBookmarkArticle,
-} from "../redux/actions/articlesActions";
+  deleteArticle,
+} from "../../redux/actions/articlesActions";
 
 class ArticleView extends Component {
   constructor(props) {
@@ -22,21 +23,22 @@ class ArticleView extends Component {
       newComment: "",
     };
   }
-  UNSAFE_componentWillMount() {
+  componentDidMount() {
     this.props.dispatch(listArticleDetails(this.props.match.params.id));
   }
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({
-      articleDetails: {
-        title: nextProps.article.title,
-        body: nextProps.article.body,
-        user_id: nextProps.article.user._id,
-        user_name: nextProps.article.user.name,
-        comments: nextProps.article.comments,
-      },
-      isBookmarked: false,
-    });
-    console.log(this.state.articleDetails);
+  componentDidUpdate(prevProps) {
+    if (this.props.article !== prevProps.article) {
+      this.setState({
+        articleDetails: {
+          title: this.props.article.title,
+          body: this.props.article.body,
+          user_id: this.props.article.user._id,
+          user_name: this.props.article.user.name,
+          comments: [],
+        },
+        isBookmarked: false,
+      });
+    }
   }
 
   onChange = (e) => {
@@ -111,7 +113,21 @@ class ArticleView extends Component {
     }
     return null;
   };
+  deleteArticle = () => {
+    if (this.props.user.id === this.state.articleDetails.user_id) {
+      return (
+        <button className="btn btn-primary" onClick={this.handleDelete}>
+          Delete
+        </button>
+      );
+    }
+    return null;
+  };
 
+  handleDelete = (e) => {
+    this.props.dispatch(deleteArticle(this.props.match.params.id));
+    window.location = "/";
+  };
   render() {
     return (
       <div className="container-fluid">
@@ -132,6 +148,7 @@ class ArticleView extends Component {
           Remove Bookmark
         </button>
 
+        {this.deleteArticle()}
         <hr />
 
         {this.commentsList()}

@@ -16,7 +16,7 @@ const Article = (props) => {
           {props.article.user.name}
         </Link>
         <br />
-        <b>Created at - </b> {props.article.date.substring(0, 10)}
+        <b>Created at - </b> {props.article.createdAt.substring(0, 10)}
         <br />
       </div>
     </div>
