@@ -499,6 +499,30 @@ function* signUpUser(action) {
     console.log(error);
   }
 }
+
+function* getArticlesLiked(action) {
+  console.log("Get Action->" + JSON.stringify(action));
+
+  const reqMethod = "GET";
+  const loginUrl = baseUrl + "/like/user/all_articles/" + action._id;
+
+  const response = yield call(GetDataFromServer, loginUrl, "", "");
+
+  const result = yield response.json();
+
+  console.log("Result->" + JSON.stringify(result));
+  if (result.error) {
+    yield put({
+      type: Types.GET_ARTICLES_LIKED_ERROR_RESPONSE,
+      result,
+    });
+  } else {
+    yield put({
+      type: Types.GET_ARTICLES_LIKED_SUCCESS_RESPONSE,
+      result,
+    });
+  }
+}
 export default function* rootSaga(params) {
   yield takeLatest(Types.LOGIN_USER, fetchLoginUser);
   yield takeEvery(Types.ARTICLE_LIST, listArticles);
@@ -521,5 +545,6 @@ export default function* rootSaga(params) {
   yield takeEvery(Types.GET_ARTICLE_COMMENTS, getArticleComments);
   yield takeEvery(Types.GET_ARTICLE_LIKES, getArticleLikes);
   yield takeEvery(Types.DELETE_LIKE_ARTICLE, deleteArticleLike);
+  yield takeEvery(Types.GET_ARTICLES_LIKED, getArticlesLiked);
   console.log("ROOT SAGA");
 }

@@ -6,6 +6,7 @@ const initialUserObj = {
   followers: [],
   following: [],
   articles: [],
+  articlesLiked: [],
   message: "",
 };
 
@@ -96,6 +97,18 @@ const getArticlesSuccessResponse = (state, action) => {
   return { ...newState };
 };
 
+const getArticlesLikedSuccessResponse = (state, action) => {
+  console.log("REdux" + JSON.stringify(action));
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      articlesLiked: JSON.parse(JSON.stringify(action.result)),
+    });
+    console.log("New" + JSON.stringify(newState));
+  }
+  return { ...newState };
+};
+
 export default (state = initialUserObj, action = {}) => {
   switch (action.type) {
     case Types.GET_USER:
@@ -155,6 +168,16 @@ export default (state = initialUserObj, action = {}) => {
       return getArticlesSuccessResponse(state, action);
     case Types.GET_USER_WRITTEN_ARTICLES_SERVER_RESPONSE_ERROR:
       return { ...state };
+
+    // get articles liked
+
+    case Types.GET_ARTICLES_LIKED:
+      return { ...state };
+    case Types.GET_ARTICLES_LIKED_SUCCESS_RESPONSE:
+      return getArticlesLikedSuccessResponse(state, action);
+    case Types.GET_ARTICLES_LIKED_ERROR_RESPONSE:
+      return { ...state };
+
     default:
       return state;
   }
