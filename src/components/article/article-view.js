@@ -24,14 +24,25 @@ const Comments = (props) => {
         <ul className="list-group">
           {props.comments.map((comment, index) => {
             return (
-              <li className="list-group-item" key={index}>
-                <p>{comment.body}</p>-
-                <Link to={"/user/" + comment.user._id}>
-                  {comment.user.name}
+              // <li className="list-group-item" key={index}>
+              //   <p>{comment.body}</p>-
+              //   <Link to={"/user/" + comment.user._id}>
+              //     {comment.user.name}
+              //   </Link>
+              //   <br />
+              //   <b>Date - </b> {comment.createdAt.substring(0, 10)}
+              // </li>
+              <div>
+              <div class="card">
+  <div class="card-body">
+    <p><h3>{comment.body}</h3></p>
+    <b>By -</b><Link to={"/user/" + comment.user._id}>
+                {comment.user.name}
                 </Link>
                 <br />
                 <b>Date - </b> {comment.createdAt.substring(0, 10)}
-              </li>
+  </div>
+</div><br/></div>
             );
           })}
         </ul>
