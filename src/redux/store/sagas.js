@@ -252,12 +252,7 @@ function* editComment(action) {
     formBody = action.comment;
     console.log("FormBody" + JSON.stringify(formBody));
 
-    const postUrl =
-      baseUrl +
-      "/comments/edit/" +
-      action.comment_id +
-      "/user/" +
-      action.user_id;
+    const postUrl = baseUrl + "/comments/edit/" + action.comment_id;
 
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
@@ -285,26 +280,13 @@ function* deleteComment(action) {
     // Ensure that your API returns the data of the updated todo
     let formBody = {};
     // formBody._id = action._id;
-    const deleteApi =
-      baseUrl +
-      "comments/delete/" +
-      action.comment_id +
-      "/user/" +
-      action.user_id;
+    const deleteApi = baseUrl + "/comments/delete/" + action.comment_id;
     const result = yield call(deleteService, formBody, deleteApi); // Refer sample to api calls in remote.js file
     /// Other things can go here depending on what you want
-
-    if (result.error) {
-      yield put({
-        type: Types.DELETE_COMMENT_ARTICLE_SERVER_RESPONSE_ERROR,
-        result,
-      }); // pass in the id you updated and the newData returned from the API
-    } else {
-      yield put({
-        type: Types.DELETE_COMMENT_ARTICLE_SERVER_RESPONSE_SUCCESS,
-        result,
-      }); // pass in the id you updated and the newData returned from the API
-    }
+    yield put({
+      type: Types.DELETE_COMMENT_ARTICLE_SERVER_RESPONSE_SUCCESS,
+      result,
+    }); // pass in the id you updated and the newData returned from the API
     console.log("Comment DELETE" + JSON.stringify(result));
   } catch (e) {
     console.log("SAGA ERROR");
@@ -329,7 +311,7 @@ function* postBookmark(action) {
       });
     } else {
       yield put({
-        type: Types.BOOKMARK_ARTICLE_ERROR_RESPONSE,
+        type: Types.BOOKMARK_ARTICLE_SUCCESS_RESPONSE,
         result,
       });
     }
