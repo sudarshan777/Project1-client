@@ -223,7 +223,7 @@ function* postComment(action) {
     formBody = action.comment;
     console.log("FormBody" + JSON.stringify(formBody));
 
-    const postUrl = baseUrl + "/comments/post/article/" + action._id;
+    const postUrl = baseUrl + "/comments/post/" + action._id;
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     console.log("Result Json" + JSON.stringify(result));
