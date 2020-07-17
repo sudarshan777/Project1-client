@@ -167,7 +167,10 @@ class ArticleView extends Component {
     const comment = {
       body: comment_body,
     };
-    this.props.dispatch(editComment(comment_id, this.props.user.id, comment));
+    this.props.dispatch(editComment(comment_id, comment));
+  };
+  handleDeleteComment = (comment_id) => {
+    this.props.dispatch(deleteComment(comment_id));
   };
   handlebookmark = (e) => {
     if (this.props.loggedIn) {
@@ -200,10 +203,7 @@ class ArticleView extends Component {
       this.setState({ showComments: false });
     }
   };
-  handleDeleteComment = (comment_id) => {
-    const user_id = this.props.user.id;
-    this.props.dispatch(deleteComment(comment_id, user_id));
-  };
+
   handleLike = (e) => {
     if (this.props.loggedIn && !this.state.isLiked) {
       this.props.dispatch(
