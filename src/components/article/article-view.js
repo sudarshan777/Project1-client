@@ -34,15 +34,17 @@ const Comments = (props) => {
               // </li>
               <div>
               <div class="card">
-  <div class="card-body">
-    <p><h3>{comment.body}</h3></p>
-    <b>By -</b><Link to={"/user/" + comment.user._id}>
-                {comment.user.name}
-                </Link>
-                <br />
-                <b>Date - </b> {comment.createdAt.substring(0, 10)}
-  </div>
-</div><br/></div>
+              <div class="card-body">
+              <p><h3>{comment.body}</h3></p>
+              <b>By -</b><Link to={"/user/" + comment.user._id}>
+              {comment.user.name}
+              </Link>
+              <br />
+              <b>Date - </b> {comment.createdAt.substring(0, 10)}
+              </div>
+              </div>
+              <br/>
+              </div>
             );
           })}
         </ul>
@@ -224,7 +226,7 @@ class ArticleView extends Component {
           </a>
         </h6>
         {this.state.showComments ? (
-          <Comments comments={this.props.comments} />
+          <Comments comments={this.props.comments} user={this.props.user} loggedIn={this.props.loggedIn} />
         ) : (
           ""
         )}
