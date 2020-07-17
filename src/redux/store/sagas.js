@@ -297,10 +297,10 @@ function* postBookmark(action) {
     console.log("Post New Bookmark Action->" + JSON.stringify(action.comment));
 
     let formBody = {};
-    formBody.user = action.user_id;
+    formBody.articleId = action.article_id;
     console.log("FormBody" + JSON.stringify(formBody));
 
-    const postUrl = baseUrl + "/articles/bookmark/" + action.article_id;
+    const postUrl = baseUrl + "/user/bookmark/" + action.user_id;
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     console.log("Result Json" + JSON.stringify(result));
@@ -326,10 +326,10 @@ function* deleteBookmark(action) {
     console.log("Delete Bookmark Action->" + JSON.stringify(action.article_id));
 
     let formBody = {};
-    formBody.user = action.user_id;
+    formBody.user = action.article_id;
     console.log("FormBody" + JSON.stringify(formBody));
 
-    const postUrl = baseUrl + "/articles/bookmark/" + action.article_id;
+    const postUrl = baseUrl + "/user/bookmark/" + action.user_id;
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     console.log("Result Json" + JSON.stringify(result));
