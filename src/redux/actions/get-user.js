@@ -18,6 +18,11 @@ export const getFollowing = (_id) => ({
   type: Types.GET_FOLLOWING,
   _id,
 });
+
+export const getArticlesLiked = (_id) => ({
+  type: Types.GET_ARTICLES_LIKED,
+  _id,
+});
 export const getUserWrittenArticles = (_id) => ({
   type: Types.GET_USER_WRITTEN_ARTICLES,
   _id,
