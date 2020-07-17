@@ -11,6 +11,8 @@ import {
   listArticleLikes,
   postLikeArticle,
   deleteLikeArticle,
+  deleteComment,
+  editComment,
 } from "../../redux/actions/articlesActions";
 
 const Comments = (props) => {
@@ -110,6 +112,12 @@ class ArticleView extends Component {
 
     // window.location = "/";
   };
+  handleEditComment = (comment_body, comment_id) => {
+    const comment = {
+      body: comment_body,
+    };
+    this.props.dispatch(editComment(comment_id, this.props.user.id, comment));
+  };
   handlebookmark = (e) => {
     if (this.props.loggedIn) {
       this.props.dispatch(
@@ -140,6 +148,10 @@ class ArticleView extends Component {
     } else {
       this.setState({ showComments: false });
     }
+  };
+  handleDeleteComment = (comment_id) => {
+    const user_id = this.props.user.id;
+    this.props.dispatch(deleteComment(comment_id, user_id));
   };
   handleLike = (e) => {
     if (this.props.loggedIn && !this.state.isLiked) {
