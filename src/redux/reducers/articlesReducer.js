@@ -120,6 +120,30 @@ const handleLikeArticleDelete = (state, action) => {
 
   return { ...newState };
 };
+const handleEditComment = (state, action) => {
+  console.log("EDIT" + JSON.stringify(state.result));
+  console.log("REducer EDIT" + JSON.stringify(action._id));
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      message: JSON.parse(JSON.stringify(action.result)),
+    });
+  }
+
+  return { ...newState };
+};
+const handleDeleteComment = (state, action) => {
+  console.log("DELETE" + JSON.stringify(state.result));
+  console.log("REducer DELETE" + JSON.stringify(action._id));
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      message: JSON.parse(JSON.stringify(action.result)),
+    });
+  }
+
+  return { ...newState };
+};
 export default (state = initialUserObj, action = {}) => {
   switch (action.type) {
     // create new articles
@@ -169,6 +193,24 @@ export default (state = initialUserObj, action = {}) => {
       return handleNewComment(state, action);
 
     case Type.POST_COMMENT_ARTICLE_DETAILS_SERVER_RESPONSE_ERROR:
+      return { ...state };
+    // EDIT a comment
+    case Type.EDIT_COMMENT_ARTICLE:
+      return { ...state, loading: true };
+
+    case Type.EDIT_COMMENT_ARTICLE_SERVER_RESPONSE_SUCCESS:
+      return handleEditComment(state, action);
+
+    case Type.EDIT_COMMENT_ARTICLE_SERVER_RESPONSE_ERROR:
+      return { ...state };
+    // Delete a comment
+    case Type.DELETE_COMMENT_ARTICLE:
+      return { ...state, loading: true };
+
+    case Type.DELETE_COMMENT_ARTICLE_SERVER_RESPONSE_SUCCESS:
+      return handleDeleteComment(state, action);
+
+    case Type.DELETE_COMMENT_ARTICLE_SERVER_RESPONSE_ERROR:
       return { ...state };
 
     //  bookmark on an Article

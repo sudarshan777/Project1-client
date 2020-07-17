@@ -244,6 +244,72 @@ function* postComment(action) {
     console.log(error);
   }
 }
+function* editComment(action) {
+  try {
+    console.log(" Edit Comment Action->" + JSON.stringify(action.comment));
+
+    let formBody = {};
+    formBody = action.comment;
+    console.log("FormBody" + JSON.stringify(formBody));
+
+    const postUrl =
+      baseUrl +
+      "/comments/edit/" +
+      action.comment_id +
+      "/user/" +
+      action.user_id;
+
+    const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
+    const result = yield response.json();
+    console.log("Result Json" + JSON.stringify(result));
+    if (result.error) {
+      yield put({
+        type: Types.EDIT_COMMENT_ARTICLE_SERVER_RESPONSE_ERROR,
+        error: result.error,
+      });
+    } else {
+      yield put({
+        type: Types.EDIT_COMMENT_ARTICLE_SERVER_RESPONSE_SUCCESS,
+        result,
+      });
+      console.log("Edit Comment DETAILS" + JSON.stringify(result));
+    }
+  } catch (error) {
+    // yield put({ type: Types.SERVER_CALL_FAILED, error: error.message });
+    console.log(error);
+  }
+}
+function* deleteComment(action) {
+  console.log("DELETE COMMENT ACTION" + JSON.stringify(action));
+  try {
+    // Ensure that your API returns the data of the updated todo
+    let formBody = {};
+    // formBody._id = action._id;
+    const deleteApi =
+      baseUrl +
+      "comments/delete/" +
+      action.comment_id +
+      "/user/" +
+      action.user_id;
+    const result = yield call(deleteService, formBody, deleteApi); // Refer sample to api calls in remote.js file
+    /// Other things can go here depending on what you want
+
+    if (result.error) {
+      yield put({
+        type: Types.DELETE_COMMENT_ARTICLE_SERVER_RESPONSE_ERROR,
+        result,
+      }); // pass in the id you updated and the newData returned from the API
+    } else {
+      yield put({
+        type: Types.DELETE_COMMENT_ARTICLE_SERVER_RESPONSE_SUCCESS,
+        result,
+      }); // pass in the id you updated and the newData returned from the API
+    }
+    console.log("Comment DELETE" + JSON.stringify(result));
+  } catch (e) {
+    console.log("SAGA ERROR");
+  }
+}
 function* postBookmark(action) {
   try {
     console.log("Post New Bookmark Action->" + JSON.stringify(action.comment));
@@ -532,6 +598,8 @@ export default function* rootSaga(params) {
   yield takeEvery(Types.GET_USER, getUser);
   yield takeEvery(Types.GET_ARTICLE_DETAILS, getArticleDetails);
   yield takeEvery(Types.POST_COMMENT_ARTICLE, postComment);
+  yield takeEvery(Types.EDIT_COMMENT_ARTICLE, editComment);
+  yield takeEvery(Types.DELETE_COMMENT_ARTICLE, deleteComment);
   yield takeEvery(Types.BOOKMARK_ARTICLE, postBookmark);
   yield takeEvery(Types.UN_BOOKMARK_ARTICLE, deleteBookmark);
   yield takeEvery(Types.LIKE_ARTICLE, postLike);
