@@ -61,7 +61,7 @@ const Comments = (props) => {
                           data-toggle="tooltip"
                           data-placement="top"
                           title="Delete Comment"
-                          onClick={this.deleteComment}
+                          onClick={props.delete(comment._id)}
                         >
                           <span
                             class="glyphicon glyphicon-remove"
@@ -276,7 +276,11 @@ class ArticleView extends Component {
           </a>
         </h6>
         {this.state.showComments ? (
-          <Comments comments={this.props.comments} user={this.props.user} />
+          <Comments
+            comments={this.props.comments}
+            user={this.props.user}
+            delete={this.handleDeleteComment}
+          />
         ) : (
           ""
         )}

@@ -9,7 +9,10 @@ import {
   takeLatest,
 } from "redux-saga/effects";
 import * as Types from "../actions/types";
-import { GetDataFromServer, deleteService } from "../service";
+import {
+  GetDataFromServer,
+  deleteService
+} from "../service";
 
 const baseUrl = "https://mern-article.herokuapp.com";
 // const baseUrl = "http://localhost:5000";
@@ -34,7 +37,10 @@ function* fetchLoginUser(action) {
         error: result.error,
       });
     } else {
-      yield put({ type: Types.LOGIN_USER_SERVER_RESPONSE_SUCCESS, result });
+      yield put({
+        type: Types.LOGIN_USER_SERVER_RESPONSE_SUCCESS,
+        result
+      });
     }
   } catch (error) {
     // yield put({ type: Types.SERVER_CALL_FAILED, error: error.message });
@@ -54,11 +60,18 @@ function* listArticles(action) {
 
   console.log("Result->" + JSON.stringify(result));
   if (result.error) {
-    yield put({ type: Types.ARTICLE_LIST_ERROR_RESPONSE, result });
+    yield put({
+      type: Types.ARTICLE_LIST_ERROR_RESPONSE,
+      result
+    });
   } else {
-    yield put({ type: Types.ARTICLE_LIST_SUCCESS_RESPONSE, result });
+    yield put({
+      type: Types.ARTICLE_LIST_SUCCESS_RESPONSE,
+      result
+    });
   }
 }
+
 function* getUser(action) {
   console.log("Get Action->" + JSON.stringify(action));
 
@@ -71,9 +84,15 @@ function* getUser(action) {
 
   console.log("Result->" + JSON.stringify(result));
   if (result.error) {
-    yield put({ type: Types.GET_USER_ERROR_RESPONSE, result });
+    yield put({
+      type: Types.GET_USER_ERROR_RESPONSE,
+      result
+    });
   } else {
-    yield put({ type: Types.GET_USER_SUCCESS_RESPONSE, result });
+    yield put({
+      type: Types.GET_USER_SUCCESS_RESPONSE,
+      result
+    });
   }
 }
 
@@ -89,9 +108,15 @@ function* getBookmarks(action) {
 
   console.log("Result->" + JSON.stringify(result));
   if (result.error) {
-    yield put({ type: Types.GET_BOOKMARKS_ERROR_RESPONSE, result });
+    yield put({
+      type: Types.GET_BOOKMARKS_ERROR_RESPONSE,
+      result
+    });
   } else {
-    yield put({ type: Types.GET_BOOKMARKS_SUCCESS_RESPONSE, result });
+    yield put({
+      type: Types.GET_BOOKMARKS_SUCCESS_RESPONSE,
+      result
+    });
   }
 }
 
@@ -142,6 +167,7 @@ function* getArticleComments(action) {
     });
   }
 }
+
 function* getArticleLikes(action) {
   console.log("Get Action->" + JSON.stringify(action));
 
@@ -209,12 +235,16 @@ function* deleteArticleDetails(action) {
     //const deleteApi = "http://localhost:5066/delete-project";
     const deleteApi = baseUrl + "/articles/" + action._id;
     const newData = yield call(deleteService, formBody, deleteApi); // Refer sample to api calls in remote.js file
-    yield put({ type: Types.DELETE_ARTICLE_SUCCESS, newData }); // pass in the id you updated and the newData returned from the API
+    yield put({
+      type: Types.DELETE_ARTICLE_SUCCESS,
+      newData
+    }); // pass in the id you updated and the newData returned from the API
     /// Other things can go here depending on what you want
   } catch (e) {
     console.log("SAGA ERROR");
   }
 }
+
 function* postComment(action) {
   try {
     console.log("Post New Comment Action->" + JSON.stringify(action.comment));
@@ -244,6 +274,7 @@ function* postComment(action) {
     console.log(error);
   }
 }
+
 function* editComment(action) {
   try {
     console.log(" Edit Comment Action->" + JSON.stringify(action.comment));
@@ -279,15 +310,16 @@ function* editComment(action) {
     console.log(error);
   }
 }
+
 function* deleteComment(action) {
   console.log("DELETE COMMENT ACTION" + JSON.stringify(action));
   try {
     // Ensure that your API returns the data of the updated todo
     let formBody = {};
-    // formBody._id = action._id;
+    formBody._id = action._id;
     const deleteApi =
       baseUrl +
-      "comments/delete/" +
+      "/comments/delete/" +
       action.comment_id +
       "/user/" +
       action.user_id;
@@ -310,6 +342,7 @@ function* deleteComment(action) {
     console.log("SAGA ERROR");
   }
 }
+
 function* postBookmark(action) {
   try {
     console.log("Post New Bookmark Action->" + JSON.stringify(action.comment));
@@ -339,6 +372,7 @@ function* postBookmark(action) {
     console.log(error);
   }
 }
+
 function* deleteBookmark(action) {
   try {
     console.log("Delete Bookmark Action->" + JSON.stringify(action.article_id));
@@ -410,9 +444,15 @@ function* deleteArticleLike(action) {
     /// Other things can go here depending on what you want
 
     if (result.error) {
-      yield put({ type: Types.DELETE_LIKE_ARTICLE_ERROR_RESPONSE, result }); // pass in the id you updated and the newData returned from the API
+      yield put({
+        type: Types.DELETE_LIKE_ARTICLE_ERROR_RESPONSE,
+        result
+      }); // pass in the id you updated and the newData returned from the API
     } else {
-      yield put({ type: Types.DELETE_LIKE_ARTICLE_SUCCESS_RESPONSE, result }); // pass in the id you updated and the newData returned from the API
+      yield put({
+        type: Types.DELETE_LIKE_ARTICLE_SUCCESS_RESPONSE,
+        result
+      }); // pass in the id you updated and the newData returned from the API
     }
     console.log("LIKE DELETE DETAILS" + JSON.stringify(result));
   } catch (e) {
@@ -432,11 +472,18 @@ function* getFollowers(action) {
 
   console.log("Result->" + JSON.stringify(result));
   if (result.error) {
-    yield put({ type: Types.GET_FOLLOWERS_ERROR_RESPONSE, result });
+    yield put({
+      type: Types.GET_FOLLOWERS_ERROR_RESPONSE,
+      result
+    });
   } else {
-    yield put({ type: Types.GET_FOLLOWERS_SUCCESS_RESPONSE, result });
+    yield put({
+      type: Types.GET_FOLLOWERS_SUCCESS_RESPONSE,
+      result
+    });
   }
 }
+
 function* getFollowing(action) {
   console.log("Get Action->" + JSON.stringify(action));
 
@@ -449,9 +496,15 @@ function* getFollowing(action) {
 
   console.log("Result->" + JSON.stringify(result));
   if (result.error) {
-    yield put({ type: Types.GET_FOLLOWING_ERROR_RESPONSE, result });
+    yield put({
+      type: Types.GET_FOLLOWING_ERROR_RESPONSE,
+      result
+    });
   } else {
-    yield put({ type: Types.GET_FOLLOWING_SUCCESS_RESPONSE, result });
+    yield put({
+      type: Types.GET_FOLLOWING_SUCCESS_RESPONSE,
+      result
+    });
   }
 }
 
@@ -478,6 +531,7 @@ function* getUserArticles(action) {
     });
   }
 }
+
 function* followUser(action) {
   try {
     console.log("Follow User Action->" + JSON.stringify(action.comment));
@@ -507,6 +561,7 @@ function* followUser(action) {
     console.log(error);
   }
 }
+
 function* unFollowUser(action) {
   try {
     console.log("Un Follow Use Action->" + JSON.stringify(action.comment));
@@ -558,7 +613,10 @@ function* signUpUser(action) {
         error: result.error,
       });
     } else {
-      yield put({ type: Types.SIGNUP_USER_SERVER_RESPONSE_SUCCESS, result });
+      yield put({
+        type: Types.SIGNUP_USER_SERVER_RESPONSE_SUCCESS,
+        result
+      });
     }
   } catch (error) {
     // yield put({ type: Types.SERVER_CALL_FAILED, error: error.message });
