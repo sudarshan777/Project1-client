@@ -33,17 +33,55 @@ const Comments = (props) => {
               //   <b>Date - </b> {comment.createdAt.substring(0, 10)}
               // </li>
               <div>
-              <div class="card">
-              <div class="card-body">
-              <p><h3>{comment.body}</h3></p>
-              <b>By -</b><Link to={"/user/" + comment.user._id}>
-              {comment.user.name}
-              </Link>
-              <br />
-              <b>Date - </b> {comment.createdAt.substring(0, 10)}
-              </div>
-              </div>
-              <br/>
+                <div class="card">
+                  <div class="card-body">
+                    <p>
+                      <h3>{comment.body}</h3>
+                    </p>
+                    {comment.user._id === props.user.id ? (
+                      <div style={{ float: "right" }}>
+                        <button
+                          class="btn btn-primary a-btn-slide-text"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Edit"
+                        >
+                          <span
+                            class="glyphicon glyphicon-edit"
+                            aria-hidden="true"
+                          ></span>
+                          <span>
+                            <strong>Edit</strong>
+                          </span>
+                        </button>{" "}
+                        <button
+                          class="btn btn-primary a-btn-slide-text"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Delete Comment"
+                          onClick={this.deleteComment}
+                        >
+                          <span
+                            class="glyphicon glyphicon-remove"
+                            aria-hidden="true"
+                          ></span>
+                          <span>
+                            <strong>Delete</strong>
+                          </span>
+                        </button>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    <b>By -</b>
+                    <Link to={"/user/" + comment.user._id}>
+                      {comment.user.name}
+                    </Link>
+                    <br />
+                    <b>Date - </b> {comment.createdAt.substring(0, 10)}
+                  </div>
+                </div>
+                <br />
               </div>
             );
           })}
@@ -226,28 +264,32 @@ class ArticleView extends Component {
           </a>
         </h6>
         {this.state.showComments ? (
-          <Comments comments={this.props.comments} user={this.props.user} loggedIn={this.props.loggedIn} />
+          <Comments comments={this.props.comments} user={this.props.user} />
         ) : (
           ""
         )}
 
         <br />
 
-        <form onSubmit={this.onSubmit}>
-          <div className="form-group">
-            <label>Add Comments </label>
-            <input
-              type="text"
-              required
-              className="form-control"
-              value={this.state.newComment}
-              onChange={this.onChange}
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </form>
+        {this.props.loggedIn ? (
+          <form onSubmit={this.onSubmit}>
+            <div className="form-group">
+              <label>Add Comments </label>
+              <input
+                type="text"
+                required
+                className="form-control"
+                value={this.state.newComment}
+                onChange={this.onChange}
+              />
+            </div>
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </form>
+        ) : (
+          " "
+        )}
       </div>
     );
   }
