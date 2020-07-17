@@ -21,12 +21,8 @@ const store = createStore(
   rootReducer,
   initialState,
   compose(
-<<<<<<< HEAD
-    applyMiddleware(...middleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-=======
     applyMiddleware(...middleware),
     // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
->>>>>>> bd761d8bf893746a64dfe106fe632838fda7b578
   )
 );
 

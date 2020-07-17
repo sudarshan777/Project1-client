@@ -37,9 +37,13 @@ const Comments = (props) => {
               <div>
                 <div class="card">
                   <div class="card-body">
-                    <p>
-                      <h3>{comment.body}</h3>
-                    </p>
+                    {props.editMode && comment.user._id === props.user.id ? (
+                      <input type="text" defaultValue={comment.body} />
+                    ) : (
+                      <p>
+                        <h3>{comment.body}</h3>
+                      </p>
+                    )}
                     {comment.user._id === props.user.id ? (
                       <div style={{ float: "right" }}>
                         <button
@@ -47,6 +51,7 @@ const Comments = (props) => {
                           data-toggle="tooltip"
                           data-placement="top"
                           title="Edit"
+                          onClick={props.edit}
                         >
                           <span
                             class="glyphicon glyphicon-edit"
@@ -57,14 +62,14 @@ const Comments = (props) => {
                           </span>
                         </button>{" "}
                         <button
-                          class="btn btn-primary a-btn-slide-text"
+                          className="btn btn-primary a-btn-slide-text"
                           data-toggle="tooltip"
                           data-placement="top"
                           title="Delete Comment"
-                          onClick={props.delete(comment._id)}
+                          //onClick={props.delete(comment._id)}
                         >
                           <span
-                            class="glyphicon glyphicon-remove"
+                            className="glyphicon glyphicon-remove"
                             aria-hidden="true"
                           ></span>
                           <span>
@@ -108,6 +113,7 @@ class ArticleView extends Component {
       isBookmarked: false,
       isLiked: false,
       likeId: "",
+      isEditMode: false,
     };
   }
   componentDidMount() {
@@ -164,6 +170,7 @@ class ArticleView extends Component {
     // window.location = "/";
   };
   handleEditComment = (comment_body, comment_id) => {
+    this.setState({ isEditMode: !this.state.isEditMode });
     const comment = {
       body: comment_body,
     };
@@ -279,7 +286,9 @@ class ArticleView extends Component {
           <Comments
             comments={this.props.comments}
             user={this.props.user}
-            delete={this.handleDeleteComment}
+            //delete={this.handleDeleteComment}
+            editMode={this.state.isEditMode}
+            edit={this.handleEditComment}
           />
         ) : (
           ""

@@ -311,18 +311,8 @@ function* deleteComment(action) {
   try {
     // Ensure that your API returns the data of the updated todo
     let formBody = {};
-<<<<<<< HEAD
-    formBody._id = action._id;
-    const deleteApi =
-      baseUrl +
-      "/comments/delete/" +
-      action.comment_id +
-      "/user/" +
-      action.user_id;
-=======
     // formBody._id = action._id;
     const deleteApi = baseUrl + "/comments/delete/" + action.comment_id;
->>>>>>> bd761d8bf893746a64dfe106fe632838fda7b578
     const result = yield call(deleteService, formBody, deleteApi); // Refer sample to api calls in remote.js file
     /// Other things can go here depending on what you want
     yield put({
