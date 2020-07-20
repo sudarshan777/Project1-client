@@ -105,6 +105,8 @@ const handleArticleDelete = (state, action) => {
     newState = Object.assign({}, state, {
       loading: false,
       article: {},
+      comments: [],
+      likes: [],
       message: JSON.parse(JSON.stringify(action.result)),
     });
   }
@@ -120,16 +122,14 @@ const handleLikeArticleDelete = (state, action) => {
   }
   return { ...newState };
 };
-<<<<<<< Updated upstream
-=======
+
 const handleEditComment = (state, action) => {
-  const result = JSON.parse(JSON.stringify(action.result));
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       comments: newState.comments.map((comment) => {
-        if (comment._id === result._id) {
-          comment.body = result.body;
+        if (comment._id === action.result._id) {
+          comment.body = action.result.body;
         }
       }),
     });
@@ -137,6 +137,7 @@ const handleEditComment = (state, action) => {
 
   return { ...newState };
 };
+
 const handleDeleteComment = (state, action) => {
   const result = JSON.parse(JSON.stringify(action.result));
   let newState = { ...state };
@@ -149,7 +150,7 @@ const handleDeleteComment = (state, action) => {
   }
   return { ...newState };
 };
->>>>>>> Stashed changes
+
 export default (state = initialUserObj, action = {}) => {
   switch (action.type) {
     // create new articles
@@ -209,6 +210,21 @@ export default (state = initialUserObj, action = {}) => {
 
     case Type.POST_COMMENT_ARTICLE_DETAILS_SERVER_RESPONSE_ERROR:
       return { ...state };
+    // EDIT a comment
+    case Type.EDIT_COMMENT_ARTICLE:
+      return { ...state, loading: true };
+
+    case Type.EDIT_COMMENT_ARTICLE_SERVER_RESPONSE_SUCCESS:
+      return handleEditComment(state, action);
+
+    case Type.EDIT_COMMENT_ARTICLE_SERVER_RESPONSE_ERROR:
+      return { ...state };
+    // Delete a comment
+    case Type.DELETE_COMMENT_ARTICLE:
+      return { ...state, loading: true };
+
+    case Type.DELETE_COMMENT_ARTICLE_SERVER_RESPONSE_SUCCESS:
+      return handleDeleteComment(state, action);
 
     case Type.DELETE_COMMENT_ARTICLE_SERVER_RESPONSE_ERROR:
       return { ...state };

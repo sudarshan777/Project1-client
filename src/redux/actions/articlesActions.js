@@ -14,12 +14,19 @@ export const postNewComment = (_id, comment) => {
     comment,
   };
 };
-// export const deleteComment = (_id, comment) => {
-//   return {
-//     type: Types.DELETE_COMMENT_ARTICLE,
-//     _id,
-//   };
-// };
+export const editComment = (comment_id, comment) => {
+  return {
+    type: Types.EDIT_COMMENT_ARTICLE,
+    comment_id,
+    comment,
+  };
+};
+export const deleteComment = (comment_id) => {
+  return {
+    type: Types.DELETE_COMMENT_ARTICLE,
+    comment_id,
+  };
+};
 
 export const listArticleDetails = (_id) => {
   return {

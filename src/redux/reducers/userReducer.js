@@ -6,6 +6,7 @@ const initialUserObj = {
   followers: [],
   following: [],
   articles: [],
+  articlesLiked: [],
   message: "",
 };
 
@@ -27,7 +28,7 @@ const getBookmarksSuccessResponse = (state, action) => {
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
-      bookmarks: JSON.parse(JSON.stringify(action.result)),
+      bookmarks: JSON.parse(JSON.stringify(action.result.bookmarks)),
     });
   }
   return { ...newState };
@@ -81,9 +82,10 @@ const getArticlesSuccessResponse = (state, action) => {
   return { ...newState };
 };
 
-<<<<<<< Updated upstream
-=======
+
+
 const getArticlesLikedSuccessResponse = (state, action) => {
+
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
@@ -93,7 +95,7 @@ const getArticlesLikedSuccessResponse = (state, action) => {
   return { ...newState };
 };
 
->>>>>>> Stashed changes
+
 export default (state = initialUserObj, action = {}) => {
   switch (action.type) {
     case Types.GET_USER:
@@ -153,6 +155,16 @@ export default (state = initialUserObj, action = {}) => {
       return getArticlesSuccessResponse(state, action);
     case Types.GET_USER_WRITTEN_ARTICLES_SERVER_RESPONSE_ERROR:
       return { ...state };
+
+    // get articles liked
+
+    case Types.GET_ARTICLES_LIKED:
+      return { ...state };
+    case Types.GET_ARTICLES_LIKED_SUCCESS_RESPONSE:
+      return getArticlesLikedSuccessResponse(state, action);
+    case Types.GET_ARTICLES_LIKED_ERROR_RESPONSE:
+      return { ...state };
+
     default:
       return state;
   }

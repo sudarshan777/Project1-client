@@ -220,13 +220,8 @@ function* postComment(action) {
   try {
     let formBody = {};
     formBody = action.comment;
-<<<<<<< Updated upstream
-    console.log("FormBody" + JSON.stringify(formBody));
 
-    const postUrl = baseUrl + "/comments/post/article/" + action._id;
-=======
     const postUrl = baseUrl + "/comments/post/" + action._id;
->>>>>>> Stashed changes
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     if (result.error) {
@@ -245,8 +240,7 @@ function* postComment(action) {
     console.log(error);
   }
 }
-<<<<<<< Updated upstream
-=======
+
 function* editComment(action) {
   try {
     let formBody = {};
@@ -254,6 +248,7 @@ function* editComment(action) {
     const postUrl = baseUrl + "/comments/edit/" + action.comment_id;
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
+
     if (result.error) {
       yield put({
         type: Types.EDIT_COMMENT_ARTICLE_SERVER_RESPONSE_ERROR,
@@ -294,19 +289,12 @@ function* deleteComment(action) {
     console.log("SAGA ERROR");
   }
 }
->>>>>>> Stashed changes
+
 function* postBookmark(action) {
   try {
     let formBody = {};
-<<<<<<< Updated upstream
-    formBody.user = action.user_id;
-    console.log("FormBody" + JSON.stringify(formBody));
-
-    const postUrl = baseUrl + "/articles/bookmark/" + action.article_id;
-=======
     formBody.articleId = action.article_id;
     const postUrl = baseUrl + "/user/bookmark/" + action.user_id;
->>>>>>> Stashed changes
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     if (result.error) {
@@ -316,7 +304,7 @@ function* postBookmark(action) {
       });
     } else {
       yield put({
-        type: Types.BOOKMARK_ARTICLE_ERROR_RESPONSE,
+        type: Types.BOOKMARK_ARTICLE_SUCCESS_RESPONSE,
         result,
       });
     }
@@ -328,10 +316,10 @@ function* postBookmark(action) {
 function* deleteBookmark(action) {
   try {
     let formBody = {};
-    formBody.user = action.user_id;
+    formBody.user = action.article_id;
     console.log("FormBody" + JSON.stringify(formBody));
 
-    const postUrl = baseUrl + "/articles/bookmark/" + action.article_id;
+    const postUrl = baseUrl + "/user/bookmark/" + action.user_id;
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     if (result.error) {
@@ -382,7 +370,7 @@ function* deleteArticleLike(action) {
     let formBody = {};
     formBody._id = action._id;
     const deleteApi = baseUrl + "/like/" + action.like_id;
-    const responce = yield call(deleteService, formBody, deleteApi); // Refer sample to api calls in remote.js file
+    const response = yield call(deleteService, formBody, deleteApi); // Refer sample to api calls in remote.js file
     /// Other things can go here depending on what you want
     const result = yield response.json();
     if (result.error) {
@@ -519,8 +507,6 @@ function* signUpUser(action) {
     console.log(error);
   }
 }
-<<<<<<< Updated upstream
-=======
 
 function* getArticlesLiked(action) {
   try {
@@ -543,7 +529,7 @@ function* getArticlesLiked(action) {
     console.log("SAGA ERROR", error);
   }
 }
->>>>>>> Stashed changes
+
 export default function* rootSaga(params) {
   yield takeLatest(Types.LOGIN_USER, fetchLoginUser);
   yield takeEvery(Types.ARTICLE_LIST, listArticles);
@@ -554,6 +540,8 @@ export default function* rootSaga(params) {
   yield takeEvery(Types.GET_USER, getUser);
   yield takeEvery(Types.GET_ARTICLE_DETAILS, getArticleDetails);
   yield takeEvery(Types.POST_COMMENT_ARTICLE, postComment);
+  yield takeEvery(Types.EDIT_COMMENT_ARTICLE, editComment);
+  yield takeEvery(Types.DELETE_COMMENT_ARTICLE, deleteComment);
   yield takeEvery(Types.BOOKMARK_ARTICLE, postBookmark);
   yield takeEvery(Types.UN_BOOKMARK_ARTICLE, deleteBookmark);
   yield takeEvery(Types.LIKE_ARTICLE, postLike);
@@ -567,5 +555,6 @@ export default function* rootSaga(params) {
   yield takeEvery(Types.GET_ARTICLE_COMMENTS, getArticleComments);
   yield takeEvery(Types.GET_ARTICLE_LIKES, getArticleLikes);
   yield takeEvery(Types.DELETE_LIKE_ARTICLE, deleteArticleLike);
+  yield takeEvery(Types.GET_ARTICLES_LIKED, getArticlesLiked);
   console.log("ROOT SAGA");
 }

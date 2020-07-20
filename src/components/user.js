@@ -13,6 +13,7 @@ import {
   getFollowers,
   getFollowing,
   getUserWrittenArticles,
+  getArticlesLiked,
 } from "../redux/actions/get-user";
 import ArticlesList from "./article/articles-list";
 
@@ -46,21 +47,20 @@ class User extends Component {
     this.state = {
       user: {
         role: [],
-        articlesWritten: [],
         bookmarks: [],
-        articleLiked: [],
         following: [],
         followers: [],
         _id: "",
         name: "",
         email: "",
-        commented: [],
         hobbies: null,
         ratings: null,
       },
       showFollowers: false,
       showFollowing: false,
       showArticles: false,
+      showArticlesLiked: false,
+      showBookmarks: false,
     };
   }
 
@@ -70,17 +70,17 @@ class User extends Component {
   }
   componentDidUpdate(prevProps) {
     if (this.props.userDetails !== prevProps.userDetails) {
-      console.log(this.props.user);
       this.setState({
         user: {
           role: this.props.userDetails.role,
           bookmarks: this.props.userDetails.bookmarks,
-          articleLiked: this.props.userDetails.articleLiked,
           following: this.props.userDetails.following,
           followers: this.props.userDetails.followers,
           _id: this.props.userDetails._id,
           name: this.props.userDetails.name,
-          commented: this.props.userDetails.commented,
+          email: this.props.userDetails.email,
+          hobbies: this.props.userDetails.hobbies,
+          ratings: this.props.userDetails.ratings,
         },
       });
     }
@@ -115,7 +115,7 @@ class User extends Component {
       alert("Log In or Register to Unfollow.");
     }
   };
-  handleClickFollowers = (e) => {
+  getFollowers = (e) => {
     e.preventDefault();
     if (this.state.user.followers.length === 0) {
       return false;
@@ -125,10 +125,12 @@ class User extends Component {
       showFollowers: true,
       showFollowing: false,
       showArticles: false,
+      showArticlesLiked: false,
+      showBookmarks: false,
     });
   };
 
-  handleClickFollowing = (e) => {
+  getFollowing = (e) => {
     e.preventDefault();
     if (this.state.user.following.length === 0) {
       return false;
@@ -138,16 +140,43 @@ class User extends Component {
       showFollowing: true,
       showFollowers: false,
       showArticles: false,
+      showArticlesLiked: false,
+      showBookmarks: false,
     });
   };
 
-  handleClickArticlesWritten = (e) => {
+  getArticlesLiked = (e) => {
     e.preventDefault();
-    this.props.dispatch(getUserWrittenArticles(this.props.match.params.id));
+    this.props.dispatch(getArticlesLiked(this.state.user._id));
+    this.setState({
+      showArticlesLiked: true,
+      showFollowing: false,
+      showFollowers: false,
+      showArticles: false,
+      showBookmarks: false,
+    });
+  };
+
+  getArticlesWritten = (e) => {
+    e.preventDefault();
+    this.props.dispatch(getUserWrittenArticles(this.state.user._id));
     this.setState({
       showArticles: true,
       showFollowing: false,
       showFollowers: false,
+      showArticlesLiked: false,
+      showBookmarks: false,
+    });
+  };
+  getBookmarks = (e) => {
+    e.preventDefault();
+    this.props.dispatch(getBookmarks(this.state.user._id));
+    this.setState({
+      showArticles: false,
+      showFollowing: false,
+      showFollowers: false,
+      showArticlesLiked: false,
+      showBookmarks: true,
     });
   };
 
@@ -169,19 +198,19 @@ class User extends Component {
       // <div>
       //   <h4>{this.state.user.name}</h4>
       //   <h6>
-      //     <a href="#" onClick={this.handleClickArticlesWritten}>
+      //     <a href="#" onClick={this.getArticlesWritten}>
       //       Articles Written
       //     </a>
       //   </h6>
       //   <h6> Bookmarks - {this.state.user.bookmarks.length}</h6>
       //   <h6>
-      //     <a href="#" onClick={this.handleClickFollowers}>
+      //     <a href="#" onClick={this.getFollowers}>
       //       Followers
       //     </a>
       //     - {this.state.user.followers.length}
       //   </h6>
       //   <h6>
-      //     <a href="#" onClick={this.handleClickFollowing}>
+      //     <a href="#" onClick={this.getFollowing}>
       //       Following
       //     </a>
       //     - {this.state.user.following.length}
@@ -234,12 +263,12 @@ class User extends Component {
       //     ) : null}
       //   </div>
       // </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
-            <div class="well profile">
-              <div class="col-sm-12">
-                <div class="col-xs-12 col-sm-8">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
+            <div className="well profile">
+              <div className="col-sm-12">
+                <div className="col-xs-12 col-sm-8">
                   <h2>{this.state.user.name}</h2>
                   <p>
                     <strong>About: </strong> Web Designer / UI.{" "}
@@ -250,118 +279,129 @@ class User extends Component {
                   </p>
                   <p>
                     <strong>Skills: </strong>
-                    <span class="tags">html5</span>
-                    <span class="tags">css3</span>
-                    <span class="tags">jquery</span>
-                    <span class="tags">bootstrap3</span>
+                    <span className="tags">html5</span>
+                    <span className="tags">css3</span>
+                    <span className="tags">jquery</span>
+                    <span className="tags">bootstrap3</span>
                   </p>
                 </div>
-                <div class="col-xs-12 col-sm-4 text-center">
+                <div className="col-xs-12 col-sm-4 text-center">
                   <figure>
                     <img
                       src="http://www.localcrimenews.com/wp-content/uploads/2013/07/default-user-icon-profile.png"
                       alt=""
-                      class="img-circle img-responsive"
+                      className="img-circle img-responsive"
                     />
-                    <figcaption class="ratings">
+                    <figcaption className="ratings">
                       <p>
                         Ratings
                         <a href="#">
-                          <span class="fa fa-star"></span>
+                          <span className="fa fa-star"></span>
                         </a>
                         <a href="#">
-                          <span class="fa fa-star"></span>
+                          <span className="fa fa-star"></span>
                         </a>
                         <a href="#">
-                          <span class="fa fa-star"></span>
+                          <span className="fa fa-star"></span>
                         </a>
                         <a href="#">
-                          <span class="fa fa-star"></span>
+                          <span className="fa fa-star"></span>
                         </a>
                         <a href="#">
-                          <span class="fa fa-star-o"></span>
+                          <span className="fa fa-star-o"></span>
                         </a>
                       </p>
                     </figcaption>
                   </figure>
                 </div>
               </div>
-              <div class="col-xs-12 divider text-center">
-                <div class="col-xs-12 col-sm-4 emphasis">
+              <div className="col-xs-12 divider text-center">
+                <div className="col-xs-12 col-sm-4 emphasis">
                   <h2>
                     <strong> {this.state.user.followers.length}</strong>
                   </h2>
                   <p>
                     <small>
-                      <a href="#" onClick={this.handleClickFollowers}>
+                      <a href="#" onClick={this.getFollowers}>
                         Followers
                       </a>
                     </small>
                   </p>
-                  <button class="btn btn-success btn-block">
-                    <span class="fa fa-plus-circle"></span> Follow{" "}
+                  <button className="btn btn-success btn-block">
+                    <span className="fa fa-plus-circle"></span> Follow{" "}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-success btn-block"
+                    onClick={this.getArticlesLiked}
+                  >
+                    <span className="fa fa-plus-circle"></span> Articles Liked{" "}
                   </button>
                 </div>
-                <div class="col-xs-12 col-sm-4 emphasis">
+                <div className="col-xs-12 col-sm-4 emphasis">
                   <h2>
                     <strong>{this.state.user.following.length}</strong>
                   </h2>
                   <p>
                     <small>
-                      <a href="#" onClick={this.handleClickFollowing}>
+                      <a href="#" onClick={this.getFollowing}>
                         Following
                       </a>
                     </small>
                   </p>
                   <button
-                    class="btn btn-info btn-block"
-                    onClick={this.handleClickArticlesWritten}
+                    className="btn btn-info btn-block"
+                    onClick={this.getArticlesWritten}
                   >
-                    <span class="fa fa-user"></span> View Articles{" "}
+                    <span className="fa fa-user"></span> View Articles{" "}
                   </button>
                 </div>
-                <div class="col-xs-12 col-sm-4 emphasis">
+                <div className="col-xs-12 col-sm-4 emphasis">
                   <h2>
                     <strong>{this.state.user.bookmarks.length}</strong>
                   </h2>
                   <p>
-                    <small>Bookmarks</small>
+                    <small>
+                      <a href="#" onClick={this.getBookmarks}>
+                        Bookmarks
+                      </a>
+                    </small>
                   </p>
-                  <div class="btn-group dropup btn-block">
-                    <button type="button" class="btn btn-primary">
-                      <span class="fa fa-gear"></span> Options{" "}
+                  <div className="btn-group dropup btn-block">
+                    <button type="button" className="btn btn-primary">
+                      <span className="fa fa-gear"></span> Options{" "}
                     </button>
                     <button
                       type="button"
-                      class="btn btn-primary dropdown-toggle"
+                      className="btn btn-primary dropdown-toggle"
                       data-toggle="dropdown"
                     >
-                      <span class="caret"></span>
-                      <span class="sr-only">Toggle Dropdown</span>
+                      <span className="caret"></span>
+                      <span className="sr-only">Toggle Dropdown</span>
                     </button>
-                    <ul class="dropdown-menu text-left" role="menu">
+                    <ul className="dropdown-menu text-left" role="menu">
                       <li>
                         <a href="#">
-                          <span class="fa fa-envelope pull-right"></span> Send
-                          an email{" "}
+                          <span className="fa fa-envelope pull-right"></span>{" "}
+                          Send an email{" "}
                         </a>
                       </li>
                       <li>
                         <a href="#">
-                          <span class="fa fa-list pull-right"></span> Add or
+                          <span className="fa fa-list pull-right"></span> Add or
                           remove from a list{" "}
                         </a>
                       </li>
-                      <li class="divider"></li>
+                      <li className="divider"></li>
                       <li>
                         <a href="#">
-                          <span class="fa fa-warning pull-right"></span>Report
-                          this user for spam
+                          <span className="fa fa-warning pull-right"></span>
+                          Report this user for spam
                         </a>
                       </li>
-                      <li class="divider"></li>
+                      <li className="divider"></li>
                       <li>
-                        <a href="#" class="btn disabled" role="button">
+                        <a href="#" className="btn disabled" role="button">
                           {" "}
                           Unfollow{" "}
                         </a>
@@ -373,7 +413,7 @@ class User extends Component {
             </div>
           </div>
         </div>
-        <div>
+        <div className="container">
           {this.state.showArticles && this.props.articles.length !== 0 ? (
             <div>
               <h5>Articles Written</h5>
@@ -381,7 +421,7 @@ class User extends Component {
             </div>
           ) : null}
         </div>
-        <div>
+        <div className="container">
           {this.state.showFollowers && this.props.followers.length !== 0 ? (
             <div>
               <h5>Followers</h5>
@@ -397,7 +437,7 @@ class User extends Component {
             </div>
           ) : null}
         </div>
-        <div>
+        <div className="container">
           {this.state.showFollowing && this.props.following.length !== 0 ? (
             <div>
               <h5>Following</h5>
@@ -413,19 +453,49 @@ class User extends Component {
             </div>
           ) : null}
         </div>
+        <div className="container">
+          {this.state.showArticlesLiked && this.props.articlesLiked ? (
+            <div>
+              <h5>Articles Liked</h5>
+              <ul>
+                {this.props.articlesLiked.map(({ article }) => {
+                  return (
+                    <li key={article._id}>
+                      <Link to={"/article/" + article._id}>
+                        {article.title}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
+        </div>
+        <div className="container">
+          {this.state.showBookmarks && this.props.bookmarks ? (
+            <div>
+              <h5>Bookmarks</h5>
+              <ul>
+                {this.props.bookmarks.map((article) => {
+                  return (
+                    <li key={article._id}>
+                      <Link to={"/article/" + article._id}>
+                        {article.title}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
+        </div>
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-<<<<<<< Updated upstream
-  console.log("User" + JSON.stringify(state.userReducer.user));
-  console.log("Followers" + JSON.stringify(state.userReducer.followers));
-  console.log("Following" + JSON.stringify(state.userReducer.following));
-  console.log("Articles" + JSON.stringify(state.userReducer.articles));
 
-=======
   // console.log("User" + JSON.stringify(state.userReducer.user));
   // console.log("Followers" + JSON.stringify(state.userReducer.followers));
   // console.log("Following" + JSON.stringify(state.userReducer.following));
@@ -434,7 +504,7 @@ function mapStateToProps(state) {
   //   "Articles Liked" + JSON.stringify(state.userReducer.articlesLiked)
   // );
   // console.log("Bookmarks" + JSON.stringify(state.userReducer.bookmarks));
->>>>>>> Stashed changes
+
   return {
     loggedIn: state.authReducer.loggedIn,
     user: state.authReducer.user,
@@ -442,6 +512,8 @@ function mapStateToProps(state) {
     followers: state.userReducer.followers,
     following: state.userReducer.following,
     articles: state.userReducer.articles,
+    articlesLiked: state.userReducer.articlesLiked,
+    bookmarks: state.userReducer.bookmarks,
   };
 }
 
