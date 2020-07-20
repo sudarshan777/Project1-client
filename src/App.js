@@ -12,6 +12,7 @@ import ArticleView from "./components/article/article-view";
 import PrivateRoute from "./components/privateRoutes";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
+import EditArticle from "./components/article/EditArticle";
 
 class App extends Component {
   render() {
@@ -43,6 +44,11 @@ class App extends Component {
               exact
               path="/create-article"
               component={(props) => <CreateArticle {...props} />}
+            />
+            <PrivateRoute
+              exact
+              path="/edit-article"
+              component={(props) => <EditArticle {...props} />}
             />
 
             <Route

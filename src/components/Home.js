@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { getArticlesList } from "../redux/actions/get-list";
 
 import ArticlesList from "./article/articles-list";
 class Home extends Component {
+  componentDidMount() {
+    this.props.dispatch(getArticlesList());
+  }
   render() {
     return (
       <div>

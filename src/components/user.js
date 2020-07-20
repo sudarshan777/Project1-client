@@ -495,14 +495,16 @@ class User extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log("User" + JSON.stringify(state.userReducer.user));
-  console.log("Followers" + JSON.stringify(state.userReducer.followers));
-  console.log("Following" + JSON.stringify(state.userReducer.following));
-  console.log("Articles" + JSON.stringify(state.userReducer.articles));
-  console.log(
-    "Articles Liked" + JSON.stringify(state.userReducer.articlesLiked)
-  );
-  console.log("Bookmarks" + JSON.stringify(state.userReducer.bookmarks));
+
+  // console.log("User" + JSON.stringify(state.userReducer.user));
+  // console.log("Followers" + JSON.stringify(state.userReducer.followers));
+  // console.log("Following" + JSON.stringify(state.userReducer.following));
+  // console.log("Articles" + JSON.stringify(state.userReducer.articles));
+  // console.log(
+  //   "Articles Liked" + JSON.stringify(state.userReducer.articlesLiked)
+  // );
+  // console.log("Bookmarks" + JSON.stringify(state.userReducer.bookmarks));
+
   return {
     loggedIn: state.authReducer.loggedIn,
     user: state.authReducer.user,

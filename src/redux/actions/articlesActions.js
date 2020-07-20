@@ -93,9 +93,10 @@ export const deleteLikeArticle = (like_id) => {
     like_id,
   };
 };
-// export const editArticle = (_id) => {
-//   return {
-//     type: Types.EDIT_ARTICLE_GET_DETAILS,
-//     _id,
-//   };
-// };
+export const editArticle = (_id, articleDetails) => {
+  return {
+    type: Types.UPDATE_ARTICLE_DETAILS,
+    _id,
+    articleDetails,
+  };
+};
