@@ -31,7 +31,7 @@ const getBookmarksSuccessResponse = (state, action) => {
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
-      bookmarks: JSON.parse(JSON.stringify(action.result)),
+      bookmarks: JSON.parse(JSON.stringify(action.result.bookmarks)),
     });
     console.log("New Bookmarks" + JSON.stringify(newState));
   }

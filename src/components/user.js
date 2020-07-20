@@ -47,15 +47,12 @@ class User extends Component {
     this.state = {
       user: {
         role: [],
-        articlesWritten: [],
         bookmarks: [],
-        articleLiked: [],
         following: [],
         followers: [],
         _id: "",
         name: "",
         email: "",
-        commented: [],
         hobbies: null,
         ratings: null,
       },
@@ -63,6 +60,7 @@ class User extends Component {
       showFollowing: false,
       showArticles: false,
       showArticlesLiked: false,
+      showBookmarks: false,
     };
   }
 
@@ -72,17 +70,17 @@ class User extends Component {
   }
   componentDidUpdate(prevProps) {
     if (this.props.userDetails !== prevProps.userDetails) {
-      console.log(this.props.user);
       this.setState({
         user: {
           role: this.props.userDetails.role,
           bookmarks: this.props.userDetails.bookmarks,
-          articleLiked: this.props.userDetails.articleLiked,
           following: this.props.userDetails.following,
           followers: this.props.userDetails.followers,
           _id: this.props.userDetails._id,
           name: this.props.userDetails.name,
-          commented: this.props.userDetails.commented,
+          email: this.props.userDetails.email,
+          hobbies: this.props.userDetails.hobbies,
+          ratings: this.props.userDetails.ratings,
         },
       });
     }
@@ -117,7 +115,7 @@ class User extends Component {
       alert("Log In or Register to Unfollow.");
     }
   };
-  handleClickFollowers = (e) => {
+  getFollowers = (e) => {
     e.preventDefault();
     if (this.state.user.followers.length === 0) {
       return false;
@@ -128,10 +126,11 @@ class User extends Component {
       showFollowing: false,
       showArticles: false,
       showArticlesLiked: false,
+      showBookmarks: false,
     });
   };
 
-  handleClickFollowing = (e) => {
+  getFollowing = (e) => {
     e.preventDefault();
     if (this.state.user.following.length === 0) {
       return false;
@@ -142,10 +141,11 @@ class User extends Component {
       showFollowers: false,
       showArticles: false,
       showArticlesLiked: false,
+      showBookmarks: false,
     });
   };
 
-  handleClickArticlesLiked = (e) => {
+  getArticlesLiked = (e) => {
     e.preventDefault();
     this.props.dispatch(getArticlesLiked(this.state.user._id));
     this.setState({
@@ -153,18 +153,30 @@ class User extends Component {
       showFollowing: false,
       showFollowers: false,
       showArticles: false,
+      showBookmarks: false,
     });
   };
 
-  handleClickArticlesWritten = (e) => {
+  getArticlesWritten = (e) => {
     e.preventDefault();
-
-    this.props.dispatch(getUserWrittenArticles(this.props.match.params.id));
+    this.props.dispatch(getUserWrittenArticles(this.state.user._id));
     this.setState({
       showArticles: true,
       showFollowing: false,
       showFollowers: false,
       showArticlesLiked: false,
+      showBookmarks: false,
+    });
+  };
+  getBookmarks = (e) => {
+    e.preventDefault();
+    this.props.dispatch(getBookmarks(this.state.user._id));
+    this.setState({
+      showArticles: false,
+      showFollowing: false,
+      showFollowers: false,
+      showArticlesLiked: false,
+      showBookmarks: true,
     });
   };
 
@@ -186,19 +198,19 @@ class User extends Component {
       // <div>
       //   <h4>{this.state.user.name}</h4>
       //   <h6>
-      //     <a href="#" onClick={this.handleClickArticlesWritten}>
+      //     <a href="#" onClick={this.getArticlesWritten}>
       //       Articles Written
       //     </a>
       //   </h6>
       //   <h6> Bookmarks - {this.state.user.bookmarks.length}</h6>
       //   <h6>
-      //     <a href="#" onClick={this.handleClickFollowers}>
+      //     <a href="#" onClick={this.getFollowers}>
       //       Followers
       //     </a>
       //     - {this.state.user.followers.length}
       //   </h6>
       //   <h6>
-      //     <a href="#" onClick={this.handleClickFollowing}>
+      //     <a href="#" onClick={this.getFollowing}>
       //       Following
       //     </a>
       //     - {this.state.user.following.length}
@@ -310,7 +322,7 @@ class User extends Component {
                   </h2>
                   <p>
                     <small>
-                      <a href="#" onClick={this.handleClickFollowers}>
+                      <a href="#" onClick={this.getFollowers}>
                         Followers
                       </a>
                     </small>
@@ -321,7 +333,7 @@ class User extends Component {
                   <button
                     type="button"
                     className="btn btn-success btn-block"
-                    onClick={this.handleClickArticlesLiked}
+                    onClick={this.getArticlesLiked}
                   >
                     <span className="fa fa-plus-circle"></span> Articles Liked{" "}
                   </button>
@@ -332,14 +344,14 @@ class User extends Component {
                   </h2>
                   <p>
                     <small>
-                      <a href="#" onClick={this.handleClickFollowing}>
+                      <a href="#" onClick={this.getFollowing}>
                         Following
                       </a>
                     </small>
                   </p>
                   <button
                     className="btn btn-info btn-block"
-                    onClick={this.handleClickArticlesWritten}
+                    onClick={this.getArticlesWritten}
                   >
                     <span className="fa fa-user"></span> View Articles{" "}
                   </button>
@@ -349,7 +361,11 @@ class User extends Component {
                     <strong>{this.state.user.bookmarks.length}</strong>
                   </h2>
                   <p>
-                    <small>Bookmarks</small>
+                    <small>
+                      <a href="#" onClick={this.getBookmarks}>
+                        Bookmarks
+                      </a>
+                    </small>
                   </p>
                   <div className="btn-group dropup btn-block">
                     <button type="button" className="btn btn-primary">
@@ -455,6 +471,24 @@ class User extends Component {
             </div>
           ) : null}
         </div>
+        <div className="container">
+          {this.state.showBookmarks && this.props.bookmarks ? (
+            <div>
+              <h5>Bookmarks</h5>
+              <ul>
+                {this.props.bookmarks.map((article) => {
+                  return (
+                    <li key={article._id}>
+                      <Link to={"/article/" + article._id}>
+                        {article.title}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
+        </div>
       </div>
     );
   }
@@ -468,6 +502,7 @@ function mapStateToProps(state) {
   console.log(
     "Articles Liked" + JSON.stringify(state.userReducer.articlesLiked)
   );
+  console.log("Bookmarks" + JSON.stringify(state.userReducer.bookmarks));
   return {
     loggedIn: state.authReducer.loggedIn,
     user: state.authReducer.user,
@@ -476,6 +511,7 @@ function mapStateToProps(state) {
     following: state.userReducer.following,
     articles: state.userReducer.articles,
     articlesLiked: state.userReducer.articlesLiked,
+    bookmarks: state.userReducer.bookmarks,
   };
 }
 
