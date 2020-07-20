@@ -8,7 +8,6 @@ const initialUserObj = {
 };
 
 const handleLoginServerResponseSuccess = (state, action) => {
-  console.log("REdux" + JSON.stringify(state));
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
@@ -18,7 +17,6 @@ const handleLoginServerResponseSuccess = (state, action) => {
       user: Object.assign({}, action.result.user),
     });
   }
-  console.log("STATE->" + JSON.stringify(newState));
   return { ...newState };
 };
 const handleLoginServerResponseError = (state, action) => {

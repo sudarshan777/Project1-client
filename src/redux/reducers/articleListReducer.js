@@ -20,7 +20,6 @@ const getArticleList = (state, action) => {
     newState = Object.assign({}, state, {
       articles: JSON.parse(JSON.stringify(action.result)),
     });
-    console.log("New" + JSON.stringify(newState));
   }
   return { ...newState };
 };

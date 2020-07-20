@@ -18,7 +18,6 @@ class PrivateRoute extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("Through Private Route" + JSON.stringify(state.authReducer));
   return {
     loggedIn: state.authReducer.loggedIn,
   };

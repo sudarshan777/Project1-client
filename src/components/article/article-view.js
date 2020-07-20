@@ -168,8 +168,18 @@ class ArticleView extends Component {
     this.props.dispatch(deleteArticle(this.props.match.params.id));
     window.location = "/";
   };
+  editArticle = () => {
+    if (this.props.user.id === this.state.articleDetails.user_id) {
+      return (
+        <Link to="/edit-article" className="btn btn-primary">
+          Edit Article
+        </Link>
+      );
+    }
+    return null;
+  };
+
   render() {
-    console.log("like id", this.state.likeId);
     return (
       <div className="container-fluid">
         <h3>{this.state.articleDetails.title}</h3>
@@ -204,7 +214,7 @@ class ArticleView extends Component {
         >
           Remove Bookmark
         </button>
-
+        {this.editArticle()}
         {this.deleteArticle()}
         <hr />
         <h6>

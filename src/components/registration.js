@@ -109,7 +109,6 @@ class Registration extends Component {
 Registration.propTypes = {};
 
 const mapStateToProps = (state) => {
-  console.log("Signup" + JSON.stringify(state));
   return {
     userObject: state.authReducer.user,
     isLoggedIn: state.authReducer.loggedIn,
