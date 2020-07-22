@@ -12,7 +12,6 @@ class Login extends Component {
   }
   static getDerivedStateFromProps(props, state) {
     if (props.isLoggedIn) {
-      console.log(props);
       props.history.push("/");
     }
     return null;

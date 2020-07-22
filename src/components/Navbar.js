@@ -68,7 +68,7 @@ class Navbar extends Component {
     );
 
     return (
-      <div>
+      <div className="container-fluid">
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <Link to="/" className="navbar-brand">
             Home{" "}

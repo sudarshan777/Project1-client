@@ -18,12 +18,72 @@ const handleArticle = (state, action) => {
   }
   return { ...newState };
 };
+const handleCreateArticle = (state, action) => {
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, action.result);
+  }
+  return { ...newState };
+};
 const handleUpdateArticle = (state, action) => {
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       loading: false,
       message: JSON.parse(JSON.stringify(action.result)),
+    });
+  }
+  return { ...newState };
+};
+
+const handleArticleDelete = (state, action) => {
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      loading: false,
+      article: {},
+      comments: [],
+      likes: [],
+      message: JSON.parse(JSON.stringify(action.result)),
+    });
+  }
+
+  return { ...newState };
+};
+
+const handleArticleLikes = (state, action) => {
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      likes: JSON.parse(JSON.stringify(action.result)),
+    });
+  }
+  return { ...newState };
+};
+const handleLike = (state, action) => {
+  let newState = { ...state };
+
+  if (action.result !== undefined) {
+    let like = JSON.parse(JSON.stringify(action.result));
+    like = Object.assign({}, like, {
+      user: { _id: like.user },
+    });
+    delete like.article;
+
+    newState = Object.assign({}, state, {
+      message: "Like Added",
+      likes: state.likes.concat(like),
+    });
+  }
+
+  return { ...newState };
+};
+const handleLikeArticleDelete = (state, action) => {
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      message: JSON.parse(JSON.stringify(action.result)),
+      likes: newState.likes.filter((like) => like._id !== action._id),
     });
   }
   return { ...newState };
@@ -49,88 +109,17 @@ const handleArticleComments = (state, action) => {
   return { ...newState };
 };
 
-const handleArticleLikes = (state, action) => {
-  let newState = { ...state };
-  if (action.result !== undefined) {
-    newState = Object.assign({}, state, {
-      likes: JSON.parse(JSON.stringify(action.result)),
-    });
-  }
-  return { ...newState };
-};
-
-const handleCreateArticle = (state, action) => {
-  let newState = { ...state };
-  if (action.result !== undefined) {
-    newState = Object.assign({}, state, action.result);
-  }
-  return { ...newState };
-};
-
-const handleBookmark = (state, action) => {
-  let newState = { ...state };
-  if (action.result !== undefined) {
-    newState = Object.assign({}, state, {
-      message: JSON.parse(JSON.stringify(action.result)),
-    });
-  }
-
-  return { ...newState };
-};
-const handleRemoveBookmark = (state, action) => {
-  let newState = { ...state };
-  if (action.result !== undefined) {
-    newState = Object.assign({}, state, {
-      message: JSON.parse(JSON.stringify(action.result)),
-    });
-  }
-
-  return { ...newState };
-};
-
-const handleLike = (state, action) => {
-  let newState = { ...state };
-  if (action.result !== undefined) {
-    newState = Object.assign({}, state, {
-      message: JSON.parse(JSON.stringify(action.result)),
-    });
-  }
-
-  return { ...newState };
-};
-
-const handleArticleDelete = (state, action) => {
-  let newState = { ...state };
-  if (action.result !== undefined) {
-    newState = Object.assign({}, state, {
-      loading: false,
-      article: {},
-      comments: [],
-      likes: [],
-      message: JSON.parse(JSON.stringify(action.result)),
-    });
-  }
-
-  return { ...newState };
-};
-const handleLikeArticleDelete = (state, action) => {
-  let newState = { ...state };
-  if (action.result !== undefined) {
-    newState = Object.assign({}, state, {
-      message: JSON.parse(JSON.stringify(action.result)),
-    });
-  }
-  return { ...newState };
-};
-
 const handleEditComment = (state, action) => {
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       comments: newState.comments.map((comment) => {
-        if (comment._id === action.result._id) {
-          comment.body = action.result.body;
+        if (comment.id !== action.result._id) {
+          return comment;
         }
+        return Object.assign({}, comment, {
+          body: action.result.body,
+        });
       }),
     });
   }
@@ -227,26 +216,6 @@ export default (state = initialUserObj, action = {}) => {
       return handleDeleteComment(state, action);
 
     case Type.DELETE_COMMENT_ARTICLE_SERVER_RESPONSE_ERROR:
-      return { ...state };
-
-    //  bookmark on an Article
-    case Type.BOOKMARK_ARTICLE:
-      return { ...state, loading: true };
-
-    case Type.BOOKMARK_ARTICLE_SUCCESS_RESPONSE:
-      return handleBookmark(state, action);
-
-    case Type.BOOKMARK_ARTICLE_ERROR_RESPONSE:
-      return { ...state };
-
-    // Remove bookmark on an Article
-    case Type.UN_BOOKMARK_ARTICLE:
-      return { ...state, loading: true };
-
-    case Type.UN_BOOKMARK_ARTICLE_SUCCESS_RESPONSE:
-      return handleRemoveBookmark(state, action);
-
-    case Type.UN_BOOKMARK_ARTICLE_ERROR_RESPONSE:
       return { ...state };
 
     //  like on an Article

@@ -22,10 +22,7 @@ function* fetchLoginUser(action) {
 
     const loginUrl = baseUrl + "/auth";
     const response = yield call(GetDataFromServer, loginUrl, "POST", formBody);
-
     const result = yield response.json();
-    console.log("Result ->" + JSON.stringify(result));
-    console.log("Result Json" + result);
     if (result.error) {
       yield put({
         type: "LOGIN_USER_SERVER_RESPONSE_ERROR",
@@ -294,6 +291,7 @@ function* postBookmark(action) {
   try {
     let formBody = {};
     formBody.articleId = action.article_id;
+    const _id = action.article_id;
     const postUrl = baseUrl + "/user/bookmark/" + action.user_id;
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
@@ -306,6 +304,7 @@ function* postBookmark(action) {
       yield put({
         type: Types.BOOKMARK_ARTICLE_SUCCESS_RESPONSE,
         result,
+        _id,
       });
     }
   } catch (error) {
@@ -316,8 +315,8 @@ function* postBookmark(action) {
 function* deleteBookmark(action) {
   try {
     let formBody = {};
-    formBody.user = action.article_id;
-    console.log("FormBody" + JSON.stringify(formBody));
+    formBody.articleId = action.article_id;
+    const _id = action.article_id;
 
     const postUrl = baseUrl + "/user/bookmark/" + action.user_id;
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
@@ -331,6 +330,7 @@ function* deleteBookmark(action) {
       yield put({
         type: Types.UN_BOOKMARK_ARTICLE_SUCCESS_RESPONSE,
         result,
+        _id,
       });
     }
   } catch (error) {
@@ -368,7 +368,8 @@ function* deleteArticleLike(action) {
   try {
     // Ensure that your API returns the data of the updated todo
     let formBody = {};
-    formBody._id = action._id;
+    formBody._id = action.like_id;
+    const _id = action.like_id;
     const deleteApi = baseUrl + "/like/" + action.like_id;
     const response = yield call(deleteService, formBody, deleteApi); // Refer sample to api calls in remote.js file
     /// Other things can go here depending on what you want
@@ -376,7 +377,11 @@ function* deleteArticleLike(action) {
     if (result.error) {
       yield put({ type: Types.DELETE_LIKE_ARTICLE_ERROR_RESPONSE, result }); // pass in the id you updated and the newData returned from the API
     } else {
-      yield put({ type: Types.DELETE_LIKE_ARTICLE_SUCCESS_RESPONSE, result }); // pass in the id you updated and the newData returned from the API
+      yield put({
+        type: Types.DELETE_LIKE_ARTICLE_SUCCESS_RESPONSE,
+        result,
+        _id,
+      }); // pass in the id you updated and the newData returned from the API
     }
   } catch (e) {
     console.log("SAGA ERROR", e);
