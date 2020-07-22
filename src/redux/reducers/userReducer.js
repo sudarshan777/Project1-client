@@ -16,96 +16,104 @@ const getUserError = (state) => {
 };
 
 const getUserSuccessResponse = (state, action) => {
-  console.log("REdux" + JSON.stringify(action));
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       user: JSON.parse(JSON.stringify(action.result)),
     });
-    console.log("New" + JSON.stringify(newState));
   }
   return { ...newState };
 };
-const getBookmarksSuccessResponse = (state, action) => {
-  console.log("REdux" + JSON.stringify(action));
-  let newState = { ...state };
-  if (action.result !== undefined) {
-    newState = Object.assign({}, state, {
-      bookmarks: JSON.parse(JSON.stringify(action.result.bookmarks)),
-    });
-    console.log("New Bookmarks" + JSON.stringify(newState));
-  }
-  return { ...newState };
-};
+
 const followUserSuccessResponse = (state, action) => {
-  console.log("REdux" + JSON.stringify(action));
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       message: JSON.parse(JSON.stringify(action.result)),
     });
-    console.log("New" + JSON.stringify(newState));
   }
   return { ...newState };
 };
 
 const unFollowUserSuccessResponse = (state, action) => {
-  console.log("REdux" + JSON.stringify(action));
   let newState = { ...state };
-
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       message: JSON.parse(JSON.stringify(action.result)),
     });
-    console.log("New" + JSON.stringify(newState));
   }
   return { ...newState };
 };
 
 const getFollowersSuccessResponse = (state, action) => {
-  console.log("REdux" + JSON.stringify(action));
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       followers: JSON.parse(JSON.stringify(action.result.followers)),
     });
-    console.log("New" + JSON.stringify(newState));
   }
   return { ...newState };
 };
 const getFollowingSuccessResponse = (state, action) => {
-  console.log("REdux" + JSON.stringify(action));
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       following: JSON.parse(JSON.stringify(action.result.following)),
     });
-    console.log("New" + JSON.stringify(newState));
   }
   return { ...newState };
 };
 
 const getArticlesSuccessResponse = (state, action) => {
-  console.log("REdux" + JSON.stringify(action));
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       articles: JSON.parse(JSON.stringify(action.result)),
     });
-    console.log("New" + JSON.stringify(newState));
   }
   return { ...newState };
 };
 
 const getArticlesLikedSuccessResponse = (state, action) => {
-  console.log("REdux" + JSON.stringify(action));
   let newState = { ...state };
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       articlesLiked: JSON.parse(JSON.stringify(action.result)),
     });
-    console.log("New" + JSON.stringify(newState));
   }
+  return { ...newState };
+};
+const getBookmarksSuccessResponse = (state, action) => {
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      bookmarks: JSON.parse(JSON.stringify(action.result.bookmarks)),
+    });
+  }
+  return { ...newState };
+};
+const handleBookmark = (state, action) => {
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      message: JSON.parse(JSON.stringify(action.result)),
+      bookmarks: state.bookmarks.concat({ _id: action._id }),
+    });
+  }
+
+  return { ...newState };
+};
+const handleRemoveBookmark = (state, action) => {
+  let newState = { ...state };
+  if (action.result !== undefined) {
+    newState = Object.assign({}, state, {
+      message: JSON.parse(JSON.stringify(action.result)),
+      bookmarks: newState.bookmarks.filter(
+        (bookmark) => bookmark._id !== action._id
+      ),
+    });
+  }
+
   return { ...newState };
 };
 
@@ -176,6 +184,26 @@ export default (state = initialUserObj, action = {}) => {
     case Types.GET_ARTICLES_LIKED_SUCCESS_RESPONSE:
       return getArticlesLikedSuccessResponse(state, action);
     case Types.GET_ARTICLES_LIKED_ERROR_RESPONSE:
+      return { ...state };
+
+    //  bookmark on an Article
+    case Types.BOOKMARK_ARTICLE:
+      return { ...state, loading: true };
+
+    case Types.BOOKMARK_ARTICLE_SUCCESS_RESPONSE:
+      return handleBookmark(state, action);
+
+    case Types.BOOKMARK_ARTICLE_ERROR_RESPONSE:
+      return { ...state };
+
+    // Remove bookmark on an Article
+    case Types.UN_BOOKMARK_ARTICLE:
+      return { ...state, loading: true };
+
+    case Types.UN_BOOKMARK_ARTICLE_SUCCESS_RESPONSE:
+      return handleRemoveBookmark(state, action);
+
+    case Types.UN_BOOKMARK_ARTICLE_ERROR_RESPONSE:
       return { ...state };
 
     default:

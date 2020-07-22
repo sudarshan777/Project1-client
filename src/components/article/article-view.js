@@ -1,19 +1,18 @@
 import React, { Component, useRef } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import Like from "./Like";
+import Bookmark from "./Bookmark";
 import {
   postNewComment,
   listArticleDetails,
   listArticleComments,
-  bookmarkArticle,
-  removeBookmarkArticle,
   deleteArticle,
   listArticleLikes,
-  postLikeArticle,
-  deleteLikeArticle,
   deleteComment,
   editComment,
 } from "../../redux/actions/articlesActions";
+import { getBookmarks } from "../../redux/actions/get-user";
 
 const Comments = (props) => {
   if (props.comments.length > 0 && props !== undefined) {
@@ -47,7 +46,9 @@ const Comments = (props) => {
                         <button
                           type="button"
                           class="btn btn-success"
-                          onClick={props.save()}
+                          onClick={() => {
+                            props.save(comment._id);
+                          }}
                         >
                           Save
                         </button>
@@ -123,17 +124,15 @@ class ArticleView extends Component {
       },
       newComment: "",
       showComments: false,
-      isBookmarked: false,
-      isLiked: false,
-      likeId: "",
-      isEditMode: false,
-      inputRef: "",
     };
   }
 
   componentDidMount() {
     this.props.dispatch(listArticleDetails(this.props.match.params.id));
     this.props.dispatch(listArticleLikes(this.props.match.params.id));
+    if (this.props.loggedIn) {
+      this.props.dispatch(getBookmarks(this.props.user.id));
+    }
   }
   componentDidUpdate(prevProps) {
     if (this.props.article !== prevProps.article) {
@@ -145,14 +144,6 @@ class ArticleView extends Component {
           user_name: this.props.article.user.name,
         },
       });
-    }
-    if (this.props.likes !== prevProps.likes) {
-      const result = this.props.likes.find(
-        ({ user }) => user._id === this.props.user.id
-      );
-      if (result) {
-        this.setState({ isLiked: true, likeId: result._id });
-      }
     }
   }
 
@@ -189,8 +180,6 @@ class ArticleView extends Component {
       body: this.state.newComment,
       user: this.props.user.id,
     };
-
-    console.log(this.props.user.id);
     const _id = this.props.match.params.id;
     if (this.props.loggedIn) {
       this.props.dispatch(postNewComment(_id, newComment));
@@ -214,26 +203,6 @@ class ArticleView extends Component {
   handleDeleteComment = (comment_id) => {
     this.props.dispatch(deleteComment(comment_id));
   };
-  handlebookmark = (e) => {
-    if (this.props.loggedIn) {
-      this.props.dispatch(
-        bookmarkArticle(this.props.match.params.id, this.props.user.id)
-      );
-    } else {
-      e.preventDefault();
-      alert("Log In or Register to bookmark.");
-    }
-  };
-  handleRemovebookmark = (e) => {
-    if (this.props.loggedIn) {
-      this.props.dispatch(
-        removeBookmarkArticle(this.props.match.params.id, this.props.user.id)
-      );
-    } else {
-      e.preventDefault();
-      alert("Log In or Register to remove bookmark.");
-    }
-  };
 
   handleFetchComments = (e) => {
     e.preventDefault();
@@ -246,24 +215,18 @@ class ArticleView extends Component {
     }
   };
 
-  handleLike = (e) => {
-    if (this.props.loggedIn && !this.state.isLiked) {
-      this.props.dispatch(
-        postLikeArticle(this.props.match.params.id, this.props.user.id)
-      );
-    } else if (this.props.loggedIn && this.state.isLiked) {
-      this.props.dispatch(deleteLikeArticle(this.state.likeId));
-    } else {
-      e.preventDefault();
-      alert("Log In or Register to Like .");
-    }
-  };
-  deleteArticle = () => {
+  //Edit Article & Delete
+  editAndDeleArticle = () => {
     if (this.props.user.id === this.state.articleDetails.user_id) {
       return (
-        <button className="btn btn-primary" onClick={this.handleDelete}>
-          Delete
-        </button>
+        <div>
+          <Link to="/edit-article" className="btn btn-primary">
+            Edit Article
+          </Link>
+          <button className="btn btn-primary" onClick={this.handleDelete}>
+            Delete
+          </button>
+        </div>
       );
     }
     return null;
@@ -273,8 +236,8 @@ class ArticleView extends Component {
     this.props.dispatch(deleteArticle(this.props.match.params.id));
     window.location = "/";
   };
+
   render() {
-    console.log("like id", this.state.likeId);
     return (
       <div className="container-fluid">
         <h3>{this.state.articleDetails.title}</h3>
@@ -287,30 +250,11 @@ class ArticleView extends Component {
           </Link>
         </h6>
 
-        <button
-          className="btn btn-primary"
-          onClick={this.handleLike}
-          disabled={!this.props.loggedIn}
-        >
-          {this.state.isLiked ? "Liked" : "Likes"} -{" "}
-          {this.props.likes.length ? this.props.likes.length : 0}
-        </button>
-        <button
-          className="btn btn-primary"
-          onClick={this.handlebookmark}
-          disabled={!this.props.loggedIn}
-        >
-          Bookmark
-        </button>
-        <button
-          className="btn btn-primary"
-          onClick={this.handleRemovebookmark}
-          disabled={!this.props.loggedIn}
-        >
-          Remove Bookmark
-        </button>
+        <Like />
+        {this.props.loggedIn ? <Bookmark /> : ""}
 
-        {this.deleteArticle()}
+        {this.editAndDeleArticle()}
+
         <hr />
         <h6>
           <a href="#" onClick={this.handleFetchComments}>
@@ -324,7 +268,9 @@ class ArticleView extends Component {
             //delete={this.handleDeleteComment}
             editMode={this.state.isEditMode}
             edit={this.handleEditComment}
-            save={this.onSave}
+            save={(id) => {
+              this.onSave(id);
+            }}
             setRef={this.setRef}
           />
         ) : (
@@ -363,7 +309,6 @@ function mapStateToProps(state) {
     user: state.authReducer.user,
     article: state.articlesReducer.article,
     comments: state.articlesReducer.comments,
-    likes: state.articlesReducer.likes,
   };
 }
 

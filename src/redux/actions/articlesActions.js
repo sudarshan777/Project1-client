@@ -64,21 +64,7 @@ export const deleteArticleSuccess = (_id) => {
   };
 };
 
-export const bookmarkArticle = (article_id, user_id) => {
-  return {
-    type: Types.BOOKMARK_ARTICLE,
-    article_id,
-    user_id,
-  };
-};
 
-export const removeBookmarkArticle = (article_id, user_id) => {
-  return {
-    type: Types.UN_BOOKMARK_ARTICLE,
-    article_id,
-    user_id,
-  };
-};
 
 export const postLikeArticle = (article_id, user_id) => {
   return {
@@ -93,9 +79,10 @@ export const deleteLikeArticle = (like_id) => {
     like_id,
   };
 };
-// export const editArticle = (_id) => {
-//   return {
-//     type: Types.EDIT_ARTICLE_GET_DETAILS,
-//     _id,
-//   };
-// };
+export const editArticle = (_id, articleDetails) => {
+  return {
+    type: Types.UPDATE_ARTICLE_DETAILS,
+    _id,
+    articleDetails,
+  };
+};
