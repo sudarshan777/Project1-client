@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useRef } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {
@@ -38,7 +38,20 @@ const Comments = (props) => {
                 <div class="card">
                   <div class="card-body">
                     {props.editMode && comment.user._id === props.user.id ? (
-                      <input type="text" defaultValue={comment.body} />
+                      <div>
+                        <input
+                          type="text"
+                          defaultValue={comment.body}
+                          ref={props.setRef}
+                        />
+                        <button
+                          type="button"
+                          class="btn btn-success"
+                          onClick={props.save()}
+                        >
+                          Save
+                        </button>
+                      </div>
                     ) : (
                       <p>
                         <h3>{comment.body}</h3>
@@ -114,8 +127,10 @@ class ArticleView extends Component {
       isLiked: false,
       likeId: "",
       isEditMode: false,
+      inputRef: "",
     };
   }
+
   componentDidMount() {
     this.props.dispatch(listArticleDetails(this.props.match.params.id));
     this.props.dispatch(listArticleLikes(this.props.match.params.id));
@@ -141,6 +156,27 @@ class ArticleView extends Component {
     }
   }
 
+  setRef = (ref) => {
+    this.setState({
+      inputRef: ref,
+    });
+  };
+
+  onSave = (comment_id) => {
+    console.log("You clicked Save button", this.state.isEditMode);
+    console.log(this.state.newComment);
+    this.setState({
+      isEditMode: false,
+      // newComment: this.state.inputRef.value,
+    });
+    console.log(this.state.inputRef.value);
+    const comment_body = this.state.inputRef.value;
+    const comment = {
+      body: comment_body,
+    };
+    this.props.dispatch(editComment(comment_id, comment));
+  };
+
   onChange = (e) => {
     this.setState({
       newComment: e.target.value,
@@ -149,7 +185,6 @@ class ArticleView extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-
     const newComment = {
       body: this.state.newComment,
       user: this.props.user.id,
@@ -171,10 +206,10 @@ class ArticleView extends Component {
   };
   handleEditComment = (comment_body, comment_id) => {
     this.setState({ isEditMode: !this.state.isEditMode });
-    const comment = {
-      body: comment_body,
-    };
-    this.props.dispatch(editComment(comment_id, comment));
+    // const comment = {
+    //   body: comment_body,
+    // };
+    // this.props.dispatch(editComment(comment_id, comment));
   };
   handleDeleteComment = (comment_id) => {
     this.props.dispatch(deleteComment(comment_id));
@@ -289,6 +324,8 @@ class ArticleView extends Component {
             //delete={this.handleDeleteComment}
             editMode={this.state.isEditMode}
             edit={this.handleEditComment}
+            save={this.onSave}
+            setRef={this.setRef}
           />
         ) : (
           ""
