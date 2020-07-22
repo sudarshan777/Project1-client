@@ -85,6 +85,12 @@ class User extends Component {
       });
     }
   }
+  // shouldComponentUpdate(nextProps) {
+  //   if (this.props.match.params.id !== nextProps.match.params.id) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   handleFollow = (e) => {
     if (this.props.loggedIn && this.props.user.id !== this.state.user._id) {
@@ -495,7 +501,6 @@ class User extends Component {
 }
 
 function mapStateToProps(state) {
-
   // console.log("User" + JSON.stringify(state.userReducer.user));
   // console.log("Followers" + JSON.stringify(state.userReducer.followers));
   // console.log("Following" + JSON.stringify(state.userReducer.following));

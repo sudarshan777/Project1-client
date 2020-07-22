@@ -43,5 +43,5 @@ export function deleteService(formBody, deleteApi) {
     method: "DELETE",
     body: JSON.stringify(formBody),
     headers: myHeaders,
-  }).then((res) => res.json());
+  });
 }
