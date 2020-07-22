@@ -25,16 +25,7 @@ const Bookmark = () => {
     } else {
       setBookmark(false);
     }
-  }, [bookmarks]);
-
-  useEffect(() => {
-    const result = bookmarks.find((article) => article._id === _id);
-    if (result) {
-      setBookmark(true);
-    } else {
-      setBookmark(false);
-    }
-  }, [_id]);
+  }, [bookmarks, _id]);
 
   const handleBookmark = () => {
     //_id  article id
