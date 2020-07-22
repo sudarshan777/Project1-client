@@ -24,8 +24,11 @@ const Like = () => {
     if (result) {
       setLike(true);
       setLikeId(result._id);
+    } else {
+      setLike(false);
+      setLikeId("");
     }
-  }, [likes]);
+  }, [likes, _id]);
 
   const handleLike = () => {
     //_id  article id
