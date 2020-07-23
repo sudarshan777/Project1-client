@@ -154,7 +154,7 @@ const handleEditComment = (state, action) => {
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       comments: newState.comments.map((comment) => {
-        if (comment.id !== action.result._id) {
+        if (comment._id !== action.result._id) {
           return comment;
         }
         return Object.assign({}, comment, {
@@ -163,7 +163,6 @@ const handleEditComment = (state, action) => {
       }),
     });
   }
-
   return {
     ...newState
   };
@@ -175,7 +174,7 @@ const handleDeleteComment = (state, action) => {
     ...state
   };
   if (action.result !== undefined) {
-    newState = Object.assign({}, state, {
+    newState = Object.assign({}, state, { 
       comments: newState.comments.filter(
         (comment) => comment._id !== result._id
       ),

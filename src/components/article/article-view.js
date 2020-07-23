@@ -80,7 +80,7 @@ const Comments = (props) => {
                           data-toggle="tooltip"
                           data-placement="top"
                           title="Delete Comment"
-                          //onClick={props.delete(comment._id)}
+                          onClick={()=> {props.delete(comment._id)}}
                         >
                           <span
                             className="glyphicon glyphicon-remove"
@@ -265,7 +265,7 @@ class ArticleView extends Component {
           <Comments
             comments={this.props.comments}
             user={this.props.user}
-            //delete={this.handleDeleteComment}
+            delete={this.handleDeleteComment}
             editMode={this.state.isEditMode}
             edit={this.handleEditComment}
             save={(id) => {
