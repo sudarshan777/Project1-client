@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { formatDistanceToNow } from "date-fns";
 //import Like from "./Like";
 import "../styles/styling.sass";
 
@@ -14,6 +14,7 @@ const Comments = (props) => {
         </h6>
         <ul className="list-group">
           {props.comments.map((comment, index) => {
+            var date = new Date(comment.createdAt);
             return (
               // <li className="list-group-item" key={index}>
               //   <p>{comment.body}</p>-
@@ -96,7 +97,7 @@ const Comments = (props) => {
                       {comment.user.name}
                     </Link>
                     <br />
-                    <b>Date - </b> {comment.createdAt.substring(0, 10)}
+                    <b>{formatDistanceToNow(date)} ago </b>
                   </div>
                 </div>
                 <br />
