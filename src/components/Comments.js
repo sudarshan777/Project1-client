@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 //import Like from "./Like";
+import "../styles/styling.sass";
 
 const Comments = (props) => {
   if (props.comments.length > 0 && props !== undefined) {
@@ -82,7 +83,11 @@ const Comments = (props) => {
                       //     </span>
                       //   </button>
                       // </div>
-                      <EditOptions edit={props.edit} comment={comment} delete={props.delete} />
+                      <EditOptions
+                        edit={props.edit}
+                        comment={comment}
+                        delete={props.delete}
+                      />
                     ) : (
                       ""
                     )}
@@ -106,7 +111,7 @@ const Comments = (props) => {
 
 const EditOptions = (props) => {
   return (
-    <div style={{ float: "right" }}>
+    <div id="CommentEditOptions">
       <button
         class="btn btn-primary a-btn-slide-text"
         data-toggle="tooltip"
