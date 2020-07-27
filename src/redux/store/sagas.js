@@ -9,7 +9,10 @@ import {
   takeLatest,
 } from "redux-saga/effects";
 import * as Types from "../actions/types";
-import { GetDataFromServer, deleteService } from "../service";
+import {
+  GetDataFromServer,
+  deleteService
+} from "../service";
 
 const baseUrl = "https://mern-article.herokuapp.com";
 // const baseUrl = "http://localhost:5000";
@@ -29,7 +32,10 @@ function* fetchLoginUser(action) {
         error: result.error,
       });
     } else {
-      yield put({ type: Types.LOGIN_USER_SERVER_RESPONSE_SUCCESS, result });
+      yield put({
+        type: Types.LOGIN_USER_SERVER_RESPONSE_SUCCESS,
+        result
+      });
     }
   } catch (error) {
     // yield put({ type: Types.SERVER_CALL_FAILED, error: error.message });
@@ -44,14 +50,21 @@ function* listArticles(action) {
     const response = yield call(GetDataFromServer, loginUrl, "", "");
     const result = yield response.json();
     if (result.error) {
-      yield put({ type: Types.ARTICLE_LIST_ERROR_RESPONSE, result });
+      yield put({
+        type: Types.ARTICLE_LIST_ERROR_RESPONSE,
+        result
+      });
     } else {
-      yield put({ type: Types.ARTICLE_LIST_SUCCESS_RESPONSE, result });
+      yield put({
+        type: Types.ARTICLE_LIST_SUCCESS_RESPONSE,
+        result
+      });
     }
   } catch (error) {
     console.log(error);
   }
 }
+
 function* getUser(action) {
   try {
     const reqMethod = "GET";
@@ -59,9 +72,15 @@ function* getUser(action) {
     const response = yield call(GetDataFromServer, loginUrl, "", "");
     const result = yield response.json();
     if (result.error) {
-      yield put({ type: Types.GET_USER_ERROR_RESPONSE, result });
+      yield put({
+        type: Types.GET_USER_ERROR_RESPONSE,
+        result
+      });
     } else {
-      yield put({ type: Types.GET_USER_SUCCESS_RESPONSE, result });
+      yield put({
+        type: Types.GET_USER_SUCCESS_RESPONSE,
+        result
+      });
     }
   } catch (error) {
     console.log(error);
@@ -75,9 +94,15 @@ function* getBookmarks(action) {
     const response = yield call(GetDataFromServer, loginUrl, "", "");
     const result = yield response.json();
     if (result.error) {
-      yield put({ type: Types.GET_BOOKMARKS_ERROR_RESPONSE, result });
+      yield put({
+        type: Types.GET_BOOKMARKS_ERROR_RESPONSE,
+        result
+      });
     } else {
-      yield put({ type: Types.GET_BOOKMARKS_SUCCESS_RESPONSE, result });
+      yield put({
+        type: Types.GET_BOOKMARKS_SUCCESS_RESPONSE,
+        result
+      });
     }
   } catch (error) {
     console.log(error);
@@ -127,6 +152,7 @@ function* getArticleComments(action) {
     console.log(error);
   }
 }
+
 function* getArticleLikes(action) {
   try {
     const reqMethod = "GET";
@@ -173,6 +199,7 @@ function* saveArticleDetails(action) {
     console.log(error);
   }
 }
+
 function* updateArticleDetails(action) {
   try {
     let formBody = {};
@@ -207,12 +234,16 @@ function* deleteArticleDetails(action) {
     //const deleteApi = "http://localhost:5066/delete-project";
     const deleteApi = baseUrl + "/articles/" + action._id;
     const newData = yield call(deleteService, formBody, deleteApi); // Refer sample to api calls in remote.js file
-    yield put({ type: Types.DELETE_ARTICLE_SUCCESS, newData }); // pass in the id you updated and the newData returned from the API
+    yield put({
+      type: Types.DELETE_ARTICLE_SUCCESS,
+      newData
+    }); // pass in the id you updated and the newData returned from the API
     /// Other things can go here depending on what you want
   } catch (e) {
     console.log("SAGA ERROR");
   }
 }
+
 function* postComment(action) {
   try {
     let formBody = {};
@@ -262,6 +293,7 @@ function* editComment(action) {
     console.log(error);
   }
 }
+
 function* deleteComment(action) {
   try {
     // Ensure that your API returns the data of the updated todo
@@ -312,6 +344,7 @@ function* postBookmark(action) {
     console.log(error);
   }
 }
+
 function* deleteBookmark(action) {
   try {
     let formBody = {};
@@ -375,7 +408,10 @@ function* deleteArticleLike(action) {
     /// Other things can go here depending on what you want
     const result = yield response.json();
     if (result.error) {
-      yield put({ type: Types.DELETE_LIKE_ARTICLE_ERROR_RESPONSE, result }); // pass in the id you updated and the newData returned from the API
+      yield put({
+        type: Types.DELETE_LIKE_ARTICLE_ERROR_RESPONSE,
+        result
+      }); // pass in the id you updated and the newData returned from the API
     } else {
       yield put({
         type: Types.DELETE_LIKE_ARTICLE_SUCCESS_RESPONSE,
@@ -395,14 +431,21 @@ function* getFollowers(action) {
     const response = yield call(GetDataFromServer, loginUrl, "", "");
     const result = yield response.json();
     if (result.error) {
-      yield put({ type: Types.GET_FOLLOWERS_ERROR_RESPONSE, result });
+      yield put({
+        type: Types.GET_FOLLOWERS_ERROR_RESPONSE,
+        result
+      });
     } else {
-      yield put({ type: Types.GET_FOLLOWERS_SUCCESS_RESPONSE, result });
+      yield put({
+        type: Types.GET_FOLLOWERS_SUCCESS_RESPONSE,
+        result
+      });
     }
   } catch (error) {
     console.log("SAGA ERROR", error);
   }
 }
+
 function* getFollowing(action) {
   try {
     const reqMethod = "GET";
@@ -410,9 +453,15 @@ function* getFollowing(action) {
     const response = yield call(GetDataFromServer, loginUrl, "", "");
     const result = yield response.json();
     if (result.error) {
-      yield put({ type: Types.GET_FOLLOWING_ERROR_RESPONSE, result });
+      yield put({
+        type: Types.GET_FOLLOWING_ERROR_RESPONSE,
+        result
+      });
     } else {
-      yield put({ type: Types.GET_FOLLOWING_SUCCESS_RESPONSE, result });
+      yield put({
+        type: Types.GET_FOLLOWING_SUCCESS_RESPONSE,
+        result
+      });
     }
   } catch (error) {
     console.log("SAGA ERROR", error);
@@ -440,6 +489,7 @@ function* getUserArticles(action) {
     console.log("SAGA ERROR", error);
   }
 }
+
 function* followUser(action) {
   try {
     let formBody = {};
@@ -463,6 +513,7 @@ function* followUser(action) {
     console.log("SAGA ERROR", error);
   }
 }
+
 function* unFollowUser(action) {
   try {
     let formBody = {};
@@ -505,7 +556,10 @@ function* signUpUser(action) {
         error: result.error,
       });
     } else {
-      yield put({ type: Types.SIGNUP_USER_SERVER_RESPONSE_SUCCESS, result });
+      yield put({
+        type: Types.SIGNUP_USER_SERVER_RESPONSE_SUCCESS,
+        result
+      });
     }
   } catch (error) {
     // yield put({ type: Types.SERVER_CALL_FAILED, error: error.message });

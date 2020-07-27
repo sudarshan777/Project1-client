@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useRef } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Like from "./Like";
@@ -14,32 +14,141 @@ import {
 } from "../../redux/actions/articlesActions";
 import { getBookmarks } from "../../redux/actions/get-user";
 
-const Comments = (props) => {
-  if (props.comments.length > 0 && props !== undefined) {
-    return (
-      <div>
-        <h6>
-          {" "}
-          <b>Comments</b>
-        </h6>
-        <ul className="list-group">
-          {props.comments.map((comment, index) => {
-            return (
-              <li className="list-group-item" key={index}>
-                <p>{comment.body}</p>-
-                <Link to={"/user/" + comment.user._id}>
-                  {comment.user.name}
-                </Link>
-                <br />
-                <b>Date - </b> {comment.createdAt.substring(0, 10)}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    );
-  } else return null;
-};
+import Comments from "../Comments"
+
+// const Comments = (props) => {
+//   if (props.comments.length > 0 && props !== undefined) {
+//     return (
+//       <div>
+//         <h6>
+//           {" "}
+//           <b>Comments</b>
+//         </h6>
+//         <ul className="list-group">
+//           {props.comments.map((comment, index) => {
+//             return (
+//               // <li className="list-group-item" key={index}>
+//               //   <p>{comment.body}</p>-
+//               //   <Link to={"/user/" + comment.user._id}>
+//               //     {comment.user.name}
+//               //   </Link>
+//               //   <br />
+//               //   <b>Date - </b> {comment.createdAt.substring(0, 10)}
+//               // </li>
+//               <div>
+//                 <div class="card">
+//                   <div class="card-body">
+//                     {props.editMode && comment.user._id === props.user.id ? (
+//                       <div>
+//                         <input
+//                           type="text"
+//                           defaultValue={comment.body}
+//                           ref={props.setRef}
+//                         />
+//                         <button
+//                           type="button"
+//                           class="btn btn-success"
+//                           onClick={() => {
+//                             props.save(comment._id);
+//                           }}
+//                         >
+//                           Save
+//                         </button>
+//                       </div>
+//                     ) : (
+//                       <p>
+//                         <h3>{comment.body}</h3>
+//                       </p>
+//                     )}
+//                     {comment.user._id === props.user.id ? (
+//                       // <div style={{ float: "right" }}>
+//                       //   <button
+//                       //     class="btn btn-primary a-btn-slide-text"
+//                       //     data-toggle="tooltip"
+//                       //     data-placement="top"
+//                       //     title="Edit"
+//                       //     onClick={props.edit}
+//                       //   >
+//                       //     <span
+//                       //       class="glyphicon glyphicon-edit"
+//                       //       aria-hidden="true"
+//                       //     ></span>
+//                       //     <span>
+//                       //       <strong>Edit</strong>
+//                       //     </span>
+//                       //   </button>{" "}
+//                       //   <button
+//                       //     className="btn btn-primary a-btn-slide-text"
+//                       //     data-toggle="tooltip"
+//                       //     data-placement="top"
+//                       //     title="Delete Comment"
+//                       //     onClick={() => {
+//                       //       props.delete(comment._id);
+//                       //     }}
+//                       //   >
+//                       //     <span
+//                       //       className="glyphicon glyphicon-remove"
+//                       //       aria-hidden="true"
+//                       //     ></span>
+//                       //     <span>
+//                       //       <strong>Delete</strong>
+//                       //     </span>
+//                       //   </button>
+//                       // </div>
+//                       <EditOptions edit={props.edit} comment={comment} delete={props.delete} />
+//                     ) : (
+//                       ""
+//                     )}
+//                     <b>By -</b>
+//                     <Link to={"/user/" + comment.user._id}>
+//                       {comment.user.name}
+//                     </Link>
+//                     <br />
+//                     <b>Date - </b> {comment.createdAt.substring(0, 10)}
+//                   </div>
+//                 </div>
+//                 <br />
+//               </div>
+//             );
+//           })}
+//         </ul>
+//       </div>
+//     );
+//   } else return null;
+// };
+
+// const EditOptions = (props) => {
+//   return (
+//     <div style={{ float: "right" }}>
+//       <button
+//         class="btn btn-primary a-btn-slide-text"
+//         data-toggle="tooltip"
+//         data-placement="top"
+//         title="Edit"
+//         onClick={props.edit}
+//       >
+//         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+//         <span>
+//           <strong>Edit</strong>
+//         </span>
+//       </button>{" "}
+//       <button
+//         className="btn btn-primary a-btn-slide-text"
+//         data-toggle="tooltip"
+//         data-placement="top"
+//         title="Delete Comment"
+//         onClick={() => {
+//           props.delete(props.comment._id);
+//         }}
+//       >
+//         <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
+//         <span>
+//           <strong>Delete</strong>
+//         </span>
+//       </button>
+//     </div>
+//   );
+// };
 
 class ArticleView extends Component {
   constructor(props) {
@@ -55,6 +164,7 @@ class ArticleView extends Component {
       showComments: false,
     };
   }
+
   componentDidMount() {
     this.props.dispatch(listArticleDetails(this.props.match.params.id));
     this.props.dispatch(listArticleLikes(this.props.match.params.id));
@@ -75,6 +185,27 @@ class ArticleView extends Component {
     }
   }
 
+  setRef = (ref) => {
+    this.setState({
+      inputRef: ref,
+    });
+  };
+
+  onSave = (comment_id) => {
+    console.log("You clicked Save button", this.state.isEditMode);
+    console.log(this.state.newComment);
+    this.setState({
+      isEditMode: false,
+      // newComment: this.state.inputRef.value,
+    });
+    console.log(this.state.inputRef.value);
+    const comment_body = this.state.inputRef.value;
+    const comment = {
+      body: comment_body,
+    };
+    this.props.dispatch(editComment(comment_id, comment));
+  };
+
   onChange = (e) => {
     this.setState({
       newComment: e.target.value,
@@ -83,7 +214,6 @@ class ArticleView extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-
     const newComment = {
       body: this.state.newComment,
       user: this.props.user.id,
@@ -102,10 +232,11 @@ class ArticleView extends Component {
     // window.location = "/";
   };
   handleEditComment = (comment_body, comment_id) => {
-    const comment = {
-      body: comment_body,
-    };
-    this.props.dispatch(editComment(comment_id, comment));
+    this.setState({ isEditMode: !this.state.isEditMode });
+    // const comment = {
+    //   body: comment_body,
+    // };
+    // this.props.dispatch(editComment(comment_id, comment));
   };
   handleDeleteComment = (comment_id) => {
     this.props.dispatch(deleteComment(comment_id));
@@ -176,28 +307,42 @@ class ArticleView extends Component {
           </a>
         </h6>
         {this.state.showComments ? (
-          <Comments comments={this.props.comments} />
+          <Comments
+            comments={this.props.comments}
+            user={this.props.user}
+            delete={this.handleDeleteComment}
+            editMode={this.state.isEditMode}
+            edit={this.handleEditComment}
+            save={(id) => {
+              this.onSave(id);
+            }}
+            setRef={this.setRef}
+          />
         ) : (
           ""
         )}
 
         <br />
 
-        <form onSubmit={this.onSubmit}>
-          <div className="form-group">
-            <label>Add Comments </label>
-            <input
-              type="text"
-              required
-              className="form-control"
-              value={this.state.newComment}
-              onChange={this.onChange}
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </form>
+        {this.props.loggedIn ? (
+          <form onSubmit={this.onSubmit}>
+            <div className="form-group">
+              <label>Add Comments </label>
+              <input
+                type="text"
+                required
+                className="form-control"
+                value={this.state.newComment}
+                onChange={this.onChange}
+              />
+            </div>
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </form>
+        ) : (
+          " "
+        )}
       </div>
     );
   }
