@@ -114,7 +114,7 @@ const handleEditComment = (state, action) => {
   if (action.result !== undefined) {
     newState = Object.assign({}, state, {
       comments: newState.comments.map((comment) => {
-        if (comment.id !== action.result._id) {
+        if (comment._id !== action.result._id) {
           return comment;
         }
         return Object.assign({}, comment, {

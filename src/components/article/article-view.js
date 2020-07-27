@@ -143,6 +143,14 @@ class ArticleView extends Component {
     this.props.dispatch(deleteArticle(this.props.match.params.id));
     window.location = "/";
   };
+  showBookmark = () => {
+    if (
+      this.props.loggedIn &&
+      this.props.user.id !== this.state.articleDetails.user_id
+    ) {
+      return <Bookmark />;
+    }
+  };
 
   render() {
     return (
@@ -158,8 +166,7 @@ class ArticleView extends Component {
         </h6>
 
         <Like />
-        {this.props.loggedIn ? <Bookmark /> : ""}
-
+        {this.showBookmark()}
         {this.editAndDeleArticle()}
 
         <hr />

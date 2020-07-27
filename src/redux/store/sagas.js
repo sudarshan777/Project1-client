@@ -454,7 +454,7 @@ function* followUser(action) {
       });
     } else {
       yield put({
-        type: Types.FOLLOW_USER_ERROR_RESPONSE,
+        type: Types.FOLLOW_USER_SUCCESS_RESPONSE,
         result,
       });
     }
@@ -467,7 +467,7 @@ function* unFollowUser(action) {
   try {
     let formBody = {};
     formBody.user = action.unfollow_id;
-    const postUrl = baseUrl + +"/user/" + action.user_id + "/follow";
+    const postUrl = baseUrl + "/user/" + action.user_id + "/follow";
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     if (result.error) {
@@ -477,7 +477,7 @@ function* unFollowUser(action) {
       });
     } else {
       yield put({
-        type: Types.UN_FOLLOW_USER_ERROR_RESPONSE,
+        type: Types.UN_FOLLOW_USER_SUCCESS_RESPONSE,
         result,
       });
     }

@@ -2,20 +2,19 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Card } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import "../styles/styles.css";
+import "../../styles/styles.css";
 
 import { connect } from "react-redux";
 import {
   getUser,
-  followUser,
-  unFollowUser,
   getBookmarks,
   getFollowers,
   getFollowing,
   getUserWrittenArticles,
   getArticlesLiked,
-} from "../redux/actions/get-user";
-import ArticlesList from "./article/articles-list";
+} from "../../redux/actions/get-user";
+import ArticlesList from "../article/articles-list";
+import FollowButton from "./FollowButton";
 
 class ErrorBoundary extends Component {
   state = {
@@ -67,6 +66,9 @@ class User extends Component {
   componentDidMount() {
     this.props.dispatch(getUser(this.props.match.params.id));
     this.props.dispatch(getBookmarks(this.props.match.params.id));
+    if (this.props.loggedIn) {
+      this.props.dispatch(getFollowing(this.props.user.id));
+    }
   }
   componentDidUpdate(prevProps) {
     if (this.props.userDetails !== prevProps.userDetails) {
@@ -92,35 +94,6 @@ class User extends Component {
   //   return false;
   // }
 
-  handleFollow = (e) => {
-    if (this.props.loggedIn && this.props.user.id !== this.state.user._id) {
-      this.props.dispatch(followUser(this.props.user.id, this.state.user._id));
-    } else if (
-      this.props.loggedIn &&
-      this.props.user.id === this.state.user._id
-    ) {
-      alert("You cannot follow yourself.");
-    } else {
-      e.preventDefault();
-      alert("Log In or Register to follow.");
-    }
-  };
-
-  handleUnfollow = (e) => {
-    if (this.props.loggedIn && this.props.user.id !== this.state.user._id) {
-      this.props.dispatch(
-        unFollowUser(this.props.user.id, this.state.user._id)
-      );
-    } else if (
-      this.props.loggedIn &&
-      this.props.user.id === this.state.user._id
-    ) {
-      alert("You cannot un follow yourself.");
-    } else {
-      e.preventDefault();
-      alert("Log In or Register to Unfollow.");
-    }
-  };
   getFollowers = (e) => {
     e.preventDefault();
     if (this.state.user.followers.length === 0) {
@@ -184,19 +157,6 @@ class User extends Component {
       showArticlesLiked: false,
       showBookmarks: true,
     });
-  };
-
-  followButton = () => {
-    return (
-      <div>
-        <button className="btn btn-primary" onClick={this.handleFollow}>
-          Follow
-        </button>
-        <button className="btn btn-primary" onClick={this.handleUnfollow}>
-          Un Follow
-        </button>
-      </div>
-    );
   };
 
   render() {
@@ -333,9 +293,9 @@ class User extends Component {
                       </a>
                     </small>
                   </p>
-                  <button className="btn btn-success btn-block">
-                    <span className="fa fa-plus-circle"></span> Follow{" "}
-                  </button>
+
+                  <FollowButton />
+
                   <button
                     type="button"
                     className="btn btn-success btn-block"
