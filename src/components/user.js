@@ -16,6 +16,7 @@ import {
   getArticlesLiked,
 } from "../redux/actions/get-user";
 import ArticlesList from "./article/articles-list";
+import EditProfile from "./EditProfile";
 
 class ErrorBoundary extends Component {
   state = {
@@ -374,45 +375,12 @@ class User extends Component {
                     </small>
                   </p>
                   <div className="btn-group dropup btn-block">
-                    <button type="button" className="btn btn-primary">
-                      <span className="fa fa-gear"></span> Options{" "}
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-primary dropdown-toggle"
-                      data-toggle="dropdown"
-                    >
-                      <span className="caret"></span>
-                      <span className="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul className="dropdown-menu text-left" role="menu">
-                      <li>
-                        <a href="#">
-                          <span className="fa fa-envelope pull-right"></span>{" "}
-                          Send an email{" "}
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <span className="fa fa-list pull-right"></span> Add or
-                          remove from a list{" "}
-                        </a>
-                      </li>
-                      <li className="divider"></li>
-                      <li>
-                        <a href="#">
-                          <span className="fa fa-warning pull-right"></span>
-                          Report this user for spam
-                        </a>
-                      </li>
-                      <li className="divider"></li>
-                      <li>
-                        <a href="#" className="btn disabled" role="button">
-                          {" "}
-                          Unfollow{" "}
-                        </a>
-                      </li>
-                    </ul>
+                    <Link to={"/EditProfile"}>
+                      <button type="button" className="btn btn-primary">
+                        {" "}
+                        <span className="fa fa-gear"></span> Edit Profile{" "}
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </div>
