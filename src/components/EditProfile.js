@@ -67,13 +67,12 @@ class EditProfile extends Component {
         </div>
         <div class="form-group">
           <label for="exampleFormControlSelect2">Skills</label>
-          <select multiple class="form-control" id="SkillSelect">
-            <option>HTML</option>
-            <option>CSS</option>
-            <option>Javascript</option>
-            <option>Java</option>
-            <option>C++</option>
-          </select>
+          <input
+            type="text"
+            class="form-control"
+            id="inputSkills"
+            placeholder="HTML, Javascript..."
+          />
         </div>
         <div class="form-group col-md-2">
           <button type="submit" class="btn btn-primary">
