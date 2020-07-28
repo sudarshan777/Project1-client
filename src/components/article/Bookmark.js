@@ -10,7 +10,7 @@ const Bookmark = () => {
     (state) => state.userReducer.bookmarks,
     shallowEqual
   );
-  const { _id } = useSelector(
+  const { _id, user } = useSelector(
     (state) => state.articlesReducer.article,
     shallowEqual
   );

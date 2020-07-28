@@ -2,20 +2,19 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Avatar, Card } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import "../styles/styles.css";
+import "../../styles/styles.css";
 
 import { connect } from "react-redux";
 import {
   getUser,
-  followUser,
-  unFollowUser,
   getBookmarks,
   getFollowers,
   getFollowing,
   getUserWrittenArticles,
   getArticlesLiked,
-} from "../redux/actions/get-user";
-import ArticlesList from "./article/articles-list";
+} from "../../redux/actions/get-user";
+import ArticlesList from "../article/articles-list";
+import FollowButton from "./FollowButton";
 
 class ErrorBoundary extends Component {
   state = {
@@ -66,7 +65,6 @@ class User extends Component {
 
   componentDidMount() {
     this.props.dispatch(getUser(this.props.match.params.id));
-    this.props.dispatch(getBookmarks(this.props.match.params.id));
   }
   componentDidUpdate(prevProps) {
     if (this.props.userDetails !== prevProps.userDetails) {
@@ -85,43 +83,8 @@ class User extends Component {
       });
     }
   }
-  // shouldComponentUpdate(nextProps) {
-  //   if (this.props.match.params.id !== nextProps.match.params.id) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
-  handleFollow = (e) => {
-    if (this.props.loggedIn && this.props.user.id !== this.state.user._id) {
-      this.props.dispatch(followUser(this.props.user.id, this.state.user._id));
-    } else if (
-      this.props.loggedIn &&
-      this.props.user.id === this.state.user._id
-    ) {
-      alert("You cannot follow yourself.");
-    } else {
-      e.preventDefault();
-      alert("Log In or Register to follow.");
-    }
-  };
-
-  handleUnfollow = (e) => {
-    if (this.props.loggedIn && this.props.user.id !== this.state.user._id) {
-      this.props.dispatch(
-        unFollowUser(this.props.user.id, this.state.user._id)
-      );
-    } else if (
-      this.props.loggedIn &&
-      this.props.user.id === this.state.user._id
-    ) {
-      alert("You cannot un follow yourself.");
-    } else {
-      e.preventDefault();
-      alert("Log In or Register to Unfollow.");
-    }
-  };
-  getFollowers = (e) => {
+  showFollowers = (e) => {
     e.preventDefault();
     if (this.state.user.followers.length === 0) {
       return false;
@@ -136,7 +99,7 @@ class User extends Component {
     });
   };
 
-  getFollowing = (e) => {
+  showFollowing = (e) => {
     e.preventDefault();
     if (this.state.user.following.length === 0) {
       return false;
@@ -186,17 +149,10 @@ class User extends Component {
     });
   };
 
-  followButton = () => {
-    return (
-      <div>
-        <button className="btn btn-primary" onClick={this.handleFollow}>
-          Follow
-        </button>
-        <button className="btn btn-primary" onClick={this.handleUnfollow}>
-          Un Follow
-        </button>
-      </div>
-    );
+  showFollow = () => {
+    if (this.props.loggedIn && this.props.user.id !== this.state.user._id) {
+      return <FollowButton />;
+    }
   };
 
   render() {
@@ -328,14 +284,12 @@ class User extends Component {
                   </h2>
                   <p>
                     <small>
-                      <a href="#" onClick={this.getFollowers}>
+                      <a href="#" onClick={this.showFollowers}>
                         Followers
                       </a>
                     </small>
                   </p>
-                  <button className="btn btn-success btn-block">
-                    <span className="fa fa-plus-circle"></span> Follow{" "}
-                  </button>
+                  {this.showFollow()}
                   <button
                     type="button"
                     className="btn btn-success btn-block"
@@ -350,7 +304,7 @@ class User extends Component {
                   </h2>
                   <p>
                     <small>
-                      <a href="#" onClick={this.getFollowing}>
+                      <a href="#" onClick={this.showFollowing}>
                         Following
                       </a>
                     </small>

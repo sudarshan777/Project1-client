@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Registration from "./components/registration";
 import Login from "./components/login";
 import Facebook from "./components/facebook";
-import User from "./components/user";
+import User from "./components/user/index";
 import CreateArticle from "./components/create-article";
 import ArticleView from "./components/article/article-view";
 import PrivateRoute from "./components/privateRoutes";
