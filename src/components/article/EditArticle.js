@@ -22,7 +22,7 @@ const EditArticle = ({ history }) => {
   };
 
   return (
-    <div className="container">
+    <div className="container-fluid">
       <h3>Edit Article</h3>
       <form onSubmit={onSubmit}>
         <div className="form-group">

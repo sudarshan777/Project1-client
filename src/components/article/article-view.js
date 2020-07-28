@@ -14,7 +14,7 @@ import {
 } from "../../redux/actions/articlesActions";
 import { getBookmarks } from "../../redux/actions/get-user";
 
-import Comments from "../Comments"
+import Comments from "../Comments";
 
 // const Comments = (props) => {
 //   if (props.comments.length > 0 && props !== undefined) {
@@ -272,7 +272,7 @@ class ArticleView extends Component {
 
   handleDelete = (e) => {
     this.props.dispatch(deleteArticle(this.props.match.params.id));
-    window.location = "/";
+    this.props.history.push("/");
   };
   showBookmark = () => {
     if (

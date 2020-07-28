@@ -43,12 +43,12 @@ class Registration extends Component {
       email: "",
       password: "",
     });
-    window.location = "/";
+    this.props.history.push("/");
   };
 
   render() {
     return (
-      <div className="container">
+      <div className="container-fluid">
         <h3>Register</h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">

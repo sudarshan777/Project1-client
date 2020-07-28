@@ -9,7 +9,7 @@ class Home extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="container-fluid">
         <ArticlesList articles={this.props.articles} />
       </div>
     );

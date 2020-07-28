@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+
 import {
   postLikeArticle,
   deleteLikeArticle,
@@ -17,8 +19,10 @@ const Like = () => {
   const { id } = useSelector((state) => state.authReducer.user);
   const loggedIn = useSelector((state) => state.authReducer.loggedIn);
   const dispatch = useDispatch();
+
   const [isLiked, setLike] = useState(false);
   const [likeId, setLikeId] = useState("");
+  const [showLikes, setShowLikes] = useState(false);
   useEffect(() => {
     const result = likes.find(({ user }) => user._id === id);
     if (result) {
@@ -44,7 +48,31 @@ const Like = () => {
 
   return (
     <>
-      <span>Likes {likes.length}</span>
+      <div className="dropdown">
+        <button
+          className="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Likes {likes.length}
+        </button>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          {likes.map(({ user }) => {
+            return (
+              <Link
+                className="dropdown-item"
+                key={user._id}
+                to={"/user/" + user._id}
+              >
+                {user.name}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
       <button
         style={
           isLiked

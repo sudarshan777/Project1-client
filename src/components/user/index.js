@@ -225,7 +225,7 @@ class User extends Component {
       //     ) : null}
       //   </div>
       // </div>
-      <div className="container">
+      <div className="container-fluid">
         <div className="row">
           <div className="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
             <div className="well profile">
@@ -373,7 +373,7 @@ class User extends Component {
             </div>
           </div>
         </div>
-        <div className="container">
+        <div className="container-fluid">
           {this.state.showArticles && this.props.articles.length !== 0 ? (
             <div>
               <h5>Articles Written</h5>
@@ -381,7 +381,7 @@ class User extends Component {
             </div>
           ) : null}
         </div>
-        <div className="container">
+        <div className="container-fluid">
           {this.state.showFollowers && this.props.followers.length !== 0 ? (
             <div>
               <h5>Followers</h5>
@@ -397,7 +397,7 @@ class User extends Component {
             </div>
           ) : null}
         </div>
-        <div className="container">
+        <div className="container-fluid">
           {this.state.showFollowing && this.props.following.length !== 0 ? (
             <div>
               <h5>Following</h5>
@@ -413,7 +413,7 @@ class User extends Component {
             </div>
           ) : null}
         </div>
-        <div className="container">
+        <div className="container-fluid">
           {this.state.showArticlesLiked && this.props.articlesLiked ? (
             <div>
               <h5>Articles Liked</h5>
@@ -431,7 +431,7 @@ class User extends Component {
             </div>
           ) : null}
         </div>
-        <div className="container">
+        <div className="container-fluid">
           {this.state.showBookmarks && this.props.bookmarks ? (
             <div>
               <h5>Bookmarks</h5>

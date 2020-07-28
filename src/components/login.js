@@ -40,7 +40,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div>
+      <div className="container-fluid">
         <h3>Login</h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
