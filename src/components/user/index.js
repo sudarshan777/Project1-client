@@ -65,10 +65,6 @@ class User extends Component {
 
   componentDidMount() {
     this.props.dispatch(getUser(this.props.match.params.id));
-    this.props.dispatch(getBookmarks(this.props.match.params.id));
-    if (this.props.loggedIn) {
-      this.props.dispatch(getFollowing(this.props.user.id));
-    }
   }
   componentDidUpdate(prevProps) {
     if (this.props.userDetails !== prevProps.userDetails) {
@@ -87,14 +83,8 @@ class User extends Component {
       });
     }
   }
-  // shouldComponentUpdate(nextProps) {
-  //   if (this.props.match.params.id !== nextProps.match.params.id) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
-  getFollowers = (e) => {
+  showFollowers = (e) => {
     e.preventDefault();
     if (this.state.user.followers.length === 0) {
       return false;
@@ -109,7 +99,7 @@ class User extends Component {
     });
   };
 
-  getFollowing = (e) => {
+  showFollowing = (e) => {
     e.preventDefault();
     if (this.state.user.following.length === 0) {
       return false;
@@ -157,6 +147,12 @@ class User extends Component {
       showArticlesLiked: false,
       showBookmarks: true,
     });
+  };
+
+  showFollow = () => {
+    if (this.props.loggedIn && this.props.user.id !== this.state.user._id) {
+      return <FollowButton />;
+    }
   };
 
   render() {
@@ -288,14 +284,12 @@ class User extends Component {
                   </h2>
                   <p>
                     <small>
-                      <a href="#" onClick={this.getFollowers}>
+                      <a href="#" onClick={this.showFollowers}>
                         Followers
                       </a>
                     </small>
                   </p>
-
-                  <FollowButton />
-
+                  {this.showFollow()}
                   <button
                     type="button"
                     className="btn btn-success btn-block"
@@ -310,7 +304,7 @@ class User extends Component {
                   </h2>
                   <p>
                     <small>
-                      <a href="#" onClick={this.getFollowing}>
+                      <a href="#" onClick={this.showFollowing}>
                         Following
                       </a>
                     </small>

@@ -1,32 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
-import {
-  followUser,
-  unFollowUser,
-} from "../../redux/actions/get-user";
+import { followUser, unFollowUser } from "../../redux/actions/get-user";
 
 const FollowButton = () => {
   const dispatch = useDispatch();
-  const following = useSelector(
-    (state) => state.userReducer.following,
-    shallowEqual
-  );
+  // const followers = useSelector(
+  //   (state) => state.userReducer.followers,
+  //   shallowEqual
+  // );
   // Logged In user id
   const { id } = useSelector((state) => state.authReducer.user);
   // Follow User Id
-  const { _id } = useSelector((state) => state.userReducer.user);
+  const { _id, followers } = useSelector(
+    (state) => state.userReducer.user,
+    shallowEqual
+  );
   const loggedIn = useSelector((state) => state.authReducer.loggedIn);
   const [isFollowed, setFollowed] = useState(false);
 
   useEffect(() => {
-    const result = following.find((user) => user._id === _id);
+    console.log(_id, followers);
+    let result = false;
+    if (_id || followers) {
+      result = followers.find((user) => user === id);
+    }
     if (result) {
       setFollowed(true);
     } else {
       setFollowed(false);
     }
- 
-  }, [following, _id]);
+  }, [followers, _id]);
 
   const handleFollow = (e) => {
     if (!isFollowed) {

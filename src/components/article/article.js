@@ -1,6 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { formatDistanceToNow } from "date-fns";
+
 const Article = (props) => {
+  var date = new Date(props.article.createdAt);
+
   return (
     <div className="card">
       <div className="card-body">
@@ -16,7 +20,7 @@ const Article = (props) => {
           {props.article.user.name}
         </Link>
         <br />
-        <b>Created at - </b> {props.article.createdAt.substring(0, 10)}
+        <b>{formatDistanceToNow(date)} ago</b>
         <br />
       </div>
     </div>
