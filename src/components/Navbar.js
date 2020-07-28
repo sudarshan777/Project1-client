@@ -27,7 +27,7 @@ class Navbar extends Component {
   handleLogout = (e) => {
     e.preventDefault();
     this.props.dispatch(logoutUser());
-    window.location = "/";
+    window.location.reload(false);
   };
   render() {
     let createArticle;

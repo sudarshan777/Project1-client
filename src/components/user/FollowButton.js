@@ -4,10 +4,7 @@ import { followUser, unFollowUser } from "../../redux/actions/get-user";
 
 const FollowButton = () => {
   const dispatch = useDispatch();
-  // const followers = useSelector(
-  //   (state) => state.userReducer.followers,
-  //   shallowEqual
-  // );
+
   // Logged In user id
   const { id } = useSelector((state) => state.authReducer.user);
   // Follow User Id
@@ -19,7 +16,6 @@ const FollowButton = () => {
   const [isFollowed, setFollowed] = useState(false);
 
   useEffect(() => {
-    console.log(_id, followers);
     let result = false;
     if (_id || followers) {
       result = followers.find((user) => user === id);

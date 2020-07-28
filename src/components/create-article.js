@@ -37,7 +37,7 @@ class CreateArticle extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container-fluid">
         <h3>Create New Article</h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
