@@ -28,8 +28,11 @@ const getUserSuccessResponse = (state, action) => {
 const followUserSuccessResponse = (state, action) => {
   let newState = { ...state };
   if (action.result !== undefined) {
-    newState = Object.assign({}, state, {
+    newState = Object.assign({}, newState, {
       message: JSON.parse(JSON.stringify(action.result)),
+      user: Object.assign({}, newState.user, {
+        followers: newState.user.followers.concat(action._id),
+      }),
     });
   }
   return { ...newState };
@@ -38,8 +41,13 @@ const followUserSuccessResponse = (state, action) => {
 const unFollowUserSuccessResponse = (state, action) => {
   let newState = { ...state };
   if (action.result !== undefined) {
-    newState = Object.assign({}, state, {
+    newState = Object.assign({}, newState, {
       message: JSON.parse(JSON.stringify(action.result)),
+      user: Object.assign({}, newState.user, {
+        followers: newState.user.followers.filter(
+          (follower) => follower !== action._id
+        ),
+      }),
     });
   }
   return { ...newState };

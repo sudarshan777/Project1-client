@@ -9,10 +9,7 @@ import {
   takeLatest,
 } from "redux-saga/effects";
 import * as Types from "../actions/types";
-import {
-  GetDataFromServer,
-  deleteService
-} from "../service";
+import { GetDataFromServer, deleteService } from "../service";
 
 const baseUrl = "https://mern-article.herokuapp.com";
 //const baseUrl = "http://localhost:5000";
@@ -34,7 +31,7 @@ function* fetchLoginUser(action) {
     } else {
       yield put({
         type: Types.LOGIN_USER_SERVER_RESPONSE_SUCCESS,
-        result
+        result,
       });
     }
   } catch (error) {
@@ -52,12 +49,12 @@ function* listArticles(action) {
     if (result.error) {
       yield put({
         type: Types.ARTICLE_LIST_ERROR_RESPONSE,
-        result
+        result,
       });
     } else {
       yield put({
         type: Types.ARTICLE_LIST_SUCCESS_RESPONSE,
-        result
+        result,
       });
     }
   } catch (error) {
@@ -74,12 +71,12 @@ function* getUser(action) {
     if (result.error) {
       yield put({
         type: Types.GET_USER_ERROR_RESPONSE,
-        result
+        result,
       });
     } else {
       yield put({
         type: Types.GET_USER_SUCCESS_RESPONSE,
-        result
+        result,
       });
     }
   } catch (error) {
@@ -96,12 +93,12 @@ function* getBookmarks(action) {
     if (result.error) {
       yield put({
         type: Types.GET_BOOKMARKS_ERROR_RESPONSE,
-        result
+        result,
       });
     } else {
       yield put({
         type: Types.GET_BOOKMARKS_SUCCESS_RESPONSE,
-        result
+        result,
       });
     }
   } catch (error) {
@@ -236,7 +233,7 @@ function* deleteArticleDetails(action) {
     const newData = yield call(deleteService, formBody, deleteApi); // Refer sample to api calls in remote.js file
     yield put({
       type: Types.DELETE_ARTICLE_SUCCESS,
-      newData
+      newData,
     }); // pass in the id you updated and the newData returned from the API
     /// Other things can go here depending on what you want
   } catch (e) {
@@ -410,7 +407,7 @@ function* deleteArticleLike(action) {
     if (result.error) {
       yield put({
         type: Types.DELETE_LIKE_ARTICLE_ERROR_RESPONSE,
-        result
+        result,
       }); // pass in the id you updated and the newData returned from the API
     } else {
       yield put({
@@ -433,12 +430,12 @@ function* getFollowers(action) {
     if (result.error) {
       yield put({
         type: Types.GET_FOLLOWERS_ERROR_RESPONSE,
-        result
+        result,
       });
     } else {
       yield put({
         type: Types.GET_FOLLOWERS_SUCCESS_RESPONSE,
-        result
+        result,
       });
     }
   } catch (error) {
@@ -455,12 +452,12 @@ function* getFollowing(action) {
     if (result.error) {
       yield put({
         type: Types.GET_FOLLOWING_ERROR_RESPONSE,
-        result
+        result,
       });
     } else {
       yield put({
         type: Types.GET_FOLLOWING_SUCCESS_RESPONSE,
-        result
+        result,
       });
     }
   } catch (error) {
@@ -494,6 +491,7 @@ function* followUser(action) {
   try {
     let formBody = {};
     formBody.user = action.follow_id;
+    const _id = action.user_id;
     const postUrl = baseUrl + "/user/" + action.user_id + "/follow";
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
@@ -504,8 +502,9 @@ function* followUser(action) {
       });
     } else {
       yield put({
-        type: Types.FOLLOW_USER_ERROR_RESPONSE,
+        type: Types.FOLLOW_USER_SUCCESS_RESPONSE,
         result,
+        _id,
       });
     }
   } catch (error) {
@@ -518,7 +517,8 @@ function* unFollowUser(action) {
   try {
     let formBody = {};
     formBody.user = action.unfollow_id;
-    const postUrl = baseUrl + +"/user/" + action.user_id + "/follow";
+    const _id = action.user_id;
+    const postUrl = baseUrl + "/user/" + action.user_id + "/follow";
     const response = yield call(GetDataFromServer, postUrl, "POST", formBody);
     const result = yield response.json();
     if (result.error) {
@@ -528,8 +528,9 @@ function* unFollowUser(action) {
       });
     } else {
       yield put({
-        type: Types.UN_FOLLOW_USER_ERROR_RESPONSE,
+        type: Types.UN_FOLLOW_USER_SUCCESS_RESPONSE,
         result,
+        _id,
       });
     }
   } catch (error) {
@@ -558,7 +559,7 @@ function* signUpUser(action) {
     } else {
       yield put({
         type: Types.SIGNUP_USER_SERVER_RESPONSE_SUCCESS,
-        result
+        result,
       });
     }
   } catch (error) {
