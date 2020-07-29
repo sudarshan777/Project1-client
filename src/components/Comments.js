@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 //import Like from "./Like";
-import "../styles/styling.sass";
+import "../styles/comments.sass";
 
 const Comments = (props) => {
   if (props.comments.length > 0 && props !== undefined) {

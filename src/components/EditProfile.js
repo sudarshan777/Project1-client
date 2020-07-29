@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const EditProfile = (props) => {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
-  const [hobbies, setHobbies] = useState([]);
+  const [hobbies, setHobbies] = useState(["1", "2"]);
   const [skills, setSkills] = useState([]);
 
   // const [profile, setProfile] = useState({
@@ -31,7 +31,7 @@ const EditProfile = (props) => {
     console.log("hobby is:", hobbyRef.current.value);
     let prevHobbies = hobbies;
     prevHobbies.push(hobbyRef.current.value);
-    setHobbies(prevHobbies);
+    setHobbies([prevHobbies]);
     // let hobs = [...profile.hobbies];
     // setProfile((hobs) => [...hobs, hobbyRef.current.value]);
     console.log("his hobby is:", hobbies);
@@ -41,6 +41,7 @@ const EditProfile = (props) => {
   useEffect(() => {
     document.title = `You clicked times`;
     console.log("This is USeEffect");
+    const array = ["1", "2"];
   });
 
   return (
@@ -89,9 +90,13 @@ const EditProfile = (props) => {
           </button>
         </div>
       </div>
-      {hobbies.length >= 1
-        ? hobbies.map((h) => <span className="tags"> {h} </span>)
-        : null}
+      <div className="form-group">
+        {hobbies.map((h) => {
+          return hobbies.length >= 1 ? (
+            <span className="tags"> {h} </span>
+          ) : null;
+        })}
+      </div>
       <div className="form-group">
         <label for="exampleFormControlSelect2">Skills</label>
         <input
