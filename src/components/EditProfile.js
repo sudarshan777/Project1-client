@@ -1,5 +1,6 @@
 import React, { Component, useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import "../styles/editProfile.sass";
 
 const EditProfile = (props) => {
   const [name, setName] = useState("");
@@ -31,8 +32,10 @@ const EditProfile = (props) => {
     e.preventDefault();
     console.log("hobby is:", hobbyRef.current.value);
     let prevHobbies = hobbies;
+    if(hobbyRef.current.value!= ""){
     prevHobbies.push(hobbyRef.current.value);
-    setHobbies([prevHobbies]);
+    }
+    setHobbies([...prevHobbies]);
     // let hobs = [...profile.hobbies];
     // setProfile((hobs) => [...hobs, hobbyRef.current.value]);
     console.log("his hobby is:", hobbies);
@@ -42,8 +45,9 @@ const EditProfile = (props) => {
   const addSkills = (e) => {
     e.preventDefault();
     let prevSkills = skills;
-    prevSkills.push(skillRef.current.value);
-    setSkills([prevSkills]);
+    if(skillRef.current.value!=""){
+    prevSkills.push(skillRef.current.value);}
+    setSkills([...prevSkills]);
     skillRef.current.value = "";
     console.log(EditedProfile)
   };
@@ -108,13 +112,9 @@ const EditProfile = (props) => {
         </div>
       </div>
       <div className="form-group">
-        {hobbies.map((h) => {
-          return hobbies.length >= 1 ? (
-            <span className="tags"> {h} </span>
-          ) : null;
-        })}
+        {hobbies.length > 0 ? hobbies.map(h => {console.log({h}); return <span id='hobbyTag' className="tags"> {h}</span>}
+        ): null}
       </div>
-
       <div className="form-row">
         <div className="form-group col-md-6">
           <label for="exampleFormControlSelect2">Skills</label>
@@ -136,7 +136,7 @@ const EditProfile = (props) => {
       <div className="form-group">
         {skills.map((s) => {
           return skills.length >= 1 ? (
-            <span className="tags"> {s} </span>
+            <span id='skillTag' className="tags"> {s} </span>
           ) : null;
         })}
       </div>
