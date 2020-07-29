@@ -1,4 +1,4 @@
-import React, { Component, useState, useRef } from "react";
+import React, { Component, useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const EditProfile = (props) => {
@@ -38,14 +38,19 @@ const EditProfile = (props) => {
     hobbyRef.current.value = "";
   };
 
+  useEffect(() => {
+    document.title = `You clicked times`;
+    console.log("This is USeEffect");
+  });
+
   return (
     <form>
-      <div class="form-group">
+      <div className="form-group">
         <label for="inputFirstName">Full Name</label>
         <input
           type="text"
           name="name"
-          class="form-control"
+          className="form-control"
           id="inputFullName"
           placeholder="Full Name"
           onChange={(e) => {
@@ -53,13 +58,13 @@ const EditProfile = (props) => {
           }}
         />
       </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
+      <div className="form-row">
+        <div className="form-group col-md-6">
           <label for="inputRole">Role</label>
           <input
             type="text"
             name="role"
-            class="form-control"
+            className="form-control"
             id="inputRole"
             placeholder="Web Developer"
             onChange={(e) => {
@@ -67,12 +72,12 @@ const EditProfile = (props) => {
             }}
           />
         </div>
-        <div class="form-group col-md-4">
+        <div className="form-group col-md-4">
           <label for="inputAddress2">Hobbies</label>
           <input
             type="text"
             name="hobbies"
-            class="form-control"
+            className="form-control"
             id="inputHobbies"
             placeholder="Dancing, Hiking or Reading"
             ref={hobbyRef}
@@ -80,27 +85,30 @@ const EditProfile = (props) => {
         </div>
         <div className="form-group col-md-2">
           <button className="btn btn-primary" onClick={addHobby}>
-            Add
+            Add Hobbies
           </button>
         </div>
       </div>
-      <div class="form-group">
+      {hobbies.length >= 1
+        ? hobbies.map((h) => <span className="tags"> {h} </span>)
+        : null}
+      <div className="form-group">
         <label for="exampleFormControlSelect2">Skills</label>
         <input
           type="text"
           name="skills"
-          class="form-control"
+          className="form-control"
           id="inputSkills"
           placeholder="HTML, Javascript..."
         />
       </div>
-      <div class="form-group col-md-2">
-        <button type="submit" class="btn btn-primary">
+      <div className="form-group col-md-2">
+        <button type="submit" className="btn btn-primary">
           Save
         </button>
       </div>
-      <div class="form-group col-md-2">
-        <button class="btn btn-primary">Cancel</button>
+      <div className="form-group col-md-2">
+        <button className="btn btn-primary">Cancel</button>
       </div>
     </form>
   );

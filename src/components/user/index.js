@@ -1,21 +1,10 @@
-import React, {
-  Component
-} from "react";
-import {
-  Link
-} from "react-router-dom";
-import {
-  Avatar,
-  Card
-} from "antd";
-import {
-  UserOutlined
-} from "@ant-design/icons";
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { Avatar, Card } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import "../../styles/styles.css";
 
-import {
-  connect
-} from "react-redux";
+import { connect } from "react-redux";
 import {
   getUser,
   getBookmarks,
@@ -44,9 +33,7 @@ class ErrorBoundary extends Component {
 
   render() {
     if (this.state.errorMessage) {
-      return <h1 > Oops!{
-        this.state.errorMessage
-      } < /h1>;
+      return <h1> Oops!{this.state.errorMessage} </h1>;
     }
 
     return this.props.children;
@@ -164,7 +151,7 @@ class User extends Component {
 
   showFollow = () => {
     if (this.props.loggedIn && this.props.user.id !== this.state.user._id) {
-      return <FollowButton / > ;
+      return <FollowButton />;
     }
   };
 
@@ -238,305 +225,209 @@ class User extends Component {
       //     ) : null}
       //   </div>
       // </div>
-      <
-      div className = "container" >
-      <
-      div className = "row" >
-      <
-      div className = "col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6" >
-      <
-      div className = "well profile" >
-      <
-      div className = "col-sm-12" >
-      <
-      div className = "col-xs-12 col-sm-8" >
-      <
-      h2 > {
-        this.state.user.name
-      } < /h2> <
-      p >
-      <
-      strong > About: < /strong> Web Designer /
-      UI. {
-        " "
-      } <
-      /p> <
-      p >
-      <
-      strong > Hobbies: < /strong> Read, out with friends, listen to
-      music, draw and learn new things. {
-        " "
-      } <
-      /p> <
-      p >
-      <
-      strong > Skills: < /strong> <
-      span className = "tags" > html5 < /span> <
-      span className = "tags" > css3 < /span> <
-      span className = "tags" > jquery < /span> <
-      span className = "tags" > bootstrap3 < /span> <
-      /p> <
-      /div> <
-      div className = "col-xs-12 col-sm-4 text-center" >
-      <
-      figure >
-      <
-      img src = "http://www.localcrimenews.com/wp-content/uploads/2013/07/default-user-icon-profile.png"
-      alt = ""
-      className = "img-circle img-responsive" /
-      >
-      <
-      figcaption className = "ratings" >
-      <
-      p >
-      Ratings <
-      a href = "#" >
-      <
-      span className = "fa fa-star" > < /span> <
-      /a> <
-      a href = "#" >
-      <
-      span className = "fa fa-star" > < /span> <
-      /a> <
-      a href = "#" >
-      <
-      span className = "fa fa-star" > < /span> <
-      /a> <
-      a href = "#" >
-      <
-      span className = "fa fa-star" > < /span> <
-      /a> <
-      a href = "#" >
-      <
-      span className = "fa fa-star-o" > < /span> <
-      /a> <
-      /p> <
-      /figcaption> <
-      /figure> <
-      /div> <
-      /div> <
-      div className = "col-xs-12 divider text-center" >
-      <
-      div className = "col-xs-12 col-sm-4 emphasis" >
-      <
-      h2 >
-      <
-      strong > {
-        this.state.user.followers.length
-      } < /strong> <
-      /h2> <
-      p >
-      <
-      small >
-      <
-      a href = "#"
-      onClick = {
-        this.showFollowers
-      } >
-      Followers <
-      /a> <
-      /small> <
-      /p> {
-        this.showFollow()
-      } <
-      button type = "button"
-      className = "btn btn-success btn-block"
-      onClick = {
-        this.getArticlesLiked
-      } >
-      <
-      span className = "fa fa-plus-circle" > < /span> Articles Liked{" "} <
-      /button> <
-      /div> <
-      div className = "col-xs-12 col-sm-4 emphasis" >
-      <
-      h2 >
-      <
-      strong > {
-        this.state.user.following.length
-      } < /strong> <
-      /h2> <
-      p >
-      <
-      small >
-      <
-      a href = "#"
-      onClick = {
-        this.showFollowing
-      } >
-      Following <
-      /a> <
-      /small> <
-      /p> <
-      button className = "btn btn-info btn-block"
-      onClick = {
-        this.getArticlesWritten
-      } >
-      <
-      span className = "fa fa-user" > < /span> View Articles{" "} <
-      /button> <
-      /div> <
-      div className = "col-xs-12 col-sm-4 emphasis" >
-      <
-      h2 >
-      <
-      strong > {
-        this.state.user.bookmarks.length
-      } < /strong> <
-      /h2> <
-      p >
-      <
-      small >
-      <
-      a href = "#"
-      onClick = {
-        this.getBookmarks
-      } >
-      Bookmarks <
-      /a> <
-      /small> <
-      /p> <
-      div className = "btn-group dropup btn-block" >
-      <
-      Link to = {
-        "/EditProfile"
-      } >
-      <
-      button type = "button"
-      className = "btn btn-primary" > {
-        " "
-      } <
-      span className = "fa fa-gear" > < /span> Edit Profile{" "} <
-      /button> <
-      /Link> <
-      /div> <
-      /div> <
-      /div> <
-      /div> <
-      /div> <
-      /div> <
-      div className = "container" > {
-        this.state.showArticles && this.props.articles.length !== 0 ? ( <
-          div >
-          <
-          h5 > Articles Written < /h5> <
-          ArticlesList articles = {
-            this.props.articles
-          }
-          /> <
-          /div>
-        ) : null
-      } <
-      /div> <
-      div className = "container" > {
-        this.state.showFollowers && this.props.followers.length !== 0 ? ( <
-          div >
-          <
-          h5 > Followers < /h5> <
-          ul > {
-            this.props.followers.map((user) => {
-              return ( <
-                li key = {
-                  user._id
-                } >
-                <
-                Link to = {
-                  "/user/" + user._id
-                } > {
-                  user.name
-                } < /Link> <
-                /li>
-              );
-            })
-          } <
-          /ul> <
-          /div>
-        ) : null
-      } <
-      /div> <
-      div className = "container" > {
-        this.state.showFollowing && this.props.following.length !== 0 ? ( <
-          div >
-          <
-          h5 > Following < /h5> <
-          ul > {
-            this.props.following.map((user) => {
-              return ( <
-                li key = {
-                  user._id
-                } >
-                <
-                Link to = {
-                  "/user/" + user._id
-                } > {
-                  user.name
-                } < /Link> <
-                /li>
-              );
-            })
-          } <
-          /ul> <
-          /div>
-        ) : null
-      } <
-      /div> <
-      div className = "container" > {
-        this.state.showArticlesLiked && this.props.articlesLiked ? ( <
-          div >
-          <
-          h5 > Articles Liked < /h5> <
-          ul > {
-            this.props.articlesLiked.map(({
-              article
-            }) => {
-              return ( <
-                li key = {
-                  article._id
-                } >
-                <
-                Link to = {
-                  "/article/" + article._id
-                } > {
-                  article.title
-                } <
-                /Link> <
-                /li>
-              );
-            })
-          } <
-          /ul> <
-          /div>
-        ) : null
-      } <
-      /div> <
-      div className = "container" > {
-        this.state.showBookmarks && this.props.bookmarks ? ( <
-          div >
-          <
-          h5 > Bookmarks < /h5> <
-          ul > {
-            this.props.bookmarks.map((article) => {
-              return ( <
-                li key = {
-                  article._id
-                } >
-                <
-                Link to = {
-                  "/article/" + article._id
-                } > {
-                  article.title
-                } <
-                /Link> <
-                /li>
-              );
-            })
-          } <
-          /ul> <
-          /div>
-        ) : null
-      } <
-      /div> <
-      /div>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
+            <div className="well profile">
+              <div className="col-sm-12">
+                <div className="col-xs-12 col-sm-8">
+                  <h2> {this.state.user.name} </h2>{" "}
+                  <p>
+                    <strong> About: </strong> Web Designer / UI.{" "}
+                  </p>{" "}
+                  <p>
+                    <strong> Hobbies: </strong> Read, out with friends, listen
+                    to music, draw and learn new things.{" "}
+                  </p>{" "}
+                  <p>
+                    <strong> Skills: </strong>{" "}
+                    <span className="tags"> html5 </span>{" "}
+                    <span className="tags"> css3 </span>{" "}
+                    <span className="tags"> jquery </span>{" "}
+                    <span className="tags"> bootstrap3 </span>{" "}
+                  </p>{" "}
+                </div>{" "}
+                <div className="col-xs-12 col-sm-4 text-center">
+                  <figure>
+                    <img
+                      src="http://www.localcrimenews.com/wp-content/uploads/2013/07/default-user-icon-profile.png"
+                      alt=""
+                      className="img-circle img-responsive"
+                    />
+                    <figcaption className="ratings">
+                      <p>
+                        Ratings{" "}
+                        <a href="#">
+                          <span className="fa fa-star"> </span>{" "}
+                        </a>{" "}
+                        <a href="#">
+                          <span className="fa fa-star"> </span>{" "}
+                        </a>{" "}
+                        <a href="#">
+                          <span className="fa fa-star"> </span>{" "}
+                        </a>{" "}
+                        <a href="#">
+                          <span className="fa fa-star"> </span>{" "}
+                        </a>{" "}
+                        <a href="#">
+                          <span className="fa fa-star-o"> </span>{" "}
+                        </a>{" "}
+                      </p>{" "}
+                    </figcaption>{" "}
+                  </figure>{" "}
+                </div>{" "}
+              </div>{" "}
+              <div className="col-xs-12 divider text-center">
+                <div className="col-xs-12 col-sm-4 emphasis">
+                  <h2>
+                    <strong> {this.state.user.followers.length} </strong>{" "}
+                  </h2>{" "}
+                  <p>
+                    <small>
+                      <a href="#" onClick={this.showFollowers}>
+                        Followers{" "}
+                      </a>{" "}
+                    </small>{" "}
+                  </p>{" "}
+                  {this.showFollow()}{" "}
+                  <button
+                    type="button"
+                    className="btn btn-success btn-block"
+                    onClick={this.getArticlesLiked}
+                  >
+                    <span className="fa fa-plus-circle"> </span> Articles Liked{" "}
+                  </button>{" "}
+                </div>{" "}
+                <div className="col-xs-12 col-sm-4 emphasis">
+                  <h2>
+                    <strong> {this.state.user.following.length} </strong>{" "}
+                  </h2>{" "}
+                  <p>
+                    <small>
+                      <a href="#" onClick={this.showFollowing}>
+                        Following{" "}
+                      </a>{" "}
+                    </small>{" "}
+                  </p>{" "}
+                  <button
+                    className="btn btn-info btn-block"
+                    onClick={this.getArticlesWritten}
+                  >
+                    <span className="fa fa-user"> </span> View Articles{" "}
+                  </button>{" "}
+                </div>{" "}
+                <div className="col-xs-12 col-sm-4 emphasis">
+                  <h2>
+                    <strong> {this.state.user.bookmarks.length} </strong>{" "}
+                  </h2>{" "}
+                  <p>
+                    <small>
+                      <a href="#" onClick={this.getBookmarks}>
+                        Bookmarks{" "}
+                      </a>{" "}
+                    </small>{" "}
+                  </p>{" "}
+                  <div className="btn-group dropup btn-block">
+                    <Link to={"/EditProfile"}>
+                      <button type="button" className="btn btn-primary">
+                        {" "}
+                        <span className="fa fa-gear"> </span> Edit Profile{" "}
+                      </button>{" "}
+                    </Link>{" "}
+                  </div>{" "}
+                </div>{" "}
+              </div>{" "}
+            </div>{" "}
+          </div>{" "}
+        </div>{" "}
+        <div className="container">
+          {" "}
+          {this.state.showArticles && this.props.articles.length !== 0 ? (
+            <div>
+              <h5> Articles Written </h5>{" "}
+              <ArticlesList articles={this.props.articles} />{" "}
+            </div>
+          ) : null}{" "}
+        </div>{" "}
+        <div className="container">
+          {" "}
+          {this.state.showFollowers && this.props.followers.length !== 0 ? (
+            <div>
+              <h5> Followers </h5>{" "}
+              <ul>
+                {" "}
+                {this.props.followers.map((user) => {
+                  return (
+                    <li key={user._id}>
+                      <Link to={"/user/" + user._id}> {user.name} </Link>{" "}
+                    </li>
+                  );
+                })}{" "}
+              </ul>{" "}
+            </div>
+          ) : null}{" "}
+        </div>{" "}
+        <div className="container">
+          {" "}
+          {this.state.showFollowing && this.props.following.length !== 0 ? (
+            <div>
+              <h5> Following </h5>{" "}
+              <ul>
+                {" "}
+                {this.props.following.map((user) => {
+                  return (
+                    <li key={user._id}>
+                      <Link to={"/user/" + user._id}> {user.name} </Link>{" "}
+                    </li>
+                  );
+                })}{" "}
+              </ul>{" "}
+            </div>
+          ) : null}{" "}
+        </div>{" "}
+        <div className="container">
+          {" "}
+          {this.state.showArticlesLiked && this.props.articlesLiked ? (
+            <div>
+              <h5> Articles Liked </h5>{" "}
+              <ul>
+                {" "}
+                {this.props.articlesLiked.map(({ article }) => {
+                  return (
+                    <li key={article._id}>
+                      <Link to={"/article/" + article._id}>
+                        {" "}
+                        {article.title}{" "}
+                      </Link>{" "}
+                    </li>
+                  );
+                })}{" "}
+              </ul>{" "}
+            </div>
+          ) : null}{" "}
+        </div>{" "}
+        <div className="container">
+          {" "}
+          {this.state.showBookmarks && this.props.bookmarks ? (
+            <div>
+              <h5> Bookmarks </h5>{" "}
+              <ul>
+                {" "}
+                {this.props.bookmarks.map((article) => {
+                  return (
+                    <li key={article._id}>
+                      <Link to={"/article/" + article._id}>
+                        {" "}
+                        {article.title}{" "}
+                      </Link>{" "}
+                    </li>
+                  );
+                })}{" "}
+              </ul>{" "}
+            </div>
+          ) : null}{" "}
+        </div>{" "}
+      </div>
     );
   }
 }
