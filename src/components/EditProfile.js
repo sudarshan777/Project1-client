@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const EditProfile = (props) => {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
-  const [hobbies, setHobbies] = useState(["1", "2"]);
+  const [hobbies, setHobbies] = useState([]);
   const [skills, setSkills] = useState([]);
 
   // const [profile, setProfile] = useState({
@@ -15,6 +15,7 @@ const EditProfile = (props) => {
   // });
 
   const hobbyRef = useRef();
+  const skillRef = useRef();
 
   // const handleChange = (e) => {
   //   const { name, value } = e.target;
@@ -38,11 +39,27 @@ const EditProfile = (props) => {
     hobbyRef.current.value = "";
   };
 
+  const addSkills = (e) => {
+    e.preventDefault();
+    let prevSkills = skills;
+    prevSkills.push(skillRef.current.value);
+    setSkills([prevSkills]);
+    skillRef.current.value = "";
+    console.log(EditedProfile)
+  };
+
   useEffect(() => {
     document.title = `You clicked times`;
     console.log("This is USeEffect");
     const array = ["1", "2"];
   });
+
+  const EditedProfile = {
+    name: name,
+    role: role,
+    hobbies: hobbies,
+    skills: skills
+  }
 
   return (
     <form>
@@ -97,23 +114,41 @@ const EditProfile = (props) => {
           ) : null;
         })}
       </div>
-      <div className="form-group">
-        <label for="exampleFormControlSelect2">Skills</label>
-        <input
-          type="text"
-          name="skills"
-          className="form-control"
-          id="inputSkills"
-          placeholder="HTML, Javascript..."
-        />
+
+      <div className="form-row">
+        <div className="form-group col-md-6">
+          <label for="exampleFormControlSelect2">Skills</label>
+          <input
+            type="text"
+            name="skills"
+            className="form-control"
+            id="inputSkills"
+            placeholder="HTML, Javascript..."
+            ref={skillRef}
+          />
+        </div>
+        <div className="form-group col-md-2">
+          <button className="btn btn-primary" onClick={addSkills}>
+            Add Skills
+          </button>
+        </div>
       </div>
-      <div className="form-group col-md-2">
+      <div className="form-group">
+        {skills.map((s) => {
+          return skills.length >= 1 ? (
+            <span className="tags"> {s} </span>
+          ) : null;
+        })}
+      </div>
+      <div className="form-row">
+      <div className="form-group col-md-1">
         <button type="submit" className="btn btn-primary">
           Save
         </button>
       </div>
-      <div className="form-group col-md-2">
+      <div className="form-group col-md-1">
         <button className="btn btn-primary">Cancel</button>
+      </div>
       </div>
     </form>
   );
