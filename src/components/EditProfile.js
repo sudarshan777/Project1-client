@@ -7,26 +7,8 @@ const EditProfile = (props) => {
   const [role, setRole] = useState("");
   const [hobbies, setHobbies] = useState([]);
   const [skills, setSkills] = useState([]);
-
-  // const [profile, setProfile] = useState({
-  //   name: "",
-  //   role: "",
-  //   hobbies: [],
-  //   skills: [],
-  // });
-
   const hobbyRef = useRef();
   const skillRef = useRef();
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setProfile((prevState) => ({
-  //     ...prevState,
-  //     [name]: value,
-  //   }));
-  //   console.log("Name:", profile.name);
-  //   console.log("role:", profile.role);
-  // };
 
   const addHobby = (e) => {
     e.preventDefault();
@@ -36,8 +18,6 @@ const EditProfile = (props) => {
     prevHobbies.push(hobbyRef.current.value);
     }
     setHobbies([...prevHobbies]);
-    // let hobs = [...profile.hobbies];
-    // setProfile((hobs) => [...hobs, hobbyRef.current.value]);
     console.log("his hobby is:", hobbies);
     hobbyRef.current.value = "";
   };
