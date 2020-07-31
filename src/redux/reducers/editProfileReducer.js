@@ -21,11 +21,6 @@ const handleEditUser = (state, action) => {
 
 export default (state = initialUserProfile, action = {}) => {
   switch (action.type) {
-    case Type.USER_PROFILE_EDIT:
-      return {
-        ...state,
-        userProfile: action.userProfile,
-      };
 
     case Type.USER_PROFILE_EDIT_SERVER_RESPONSE_SUCCESS:
       return handleEditUser(state, action);

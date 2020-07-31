@@ -155,6 +155,13 @@ class User extends Component {
     }
   };
 
+  editProfile = (e) => {
+    this.props.history.push({
+      pathname: "/EditProfile",
+      userId: this.state.user._id,
+    });
+  };
+
   render() {
     return (
       // <div>
@@ -328,12 +335,14 @@ class User extends Component {
                     </small>{" "}
                   </p>{" "}
                   <div className="btn-group dropup btn-block">
-                    <Link to={"/EditProfile"}>
-                      <button type="button" className="btn btn-primary">
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={this.editProfile}
+                      >
                         {" "}
                         <span className="fa fa-gear"> </span> Edit Profile{" "}
                       </button>{" "}
-                    </Link>{" "}
                   </div>{" "}
                 </div>{" "}
               </div>{" "}

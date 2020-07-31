@@ -30,7 +30,7 @@ export function GetDataFromServerToPatch(apiPath, reqMethod, formBody) {
       body: JSON.stringify(formBody),
       headers: myHeaders
     }
-    return fetch
+    return fetch(apiPath, fetchData)
   }
 }
 

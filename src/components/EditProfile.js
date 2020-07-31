@@ -1,5 +1,6 @@
 import React, { Component, useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import {useDispatch} from 'react-redux'
 import "../styles/editProfile.sass";
 import { editProfileSubmit } from "../redux/actions/edit-profileActions";
 
@@ -8,6 +9,7 @@ const EditProfile = (props) => {
   const [role, setRole] = useState("");
   const [hobbies, setHobbies] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [userId, setUserId] = useState(props.location.userId)
   const hobbyRef = useRef();
   const skillRef = useRef();
 
@@ -31,7 +33,6 @@ const EditProfile = (props) => {
     }
     setSkills([...prevSkills]);
     skillRef.current.value = "";
-    console.log(EditedProfile);
   };
 
   useEffect(() => {
@@ -39,16 +40,18 @@ const EditProfile = (props) => {
     console.log("This is USeEffect");
   });
 
-  const saveEdit = () => {
+  const dispatch = useDispatch()
+
+  const saveEdit = (e) => {
+    e.preventDefault();
     const EditedProfile = {
       name: name,
       role: role,
       hobbies: hobbies,
       skills: skills,
     };
-    console.log("USER EDITED DETAILS ARE: ",EditedProfile)
-
-    props.dispatch(editProfileSubmit(EditedProfile, props.user_id));
+    console.log("USER EDITED DETAILS ARE: ", EditedProfile);
+    dispatch(editProfileSubmit(EditedProfile, userId));
   };
 
   return (
@@ -144,7 +147,7 @@ const EditProfile = (props) => {
       </div>{" "}
       <div className="form-row">
         <div className="form-group col-md-1">
-          <button type="submit" className="btn btn-primary" onClick={saveEdit}>
+          <button className="btn btn-primary" onClick={saveEdit}>
             Save{" "}
           </button>{" "}
         </div>{" "}

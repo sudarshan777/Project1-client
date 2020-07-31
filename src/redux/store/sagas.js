@@ -10,6 +10,7 @@ import {
 } from "redux-saga/effects";
 import * as Types from "../actions/types";
 import {
+  GetDataFromServerToPatch,
   GetDataFromServer,
   deleteService
 } from "../service";
@@ -302,7 +303,7 @@ function* editProfile(action) {
     let formBody = {};
     formBody = action.userProfile;
     const postUrl = baseUrl + "/user/" + action.user_id;
-    const response = yield call(GetDataFromServer, postUrl, "PATCH", formBody)
+    const response = yield call(GetDataFromServerToPatch, postUrl, "PATCH", formBody)
     const result = yield response.json()
 
     if (result.error) {
