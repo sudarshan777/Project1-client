@@ -1,6 +1,6 @@
 import React, { Component, useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import {useDispatch} from 'react-redux'
+import { useDispatch } from "react-redux";
 import "../styles/editProfile.sass";
 import { editProfileSubmit } from "../redux/actions/edit-profileActions";
 
@@ -9,7 +9,7 @@ const EditProfile = (props) => {
   const [role, setRole] = useState("");
   const [hobbies, setHobbies] = useState([]);
   const [skills, setSkills] = useState([]);
-  const [userId, setUserId] = useState(props.location.userId)
+  const [userId, setUserId] = useState(props.location.userId);
   const hobbyRef = useRef();
   const skillRef = useRef();
 
@@ -40,7 +40,7 @@ const EditProfile = (props) => {
     console.log("This is USeEffect");
   });
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const saveEdit = (e) => {
     e.preventDefault();
@@ -52,6 +52,7 @@ const EditProfile = (props) => {
     };
     console.log("USER EDITED DETAILS ARE: ", EditedProfile);
     dispatch(editProfileSubmit(EditedProfile, userId));
+    props.history.push("/login");
   };
 
   return (

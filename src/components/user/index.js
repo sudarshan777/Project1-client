@@ -45,15 +45,16 @@ class User extends Component {
     super(props);
     this.state = {
       user: {
-        role: [],
+        role: "",
         bookmarks: [],
         following: [],
         followers: [],
         _id: "",
         name: "",
         email: "",
-        hobbies: null,
+        hobbies: [],
         ratings: null,
+        skills: [],
       },
       showFollowers: false,
       showFollowing: false,
@@ -65,6 +66,7 @@ class User extends Component {
 
   componentDidMount() {
     this.props.dispatch(getUser(this.props.match.params.id));
+    console.log("Role is :", this.state.user.role);
   }
   componentDidUpdate(prevProps) {
     if (this.props.userDetails !== prevProps.userDetails) {
@@ -79,6 +81,7 @@ class User extends Component {
           email: this.props.userDetails.email,
           hobbies: this.props.userDetails.hobbies,
           ratings: this.props.userDetails.ratings,
+          skills: this.props.userDetails.skills,
         },
       });
     }
@@ -240,18 +243,19 @@ class User extends Component {
                 <div className="col-xs-12 col-sm-8">
                   <h2> {this.state.user.name} </h2>{" "}
                   <p>
-                    <strong> About: </strong> Web Designer / UI.{" "}
+                    <strong> About: </strong> {this.state.user.role}{" "}
                   </p>{" "}
                   <p>
-                    <strong> Hobbies: </strong> Read, out with friends, listen
-                    to music, draw and learn new things.{" "}
+                    <strong> Hobbies: </strong>{" "}
+                    {this.state.user.hobbies.map((h) => {
+                      return <span className="tags">{h}</span>;
+                    })}
                   </p>{" "}
                   <p>
                     <strong> Skills: </strong>{" "}
-                    <span className="tags"> html5 </span>{" "}
-                    <span className="tags"> css3 </span>{" "}
-                    <span className="tags"> jquery </span>{" "}
-                    <span className="tags"> bootstrap3 </span>{" "}
+                    {this.state.user.skills.map((s) => {
+                      return <span className="tags">{s}</span>;
+                    })}
                   </p>{" "}
                 </div>{" "}
                 <div className="col-xs-12 col-sm-4 text-center">
@@ -335,14 +339,14 @@ class User extends Component {
                     </small>{" "}
                   </p>{" "}
                   <div className="btn-group dropup btn-block">
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={this.editProfile}
-                      >
-                        {" "}
-                        <span className="fa fa-gear"> </span> Edit Profile{" "}
-                      </button>{" "}
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={this.editProfile}
+                    >
+                      {" "}
+                      <span className="fa fa-gear"> </span> Edit Profile{" "}
+                    </button>{" "}
                   </div>{" "}
                 </div>{" "}
               </div>{" "}
