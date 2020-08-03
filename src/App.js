@@ -13,6 +13,7 @@ import PrivateRoute from "./components/privateRoutes";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import EditArticle from "./components/article/EditArticle";
+import EditProfile from "./components/EditProfile";
 
 class App extends Component {
   render() {
@@ -55,6 +56,11 @@ class App extends Component {
               exact
               path="/user/:id"
               component={(props) => <User {...props} />}
+            />
+            <PrivateRoute
+              exact
+              path="/EditProfile"
+              component={(props) => <EditProfile {...props} />}
             />
           </Switch>
         </div>

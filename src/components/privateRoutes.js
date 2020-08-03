@@ -1,17 +1,35 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Route, Redirect } from "react-router-dom";
+import React, {
+  Component
+} from "react";
+import {
+  connect
+} from "react-redux";
+import {
+  Route,
+  Redirect
+} from "react-router-dom";
 
 class PrivateRoute extends Component {
   render() {
-    const { component: Component, loggedIn, ...props } = this.props;
+    const {
+      component: Component,
+      loggedIn,
+      ...props
+    } = this.props;
+    console.log("Logged in")
 
-    return (
-      <Route
-        {...props}
-        render={(props) =>
-          loggedIn ? <Component {...props} /> : <Redirect to="/login" />
+    return ( <
+      Route {
+        ...props
+      }
+      render = {
+        (props) =>
+        loggedIn ? < Component {
+          ...props
         }
+        /> : <Redirect to="/login
+        " />
+      }
       />
     );
   }
