@@ -18,8 +18,8 @@ import {
   message
 } from "antd";
 
-//const baseUrl = "https://mern-article.herokuapp.com";
-const baseUrl = "http://localhost:5000";
+const baseUrl = "https://mern-article.herokuapp.com";
+//const baseUrl = "http://localhost:5000";
 
 function* fetchLoginUser(action) {
   try {
