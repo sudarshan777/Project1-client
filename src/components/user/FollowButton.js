@@ -1,16 +1,6 @@
-import React, {
-  useState,
-  useEffect
-} from "react";
-import {
-  shallowEqual,
-  useSelector,
-  useDispatch
-} from "react-redux";
-import {
-  followUser,
-  unFollowUser
-} from "../../redux/actions/get-user";
+import React, { useState, useEffect } from "react";
+import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import { followUser, unFollowUser } from "../../redux/actions/get-user";
 
 const FollowButton = () => {
   const dispatch = useDispatch();
@@ -19,14 +9,9 @@ const FollowButton = () => {
   //   shallowEqual
   // );
   // Logged In user id
-  const {
-    id
-  } = useSelector((state) => state.authReducer.user);
+  const { id } = useSelector((state) => state.authReducer.user);
   // Follow User Id
-  const {
-    _id,
-    followers
-  } = useSelector(
+  const { _id, followers } = useSelector(
     (state) => state.userReducer.user,
     shallowEqual
   );
@@ -55,28 +40,27 @@ const FollowButton = () => {
     }
   };
 
-  return ( <
-    >
-    <
-    button type = "button"
-    style = {
-      isFollowed ? {
-        backgroundColor: "#007bff"
-      } : {
-        backgroundColor: "#fff",
-        color: "#007bff"
-      }
-    }
-    className = "btn btn-primary"
-    onClick = {
-      handleFollow
-    }
-    disabled = {
-      !loggedIn
-    } >
-    Follow <
-    /button> < /
-    >
+  return (
+    <>
+      <button
+        type="button"
+        style={
+          isFollowed
+            ? {
+                backgroundColor: "#007bff",
+              }
+            : {
+                backgroundColor: "#fff",
+                color: "#007bff",
+              }
+        }
+        className="btn btn-primary"
+        onClick={handleFollow}
+        disabled={!loggedIn}
+      >
+        Follow{" "}
+      </button>{" "}
+    </>
   );
 };
 export default FollowButton;
