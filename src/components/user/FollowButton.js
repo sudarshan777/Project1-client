@@ -46,15 +46,20 @@ const FollowButton = () => {
         type="button"
         style={
           isFollowed
-            ? { backgroundColor: "#007bff" }
-            : { backgroundColor: "#fff", color: "#007bff" }
+            ? {
+                backgroundColor: "#007bff",
+              }
+            : {
+                backgroundColor: "#fff",
+                color: "#007bff",
+              }
         }
-        className="btn btn-success btn-block"
+        className="btn btn-primary"
         onClick={handleFollow}
         disabled={!loggedIn}
       >
-        Follow
-      </button>
+        Follow{" "}
+      </button>{" "}
     </>
   );
 };

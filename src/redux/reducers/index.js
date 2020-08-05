@@ -1,4 +1,6 @@
-import { combineReducers } from "redux";
+import {
+  combineReducers
+} from "redux";
 import * as Types from "../actions/types";
 import authReducer from "./authReducer";
 import articleListReducer from "./articleListReducer";

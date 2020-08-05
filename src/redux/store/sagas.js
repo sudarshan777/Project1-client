@@ -12,11 +12,9 @@ import * as Types from "../actions/types";
 import {
   GetDataFromServerToPatch,
   GetDataFromServer,
-  deleteService
+  deleteService,
 } from "../service";
-import {
-  message
-} from "antd";
+import { message } from "antd";
 
 const baseUrl = "https://mern-article.herokuapp.com";
 //const baseUrl = "http://localhost:5000";
@@ -303,22 +301,27 @@ function* editProfile(action) {
     let formBody = {};
     formBody = action.userProfile;
     const postUrl = baseUrl + "/user/" + action.user_id;
-    const response = yield call(GetDataFromServerToPatch, postUrl, "PATCH", formBody)
-    const result = yield response.json()
+    const response = yield call(
+      GetDataFromServerToPatch,
+      postUrl,
+      "PATCH",
+      formBody
+    );
+    const result = yield response.json();
 
     if (result.error) {
       yield put({
         type: Types.USER_PROFILE_EDIT_SERVER_RESPONSE_ERROR,
-        error: result.error
-      })
+        error: result.error,
+      });
     } else {
       yield put({
         type: Types.USER_PROFILE_EDIT_SERVER_RESPONSE_SUCCESS,
-        result
-      })
+        result,
+      });
     }
   } catch (error) {
-    message: error
+    message: error;
   }
 }
 
@@ -647,6 +650,6 @@ export default function* rootSaga(params) {
   yield takeEvery(Types.GET_ARTICLE_LIKES, getArticleLikes);
   yield takeEvery(Types.DELETE_LIKE_ARTICLE, deleteArticleLike);
   yield takeEvery(Types.GET_ARTICLES_LIKED, getArticlesLiked);
-  yield takeEvery(Types.USER_PROFILE_EDIT, editProfile)
+  yield takeEvery(Types.USER_PROFILE_EDIT, editProfile);
   console.log("ROOT SAGA");
 }

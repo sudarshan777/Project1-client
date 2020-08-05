@@ -167,74 +167,6 @@ class User extends Component {
 
   render() {
     return (
-      // <div>
-      //   <h4>{this.state.user.name}</h4>
-      //   <h6>
-      //     <a href="#" onClick={this.getArticlesWritten}>
-      //       Articles Written
-      //     </a>
-      //   </h6>
-      //   <h6> Bookmarks - {this.state.user.bookmarks.length}</h6>
-      //   <h6>
-      //     <a href="#" onClick={this.getFollowers}>
-      //       Followers
-      //     </a>
-      //     - {this.state.user.followers.length}
-      //   </h6>
-      //   <h6>
-      //     <a href="#" onClick={this.getFollowing}>
-      //       Following
-      //     </a>
-      //     - {this.state.user.following.length}
-      //   </h6>
-
-      //   {this.props.loggedIn ? this.followButton() : null}
-
-      //   <ErrorBoundary>
-      //     <ArticlesList article={null} />
-      //   </ErrorBoundary>
-      //   <div>
-      //     {this.state.showFollowers && this.props.followers.length !== 0 ? (
-      //       <div>
-      //         <h5>Followers</h5>
-      //         <ul>
-      //           {this.props.followers.map((user) => {
-      //             return (
-      //               <li key={user._id}>
-      //                 <Link to={"/user/" + user._id}>{user.name}</Link>
-      //               </li>
-      //             );
-      //           })}
-      //         </ul>
-      //       </div>
-      //     ) : null}
-      //   </div>
-      //   <div>
-      //     {this.state.showFollowing && this.props.following.length !== 0 ? (
-      //       <div>
-      //         <h5>Following</h5>
-      //         <ul>
-      //           {this.props.following.map((user) => {
-      //             return (
-      //               <li key={user._id}>
-      //                 <Link to={"/user/" + user._id}>{user.name}</Link>
-      //               </li>
-      //             );
-      //           })}
-      //         </ul>
-      //       </div>
-      //     ) : null}
-      //   </div>
-
-      //   <div>
-      //     {this.state.showArticles && this.props.articles.length !== 0 ? (
-      //       <div>
-      //         <h5>Articles Written</h5>
-      //         <ArticlesList articles={this.props.articles} />
-      //       </div>
-      //     ) : null}
-      //   </div>
-      // </div>
       <div className="container">
         <div className="row">
           <div className="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
@@ -248,14 +180,14 @@ class User extends Component {
                   <p>
                     <strong> Hobbies: </strong>{" "}
                     {this.state.user.hobbies.map((h) => {
-                      return <span className="tags">{h}</span>;
-                    })}
+                      return <span className="tags"> {h} </span>;
+                    })}{" "}
                   </p>{" "}
                   <p>
                     <strong> Skills: </strong>{" "}
                     {this.state.user.skills.map((s) => {
-                      return <span className="tags">{s}</span>;
-                    })}
+                      return <span className="tags"> {s} </span>;
+                    })}{" "}
                   </p>{" "}
                 </div>{" "}
                 <div className="col-xs-12 col-sm-4 text-center">
@@ -300,7 +232,6 @@ class User extends Component {
                       </a>{" "}
                     </small>{" "}
                   </p>{" "}
-                  {this.showFollow()}{" "}
                   <button
                     type="button"
                     className="btn btn-success btn-block"
@@ -339,14 +270,19 @@ class User extends Component {
                     </small>{" "}
                   </p>{" "}
                   <div className="btn-group dropup btn-block">
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={this.editProfile}
-                    >
-                      {" "}
-                      <span className="fa fa-gear"> </span> Edit Profile{" "}
-                    </button>{" "}
+                    {this.props.loggedIn &&
+                    this.props.user.id === this.state.user._id ? (
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={this.editProfile}
+                      >
+                        {" "}
+                        <span className="fa fa-gear"> </span> Edit Profile{" "}
+                      </button>
+                    ) : (
+                      this.showFollow()
+                    )}
                   </div>{" "}
                 </div>{" "}
               </div>{" "}
