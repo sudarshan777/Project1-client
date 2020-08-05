@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
-//import Like from "./Like";
-import "../styles/styling.sass";
+import "../styles/comments.sass";
 
 const Comments = (props) => {
   if (props.comments.length > 0 && props !== undefined) {
@@ -16,14 +15,6 @@ const Comments = (props) => {
           {props.comments.map((comment, index) => {
             var date = new Date(comment.createdAt);
             return (
-              // <li className="list-group-item" key={index}>
-              //   <p>{comment.body}</p>-
-              //   <Link to={"/user/" + comment.user._id}>
-              //     {comment.user.name}
-              //   </Link>
-              //   <br />
-              //   <b>Date - </b> {comment.createdAt.substring(0, 10)}
-              // </li>
               <div>
                 <div class="card">
                   <div class="card-body">
@@ -50,40 +41,6 @@ const Comments = (props) => {
                       </p>
                     )}
                     {comment.user._id === props.user.id ? (
-                      // <div style={{ float: "right" }}>
-                      //   <button
-                      //     class="btn btn-primary a-btn-slide-text"
-                      //     data-toggle="tooltip"
-                      //     data-placement="top"
-                      //     title="Edit"
-                      //     onClick={props.edit}
-                      //   >
-                      //     <span
-                      //       class="glyphicon glyphicon-edit"
-                      //       aria-hidden="true"
-                      //     ></span>
-                      //     <span>
-                      //       <strong>Edit</strong>
-                      //     </span>
-                      //   </button>{" "}
-                      //   <button
-                      //     className="btn btn-primary a-btn-slide-text"
-                      //     data-toggle="tooltip"
-                      //     data-placement="top"
-                      //     title="Delete Comment"
-                      //     onClick={() => {
-                      //       props.delete(comment._id);
-                      //     }}
-                      //   >
-                      //     <span
-                      //       className="glyphicon glyphicon-remove"
-                      //       aria-hidden="true"
-                      //     ></span>
-                      //     <span>
-                      //       <strong>Delete</strong>
-                      //     </span>
-                      //   </button>
-                      // </div>
                       <EditOptions
                         edit={props.edit}
                         comment={comment}
